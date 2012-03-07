@@ -1,0 +1,14 @@
+<ffpojo-mappings xmlns="http://www.ffpojo.org/ofm">
+	<ffpojo class="com.domain.pkg.Customer">
+		<positional>
+			<positional-field name="name" initial-position="1" final-position="5"/>
+			<positional-field name="address" initial-position="6" final-position="10"/>
+		</positional>
+	</ffpojo>
+	<ffpojo class="com.domain.pkg.Employee">
+		<delimited delimiter=";">
+			<delimited-field name="id" position-index="1" decorator-class="com.domain.pkg.MyLongDecorator"/>
+			<delimited-field name="endereco" position-index="2"/>
+		</delimited>
+	</ffpojo>
+</ffpojo-mappings>

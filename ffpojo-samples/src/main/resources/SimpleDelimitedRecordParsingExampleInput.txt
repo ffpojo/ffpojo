@@ -1,0 +1,8 @@
+25654|Gilberto Holms|gibaholms@hotmail.com
+65987|Billy Idol|billy@thehost.com
+25465|Axel Rose|axl@thehost.com
+98653|Sebastian Bach|sebastian@thehost.com
+15485|Chuck Norris|norris@thehost.com
+43251|Bob Marley|marley@thehost.com
+65821|Bryan Adams|adams@thehost.com
+45842|Britney Spears|spears@thehost.com

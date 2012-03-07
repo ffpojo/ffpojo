@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.github.ffpojo</groupId>
+		<artifactId>ffpojo-parent</artifactId>
+		<version>1.0</version>
+		<relativePath>../ffpojo-parent</relativePath>
+	</parent>
+	
+	<artifactId>ffpojo-samples</artifactId>
+	<packaging>jar</packaging>
+	
+	<name>FFPOJO :: Samples Project</name>
+	<description>FFPOJO samples project.</description>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.github.ffpojo</groupId>
+			<artifactId>ffpojo</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>.</directory>
+				<includes>
+					<include>license.txt</include>
+				</includes>
+				<targetPath>META-INF</targetPath>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

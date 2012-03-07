@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://www.ffpojo.org/ofm"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.ffpojo.org/ofm" 
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	
+	<xsd:simpleType name="padding-align">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="LEFT"/>
+			<xsd:enumeration value="RIGHT"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="padding-character">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:complexType name="positional-field">
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="initial-position" type="xsd:int" use="required"/>
+		<xsd:attribute name="final-position" type="xsd:int" use="required"/>
+		<xsd:attribute name="padding-align" type="tns:padding-align" use="optional" default="RIGHT"/>
+		<xsd:attribute name="padding-character" type="tns:padding-character" use="optional" default=" "/>
+		<xsd:attribute name="trim-on-read" type="xsd:boolean" use="optional" default="true"/>
+		<xsd:attribute name="decorator-class" type="xsd:string" use="optional" default="org.ffpojo.metadata.DefaultFieldDecorator"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="delimited-field">
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="position-index" type="xsd:int" use="required"/>
+		<xsd:attribute name="decorator-class" type="xsd:string" use="optional" default="org.ffpojo.metadata.DefaultFieldDecorator"/>
+	</xsd:complexType>
+	
+	<xsd:element name="ffpojo-mappings">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ffpojo" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:choice>
+								<xsd:element name="positional">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="positional-field" type="tns:positional-field" minOccurs="0" maxOccurs="unbounded"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+								<xsd:element name="delimited">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="delimited-field" type="tns:delimited-field" minOccurs="0" maxOccurs="unbounded"/>
+										</xsd:sequence>
+										<xsd:attribute name="delimiter" type="xsd:string" use="optional" default=","/>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:choice>
+						</xsd:sequence>
+						<xsd:attribute name="class" type="xsd:string" use="required"/>
+					</xsd:complexType>
+				</xsd:element>			
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+</xsd:schema>

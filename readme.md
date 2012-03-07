@@ -16,10 +16,10 @@ The FFPOJO library can work to positional and delimited flat-files, and provides
 
 ### Starting Points ###
 
-* [Releases](https://github.com/gibaholms/ffpojo/tree/master/ffpojo-core-releases)
+* [Releases](https://github.com/ffpojo/tree/releases)
 * [Getting Started](#getting-started)
 * [Samples](#samples)
-* [XML Schema](https://github.com/gibaholms/ffpojo/blob/master/readme-ffpojo-ofm.xsd)
+* [XML Schema](https://github.com/ffpojo/blob/master/readme-ffpojo-ofm.xsd)
 
 ---
 
@@ -107,7 +107,7 @@ If you choose to map your ffpojos using XML, it must be valid according to the [
 
 public class SimplePositionalRecordParsingExample {
 
-	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "org/ffpojo/example/resources/SimplePositionalRecordParsingExampleInput.txt";
+	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "SimplePositionalRecordParsingExampleInput.txt";
 	
 	//change here (make sure you have permission to write in the specified path):
 	private static final String OUTPUT_TXT_OS_PATH = "C:/Users/gibaholms/Desktop/SimplePositionalRecordParsingExampleOutput.txt";
@@ -230,7 +230,7 @@ public class SimplePositionalRecordParsingExample {
 
 public class SimpleDelimitedRecordParsingExample {
 
-	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "org/ffpojo/example/resources/SimpleDelimitedRecordParsingExampleInput.txt";
+	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "SimpleDelimitedRecordParsingExampleInput.txt";
 	
 	//change here (make sure you have permission to write in the specified path):
 	private static final String OUTPUT_TXT_OS_PATH = "C:/Users/gibaholms/Desktop/SimpleDelimitedRecordParsingExampleOutput.txt";
@@ -353,7 +353,7 @@ public class SimpleDelimitedRecordParsingExample {
 
 public class PositionalRecordParsingWithDecoratorExample {
 
-	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "org/ffpojo/example/resources/PositionalRecordParsingWithDecoratorExampleInput.txt";
+	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "PositionalRecordParsingWithDecoratorExampleInput.txt";
 	
 	//change here (make sure you have permission to write in the specified path):
 	private static final String OUTPUT_TXT_OS_PATH = "C:/Users/gibaholms/Desktop/PositionalRecordParsingWithDecoratorExampleOutput.txt";
@@ -587,7 +587,7 @@ public class SimpleFileSystemFlatFileReaderExample {
 
 public class SimpleInputStreamFlatFileReaderExample {
 
-	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "org/ffpojo/example/resources/SimpleInputStreamFlatFileReaderExample.txt";
+	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "SimpleInputStreamFlatFileReaderExample.txt";
 	
 	@PositionalRecord
 	public static class Customer {
