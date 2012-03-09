@@ -1,7 +1,0 @@
-# Ignore files gerenated by Eclipse editor
-.project
-.classpath
-.settings/
-bin/
-target/
-unused/
