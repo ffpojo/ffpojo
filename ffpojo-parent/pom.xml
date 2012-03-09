@@ -26,9 +26,9 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:https://gibaholms@github.com/ffpojo/ffpojo.git</connection>
-		<developerConnection>scm:git:https://gibaholms@github.com/ffpojo/ffpojo.git</developerConnection>
-		<url>https://gibaholms@github.com/ffpojo/ffpojo.git</url>
+		<connection>scm:git:git@github.com:ffpojo/ffpojo.git</connection>
+		<developerConnection>scm:git:git@github.com:ffpojo/ffpojo.git</developerConnection>
+		<url>git@github.com:ffpojo/ffpojo.git</url>
 	</scm>
 
 	<dependencies>
