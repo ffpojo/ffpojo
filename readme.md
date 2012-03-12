@@ -16,7 +16,7 @@ The FFPOJO library can work to positional and delimited flat-files, and provides
 
 ### Starting Points ###
 
-* [Releases](https://github.com/ffpojo/ffpojo/tree/releases)
+* [Releases](https://github.com/ffpojo/ffpojo/tags)
 * [Getting Started](#getting-started)
 * [Samples](#samples)
 * [XML Schema](https://github.com/ffpojo/ffpojo/blob/master/readme-ffpojo-ofm.xsd)
@@ -60,7 +60,7 @@ Delimited Fields (we can't mix cats and dogs). By convention, the annotation met
 ---
 
 ##### Object-Flat-Mapping XML Schema #####
-If you choose to map your ffpojos using XML, it must be valid according to the [ffpojo-ofm.xsd](https://github.com/gibaholms/ffpojo/blob/master/readme-ffpojo-ofm.xsd) schema.
+If you choose to map your ffpojos using XML, it must be valid according to the [ffpojo-ofm.xsd](https://github.com/ffpojo/ffpojo/blob/master/readme-ffpojo-ofm.xsd) schema.
 
 ---
 
