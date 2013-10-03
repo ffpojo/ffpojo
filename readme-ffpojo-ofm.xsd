@@ -25,13 +25,13 @@
 		<xsd:attribute name="padding-align" type="tns:padding-align" use="optional" default="RIGHT"/>
 		<xsd:attribute name="padding-character" type="tns:padding-character" use="optional" default=" "/>
 		<xsd:attribute name="trim-on-read" type="xsd:boolean" use="optional" default="true"/>
-		<xsd:attribute name="decorator-class" type="xsd:string" use="optional" default="org.ffpojo.metadata.DefaultFieldDecorator"/>
+		<xsd:attribute name="decorator-class" type="xsd:string" use="optional" default="com.github.ffpojo.metadata.DefaultFieldDecorator"/>
 	</xsd:complexType>
 	
 	<xsd:complexType name="delimited-field">
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
 		<xsd:attribute name="position-index" type="xsd:int" use="required"/>
-		<xsd:attribute name="decorator-class" type="xsd:string" use="optional" default="org.ffpojo.metadata.DefaultFieldDecorator"/>
+		<xsd:attribute name="decorator-class" type="xsd:string" use="optional" default="com.github.ffpojo.metadata.DefaultFieldDecorator"/>
 	</xsd:complexType>
 	
 	<xsd:element name="ffpojo-mappings">
