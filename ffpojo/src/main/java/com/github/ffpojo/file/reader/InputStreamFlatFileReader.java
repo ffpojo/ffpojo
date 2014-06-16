@@ -54,11 +54,12 @@ public class InputStreamFlatFileReader extends BaseFlatFileReader implements Fla
 			throw new NoSuchElementException("There are no more records to read");
 		}
 		try {
-            		String currLine = nextLine;
-        		nextLine = inputStreamReader.readLine();
-			Object record = parseRecordFromText(currLine);
-			this.recordText = nextLine;
-			recordIndex++;	
+            String currLine = nextLine;
+            nextLine = inputStreamReader.readLine();
+            Object record = parseRecordFromText(currLine);
+            this.recordText = nextLine;
+            recordIndex++;
+            return record;
 		} catch (IOException e) {
 			throw new RuntimeException("Error while decoding the line number " + (recordIndex + 1), e);
 		} catch (RecordParserException e) {
