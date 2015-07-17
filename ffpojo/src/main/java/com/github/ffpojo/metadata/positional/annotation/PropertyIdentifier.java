@@ -6,11 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface PositionalRecord {
+@Target({ElementType.METHOD})
+public @interface PropertyIdentifier {
 
-	boolean ignorePositionNotFound() default false;
-	boolean autoFillRemainPosition() default false;
-	
-	
 }

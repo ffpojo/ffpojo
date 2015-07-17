@@ -19,6 +19,11 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
 		super(recordDescriptor);
 	}
 	
+	//TODO: alterar de object pra classe correta
+	public Object parseFromText(FileClassConfiguration fileClassConfiguration, String text)throws RecordParserException {
+		return parseFromText(fileClassConfiguration.getPositionAnnotationClass(), text);
+	}
+	
 	public <T> T parseFromText(Class<T> recordClazz, String text) throws RecordParserException {
 		T record;
 		try {
@@ -99,7 +104,7 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
 				fieldValue = "";
 			} else {
 				try {
-					FieldDecorator<Object> decorator = (FieldDecorator)actualFieldDescriptor.getDecorator();
+					FieldDecorator<Object> decorator = (FieldDecorator<Object>)actualFieldDescriptor.getDecorator();
 					fieldValue = decorator.toString(fieldValueObj);
 				} catch (FieldDecoratorException e) {
 					throw new RecordParserException(e);

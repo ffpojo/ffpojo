@@ -60,12 +60,12 @@ public class ReflectUtil {
 		return getter;
 	}
 	
-	public static String pastelCaseToCamelCase(String sPastel) {
+	private static String pastelCaseToCamelCase(String sPastel) {
 		char firstChar = sPastel.charAt(0);
 		return String.valueOf(Character.toLowerCase(firstChar)) + sPastel.substring(1);
 	}
 	
-	public static String camelCaseToPastelCase(String sCamel) {
+	private static String camelCaseToPastelCase(String sCamel) {
 		char firstChar = sCamel.charAt(0);
 		return String.valueOf(Character.toUpperCase(firstChar)) + sCamel.substring(1);
 	}
