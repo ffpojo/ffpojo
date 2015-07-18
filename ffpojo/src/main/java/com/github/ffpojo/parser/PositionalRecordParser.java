@@ -21,7 +21,7 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
 	
 	//TODO: alterar de object pra classe correta
 	public Object parseFromText(FileClassConfiguration fileClassConfiguration, String text)throws RecordParserException {
-		return parseFromText(fileClassConfiguration.getPositionAnnotationClass(), text);
+		return parseFromText(fileClassConfiguration.getClassByIdLine(text), text);
 	}
 	
 	public <T> T parseFromText(Class<T> recordClazz, String text) throws RecordParserException {
