@@ -29,12 +29,7 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 					fieldDescriptor.setInitialPosition(positionalFieldAnnotation.initialPosition());
 					fieldDescriptor.setFinalPosition(positionalFieldAnnotation.finalPosition());
 					fieldDescriptor.setGetter(method);
-					FieldDecorator<?> decorator;
-					try {
-						decorator = positionalFieldAnnotation.decorator().newInstance();
-					} catch (Exception e) {
-						throw new MetadataReaderException("Error while instantiating decorator class, make sure that is provided a default constructor for class " + positionalFieldAnnotation.decorator(), e);
-					}
+					FieldDecorator<?> decorator = getDecoratorInstance(positionalFieldAnnotation);
 					fieldDescriptor.setDecorator(decorator);
 					fieldDescriptor.setPaddingAlign(positionalFieldAnnotation.paddingAlign());
 					fieldDescriptor.setPaddingCharacter(positionalFieldAnnotation.paddingCharacter());
@@ -49,6 +44,17 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 		recordDescriptor.assertValid();
 		
 		return recordDescriptor;
+	}
+
+	private FieldDecorator<?> getDecoratorInstance(PositionalField positionalFieldAnnotation)
+			throws MetadataReaderException {
+		FieldDecorator<?> decorator;
+		try {
+			decorator = positionalFieldAnnotation.decorator().newInstance();
+		} catch (Exception e) {
+			throw new MetadataReaderException("Error while instantiating decorator class, make sure that is provided a default constructor for class " + positionalFieldAnnotation.decorator(), e);
+		}
+		return decorator;
 	}
 
 }

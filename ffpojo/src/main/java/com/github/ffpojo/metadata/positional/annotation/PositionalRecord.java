@@ -8,9 +8,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface PositionalRecord {
-
+	public static final PositionalRecordLineIdentifier[] defaultIdentifier = new PositionalRecordLineIdentifier[]{};
 	boolean ignorePositionNotFound() default false;
 	boolean autoFillRemainPosition() default false;
-	
-	
+	PositionalRecordLineIdentifier[] recordLineIdentifiers() default @PositionalRecordLineIdentifier(startPosition = -1, textIdentifier="");
+	PositionalRecordLineIdentifier recordLineIdentifier() default @PositionalRecordLineIdentifier(startPosition = -1, textIdentifier="");
 }

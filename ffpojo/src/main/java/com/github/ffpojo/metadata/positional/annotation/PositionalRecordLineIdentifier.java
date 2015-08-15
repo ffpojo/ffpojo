@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface PropertyIdentifier {
-
+public @interface PositionalRecordLineIdentifier {
+	int startPosition();
+	String textIdentifier();
 }
