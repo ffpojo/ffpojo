@@ -19,7 +19,7 @@ public class SimpleDelimitedRecordParsingExample {
 	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "SimpleDelimitedRecordParsingExampleInput.txt";
 	
 	//change here (make sure you have permission to write in the specified path):
-	private static final String OUTPUT_TXT_OS_PATH = "C:/Users/gibaholms/Desktop/SimpleDelimitedRecordParsingExampleOutput.txt";
+	private static final String OUTPUT_TXT_OS_PATH = System.getProperty("java.io.tmpdir") +  INPUT_TXT_RESOURCE_CLASSPATH;
 	
 	@DelimitedRecord(delimiter = "|")
 	public static class Customer {

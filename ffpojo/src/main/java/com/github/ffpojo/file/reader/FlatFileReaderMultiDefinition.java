@@ -1,69 +1,78 @@
 package com.github.ffpojo.file.reader;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.github.ffpojo.FFPojoHelper;
 import com.github.ffpojo.exception.FFPojoException;
-import com.github.ffpojo.parser.RecordParser;
+import com.github.ffpojo.file.reader.extra.IdentifierLine;
+import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
+import com.github.ffpojo.metadata.positional.annotation.PositionalRecordLineIdentifier;
 
 public class FlatFileReaderMultiDefinition{
-	
-	private final FFPojoHelper ffpojoHelper = FFPojoHelper.getInstance();
 	
 	private Class<?> body;
 	private Class<?> header;
 	private Class<?> trailer;
+
 	
-	private RecordParser bodyParser;
-	private RecordParser headerParser;
-	private RecordParser trailerParser;
+	private Map<String, Class<?>> definitions =  new HashMap<String, Class<?>>();;
+	private IdentifierLine idLine;
 	
 	
-	public FlatFileReaderMultiDefinition(List<Class<?>> bodyClass) throws FFPojoException {
-		if (bodyClass == null || bodyClass.isEmpty()) {
+	@SuppressWarnings("rawtypes")
+	public FlatFileReaderMultiDefinition(Class bodyClass) throws FFPojoException {
+		this(Arrays.asList(bodyClass));
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public FlatFileReaderMultiDefinition(List<Class> bodyClasses) throws FFPojoException {
+		if (bodyClasses == null || bodyClasses.isEmpty()) {
 			throw new IllegalArgumentException("Class<?> object is null");
 		}
-//		this.body = body;
-//		this.bodyParser = ffpojoHelper.getRecordParser(body);
+		createMapDefinitions(bodyClasses);
 	}
 	
-	public void setHeader(Class<?> header) throws FFPojoException {
-		this.header = header;
-		if (header == null) {
-			this.headerParser = null;
-		} else {
-			this.headerParser = ffpojoHelper.getRecordParser(header);
+	@SuppressWarnings("rawtypes")
+	public void createMapDefinitions(List<Class> bodyClasses){
+		int size=0;
+		int startPosition=0;
+		for (Class<?> bodyClass : bodyClasses) {
+			if (bodyClass.isAnnotationPresent(PositionalRecord.class)){
+				PositionalRecord pr =  bodyClass.getAnnotation(PositionalRecord.class);
+				PositionalRecordLineIdentifier lineIdentifier =  pr.recordLineIdentifier();
+				size = lineIdentifier.textIdentifier().length();
+				startPosition =  lineIdentifier.startPosition();
+				definitions.put(lineIdentifier.textIdentifier(), bodyClass);
+			}
 		}
-	}
-	
-	
-	public void setTrailer(Class<?> trailer) throws FFPojoException {
-		this.trailer = trailer;
-		if (trailer == null) {
-			this.trailerParser = null;
-		} else {
-			this.trailerParser = ffpojoHelper.getRecordParser(trailer);
-		}
+		idLine =  new IdentifierLine(startPosition, size);
 	}
 	
 	// GETTERS AND SETTERS
-	
 	public Class<?> getBody() {
 		return body;
 	}
+	
+	public Class<?> getBody(String message) {
+		return body = this.definitions.get(message.substring(idLine.getStartPosition(), idLine.getSize()));
+	}
+	
 	public Class<?> getHeader() {
 		return header;
 	}
 	public Class<?> getTrailer() {
 		return trailer;
 	}
-	public RecordParser getBodyParser() {
-		return bodyParser;
+
+	public void setHeader(Class<?> header) {
+		this.header = header;
 	}
-	public RecordParser getHeaderParser() {
-		return headerParser;
+
+	public void setTrailer(Class<?> trailer) {
+		this.trailer = trailer;
 	}
-	public RecordParser getTrailerParser() {
-		return trailerParser;
-	}
+	
+	
 }

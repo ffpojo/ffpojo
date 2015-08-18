@@ -19,7 +19,7 @@ public class SimplePositionalRecordParsingExample {
 	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "SimplePositionalRecordParsingExampleInput.txt";
 	
 	//change here (make sure you have permission to write in the specified path):
-	private static final String OUTPUT_TXT_OS_PATH = "C:/Users/gibaholms/Desktop/SimplePositionalRecordParsingExampleOutput.txt";
+	private static final String OUTPUT_TXT_OS_PATH = System.getProperty("java.io.tmpdir") + "SimplePositionalRecordParsingExampleOutput.txt";
 	
 	@PositionalRecord
 	public static class Customer {

@@ -10,7 +10,7 @@ import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.file.reader.FileSystemFlatFileReader;
 import com.github.ffpojo.file.reader.FlatFileReader;
-import com.github.ffpojo.file.reader.FlatFileReaderDefinition;
+import com.github.ffpojo.file.reader.FlatFileReaderMultiDefinition;
 import com.github.ffpojo.file.reader.RecordType;
 import com.github.ffpojo.metadata.FieldDecorator;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
@@ -20,6 +20,7 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 
 	//copy the file "FileSystemFlatFileReaderWithHeaderAndTrailerExample.txt" (make sure you have permission to read in the specified path):
 	private static final String INPUT_TXT_OS_PATH = "C:/Users/gholms/Desktop/FileSystemFlatFileReaderWithHeaderAndTrailerExample.txt";
+	private static final String FILE_NAME =  "FileSystemFlatFileReaderWithHeaderAndTrailerExample.txt";
 	
 	@PositionalRecord
 	public static class Customer {
@@ -134,11 +135,13 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 	}
 	
 	public void readCustomers() throws IOException, FFPojoException {
-		File inputFile = new File(INPUT_TXT_OS_PATH);
+		ClassLoader classLoader = this.getClass().getClassLoader();
+    	File inputFile = new File(classLoader.getResource(FILE_NAME).getFile());
+    	
 		if (!inputFile.exists()) {
-			throw new IllegalStateException("File not found: " + INPUT_TXT_OS_PATH);
+			throw new IllegalStateException("File not found: " + inputFile.getAbsolutePath());
 		}
-		FlatFileReaderDefinition ffDefinition = new FlatFileReaderDefinition(Customer.class);
+		FlatFileReaderMultiDefinition ffDefinition = new FlatFileReaderMultiDefinition(Customer.class);
 		ffDefinition.setHeader(Header.class);
 		ffDefinition.setTrailer(Trailer.class);
 		FlatFileReader ffReader = new FileSystemFlatFileReader(inputFile, ffDefinition);

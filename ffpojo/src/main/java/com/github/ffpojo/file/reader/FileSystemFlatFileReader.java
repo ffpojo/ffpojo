@@ -32,19 +32,19 @@ public class FileSystemFlatFileReader extends BaseFlatFileReader implements Flat
 	private long fileSize;
 	private long position;
 	
-	public FileSystemFlatFileReader(File file, FlatFileReaderDefinition flatFileDefinition) throws IOException {
+	public FileSystemFlatFileReader(File file, FlatFileReaderMultiDefinition flatFileDefinition) throws IOException {
 		this(file, flatFileDefinition, DEFAULT_CHARSET, DEFAULT_LINE_BYTE_BUFFER_SIZE);
 	}
 	
-	public FileSystemFlatFileReader(File file, FlatFileReaderDefinition flatFileDefinition, int lineByteBufferSize) throws IOException {
+	public FileSystemFlatFileReader(File file, FlatFileReaderMultiDefinition flatFileDefinition, int lineByteBufferSize) throws IOException {
 		this(file, flatFileDefinition, DEFAULT_CHARSET, lineByteBufferSize);
 	}
 	
-	public FileSystemFlatFileReader(File file, FlatFileReaderDefinition flatFileDefinition, Charset charset) throws IOException {
+	public FileSystemFlatFileReader(File file, FlatFileReaderMultiDefinition flatFileDefinition, Charset charset) throws IOException {
 		this(file, flatFileDefinition, charset, DEFAULT_LINE_BYTE_BUFFER_SIZE);
 	}
 	
-	public FileSystemFlatFileReader(File file, FlatFileReaderDefinition flatFile, Charset charset, int lineByteBufferSize) throws IOException {
+	public FileSystemFlatFileReader(File file, FlatFileReaderMultiDefinition flatFile, Charset charset, int lineByteBufferSize) throws IOException {
 		if (file == null) {
 			throw new IllegalArgumentException("File object is null");
 		} else if (!file.exists()) {

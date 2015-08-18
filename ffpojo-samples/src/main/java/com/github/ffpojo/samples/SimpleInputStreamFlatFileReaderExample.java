@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.file.reader.FlatFileReader;
-import com.github.ffpojo.file.reader.FlatFileReaderDefinition;
+import com.github.ffpojo.file.reader.FlatFileReaderMultiDefinition;
 import com.github.ffpojo.file.reader.InputStreamFlatFileReader;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
@@ -66,7 +66,7 @@ public class SimpleInputStreamFlatFileReaderExample {
 	
 	public void readCustomers() throws IOException, FFPojoException {
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(INPUT_TXT_RESOURCE_CLASSPATH);
-		FlatFileReaderDefinition ffDefinition = new FlatFileReaderDefinition(Customer.class);
+		FlatFileReaderMultiDefinition ffDefinition = new FlatFileReaderMultiDefinition(Customer.class);
 		FlatFileReader ffReader = new InputStreamFlatFileReader(inputStream, ffDefinition);
 		for (Object record : ffReader) {
 			Customer cust = (Customer)record;

@@ -14,7 +14,7 @@ import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 public class SimpleFileSystemFlatFileWriterExample {
 
 	//change here (make sure you have permission to write in the specified path):
-	private static final String OUTPUT_TXT_OS_PATH = "C:/Users/gibaholms/Desktop/SimpleFileSystemFlatFileWriterExample.txt";
+	private static final String OUTPUT_TXT_OS_PATH = System.getProperty("java.io.tmpdir") + "SimpleFileSystemFlatFileWriterExample.txt";
 	
 	@PositionalRecord
 	public static class Customer {
