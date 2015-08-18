@@ -10,7 +10,7 @@ import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.file.reader.FileSystemFlatFileReader;
 import com.github.ffpojo.file.reader.FlatFileReader;
-import com.github.ffpojo.file.reader.FlatFileReaderMultiDefinition;
+import com.github.ffpojo.file.reader.FlatFileReaderDefinition;
 import com.github.ffpojo.file.reader.RecordType;
 import com.github.ffpojo.metadata.FieldDecorator;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
@@ -140,7 +140,7 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 		if (!inputFile.exists()) {
 			throw new IllegalStateException("File not found: " + inputFile.getAbsolutePath());
 		}
-		FlatFileReaderMultiDefinition ffDefinition = new FlatFileReaderMultiDefinition(Customer.class);
+		FlatFileReaderDefinition ffDefinition = new FlatFileReaderDefinition(Customer.class);
 		ffDefinition.setHeader(Header.class);
 		ffDefinition.setTrailer(Trailer.class);
 		FlatFileReader ffReader = new FileSystemFlatFileReader(inputFile, ffDefinition);

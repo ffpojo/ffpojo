@@ -8,7 +8,7 @@ import com.github.ffpojo.parser.RecordParser;
 
 abstract class BaseFlatFileReader implements FlatFileReader {
 	
-	protected FlatFileReaderMultiDefinition flatFileDefinition;
+	protected FlatFileReaderDefinition flatFileDefinition;
 
 	protected RecordType recordType;
 	protected String recordText;

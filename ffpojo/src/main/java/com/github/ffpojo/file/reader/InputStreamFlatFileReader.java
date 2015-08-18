@@ -15,7 +15,7 @@ public class InputStreamFlatFileReader extends BaseFlatFileReader implements Fla
 	private BufferedReader inputStreamReader;
 	private String nextLine;
 	
-	public InputStreamFlatFileReader(InputStream inputStream, FlatFileReaderMultiDefinition flatFile) throws IOException {
+	public InputStreamFlatFileReader(InputStream inputStream, FlatFileReaderDefinition flatFile) throws IOException {
 		if (inputStream == null) {
 			throw new IllegalArgumentException("InputStream object is null");
 		}

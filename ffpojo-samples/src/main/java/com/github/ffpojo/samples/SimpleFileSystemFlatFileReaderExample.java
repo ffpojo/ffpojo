@@ -6,7 +6,7 @@ import java.io.IOException;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.file.reader.FileSystemFlatFileReader;
 import com.github.ffpojo.file.reader.FlatFileReader;
-import com.github.ffpojo.file.reader.FlatFileReaderMultiDefinition;
+import com.github.ffpojo.file.reader.FlatFileReaderDefinition;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 
@@ -74,7 +74,7 @@ public class SimpleFileSystemFlatFileReaderExample {
 		if (!inputFile.exists()) {
 			throw new IllegalStateException("File not found: " + FILE_NAME);
 		}
-		FlatFileReaderMultiDefinition ffDefinition = new FlatFileReaderMultiDefinition(Customer.class);
+		FlatFileReaderDefinition ffDefinition = new FlatFileReaderDefinition(Customer.class);
 		FlatFileReader ffReader = new FileSystemFlatFileReader(inputFile, ffDefinition);
 		for (Object record : ffReader) {
 			Customer cust = (Customer)record;

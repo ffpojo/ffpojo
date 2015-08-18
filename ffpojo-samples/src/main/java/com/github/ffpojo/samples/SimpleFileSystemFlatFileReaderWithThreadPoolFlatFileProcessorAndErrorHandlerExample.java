@@ -12,7 +12,7 @@ import com.github.ffpojo.file.processor.record.event.RecordEvent;
 import com.github.ffpojo.file.processor.record.handler.ErrorHandler;
 import com.github.ffpojo.file.reader.FileSystemFlatFileReader;
 import com.github.ffpojo.file.reader.FlatFileReader;
-import com.github.ffpojo.file.reader.FlatFileReaderMultiDefinition;
+import com.github.ffpojo.file.reader.FlatFileReaderDefinition;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 
@@ -98,7 +98,7 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorAndErr
 		if (!inputFile.exists()) {
 			throw new IllegalStateException("File not found: " + INPUT_TXT_OS_PATH);
 		}
-		FlatFileReaderMultiDefinition ffDefinition = new FlatFileReaderMultiDefinition(Customer.class);
+		FlatFileReaderDefinition ffDefinition = new FlatFileReaderDefinition(Customer.class);
 		FlatFileReader ffReader = new FileSystemFlatFileReader(inputFile, ffDefinition);
 		FlatFileProcessor ffProcessor = new ThreadPoolFlatFileProcessor(ffReader, 5);
 		ffProcessor.setErrorHandler(new CustomerErrorHandler());
