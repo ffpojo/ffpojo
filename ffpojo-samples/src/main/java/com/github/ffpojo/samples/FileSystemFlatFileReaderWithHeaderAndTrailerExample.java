@@ -19,7 +19,6 @@ import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 
 	//copy the file "FileSystemFlatFileReaderWithHeaderAndTrailerExample.txt" (make sure you have permission to read in the specified path):
-	private static final String INPUT_TXT_OS_PATH = "C:/Users/gholms/Desktop/FileSystemFlatFileReaderWithHeaderAndTrailerExample.txt";
 	private static final String FILE_NAME =  "FileSystemFlatFileReaderWithHeaderAndTrailerExample.txt";
 	
 	@PositionalRecord

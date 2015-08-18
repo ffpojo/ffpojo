@@ -44,6 +44,7 @@ public class FileSystemFlatFileReader extends BaseFlatFileReader implements Flat
 		this(file, flatFileDefinition, charset, DEFAULT_LINE_BYTE_BUFFER_SIZE);
 	}
 	
+	@SuppressWarnings("resource")
 	public FileSystemFlatFileReader(File file, FlatFileReaderMultiDefinition flatFile, Charset charset, int lineByteBufferSize) throws IOException {
 		if (file == null) {
 			throw new IllegalArgumentException("File object is null");
