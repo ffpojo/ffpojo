@@ -1,10 +1,12 @@
 package com.github.ffpojo.file.reader;
 
+import java.util.List;
+
 import com.github.ffpojo.FFPojoHelper;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.parser.RecordParser;
 
-public class FlatFileReaderMultiDefinition {
+public class FlatFileReaderMultiDefinition{
 	
 	private final FFPojoHelper ffpojoHelper = FFPojoHelper.getInstance();
 	
@@ -16,12 +18,13 @@ public class FlatFileReaderMultiDefinition {
 	private RecordParser headerParser;
 	private RecordParser trailerParser;
 	
-	public FlatFileReaderMultiDefinition(Class<?> body) throws FFPojoException {
-		if (body == null) {
+	
+	public FlatFileReaderMultiDefinition(List<Class<?>> bodyClass) throws FFPojoException {
+		if (bodyClass == null || bodyClass.isEmpty()) {
 			throw new IllegalArgumentException("Class<?> object is null");
 		}
-		this.body = body;
-		this.bodyParser = ffpojoHelper.getRecordParser(body);
+//		this.body = body;
+//		this.bodyParser = ffpojoHelper.getRecordParser(body);
 	}
 	
 	public void setHeader(Class<?> header) throws FFPojoException {
@@ -32,6 +35,7 @@ public class FlatFileReaderMultiDefinition {
 			this.headerParser = ffpojoHelper.getRecordParser(header);
 		}
 	}
+	
 	
 	public void setTrailer(Class<?> trailer) throws FFPojoException {
 		this.trailer = trailer;

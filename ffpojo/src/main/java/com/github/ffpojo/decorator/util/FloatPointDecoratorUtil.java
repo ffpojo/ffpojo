@@ -17,7 +17,6 @@ public class FloatPointDecoratorUtil {
 		this(DEFAULT_PRECISION);
 	}
 
-
 	public String toString(BigDecimal value){
 		return toString(value, precision);
 	}
@@ -42,7 +41,7 @@ public class FloatPointDecoratorUtil {
 	
 	public static String toString(BigDecimal value,  int precision){
 		if (value == null) return StringUtil.EMPTY;
-		return value.multiply(getMultiplierFactor(precision)).toString();
+		return value.multiply(getMultiplierFactor(precision)).toString().split("\\.")[0];
 	}
 	
 	public static String toString(double value,  int precision){
@@ -50,7 +49,8 @@ public class FloatPointDecoratorUtil {
 	}
 	
 	public static String toString(float value,  int precision){
-		return toString(BigDecimal.valueOf(value), precision);
+		//It is required to convert float to string, because float is 32 bits and occurs a  error precision.
+		return toString(new BigDecimal(String.valueOf(value)), precision);
 	}
 
 	public static BigDecimal fromString(String value,  int precision){
@@ -72,5 +72,9 @@ public class FloatPointDecoratorUtil {
 	
 	public int getPrecision() {
 		return precision;
+	}
+	
+	public void setPrecicion(int precision){
+		this.precision =  precision;
 	}
 }

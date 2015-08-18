@@ -13,6 +13,14 @@
 	
 	<name>FFPOJO :: Core Project</name>
 	<description>FFPOJO core project.</description>
+	
+	<dependencies>
+		<dependency>
+		  <groupId>com.google.truth</groupId>
+		  <artifactId>truth</artifactId>
+		  <version>0.27</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<resources>

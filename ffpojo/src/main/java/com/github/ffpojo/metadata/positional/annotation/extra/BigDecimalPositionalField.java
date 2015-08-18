@@ -2,7 +2,7 @@ package com.github.ffpojo.metadata.positional.annotation.extra;
 
 import com.github.ffpojo.metadata.positional.PaddingAlign;
 
-public @interface BigDecimalPositionalField {
+public @interface BigDecimalPositionalField{
 
 	int initialPosition();
 	int finalPosition();
@@ -10,5 +10,4 @@ public @interface BigDecimalPositionalField {
 	char paddingCharacter() default ' ';
 	boolean trimOnRead() default true;
 	int precision() default 2;
-	
 }
