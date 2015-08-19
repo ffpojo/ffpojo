@@ -11,6 +11,5 @@ public @interface PositionalRecord {
 	public static final PositionalRecordLineIdentifier[] defaultIdentifier = new PositionalRecordLineIdentifier[]{};
 	boolean ignorePositionNotFound() default false;
 	boolean autoFillRemainPosition() default false;
-	PositionalRecordLineIdentifier[] recordLineIdentifiers() default @PositionalRecordLineIdentifier(startPosition = 0, textIdentifier="");
 	PositionalRecordLineIdentifier recordLineIdentifier() default @PositionalRecordLineIdentifier(startPosition = 0, textIdentifier="");
 }
