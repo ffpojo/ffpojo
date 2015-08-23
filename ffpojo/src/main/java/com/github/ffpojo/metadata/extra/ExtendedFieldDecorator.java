@@ -1,7 +1,5 @@
 package com.github.ffpojo.metadata.extra;
 
-import java.lang.annotation.Annotation;
-
 import com.github.ffpojo.metadata.FieldDecorator;
 
 public abstract class ExtendedFieldDecorator<T> implements FieldDecorator<T> {
@@ -21,14 +19,6 @@ public abstract class ExtendedFieldDecorator<T> implements FieldDecorator<T> {
 	 */
 	public static String[] getMethodContainsContstructorValues(){
 		return new String[]{};
-	}
-	
-	/**
-	 * Return the Annotation linked with the decoration
-	 * @return
-	 */
-	public static Class<? extends Annotation> annotationLinked(){
-		return Annotation.class;
 	}
 	
 }

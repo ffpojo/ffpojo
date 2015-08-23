@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 import com.github.ffpojo.metadata.positional.PaddingAlign;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.FIELD})
 public @interface IntegerPositionalField {
 	int initialPosition();
 	int finalPosition();

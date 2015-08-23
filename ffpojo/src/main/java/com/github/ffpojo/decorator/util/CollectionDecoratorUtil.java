@@ -40,7 +40,7 @@ public class CollectionDecoratorUtil {
 			if (AccessorType.FIELD.equals(accessorType)){
 				readObjectLineSizeFromField(clazz);
 			}else{
-				readObjectLineSizeFromProperties();
+				readObjectLineSizeFromProperties(clazz);
 			}
 			
 		}
@@ -56,19 +56,25 @@ public class CollectionDecoratorUtil {
 				clazzPositionSize =  getMoreThanPosition(getFinalPosition(annotations[j]));
 			}
 		}
-		Class<?> superClazz = clazz.getSuperclass();
-		if (superClazz != null){
-			readAnnotations(superClazz);
-		}
+		readSuperClassRecursive(clazz);
 	}
 
-	private void readObjectLineSizeFromProperties() {
+	private void readObjectLineSizeFromProperties(Class<?> clazz) {
 		Method[] methods = clazz.getMethods();
 		for (int i = 0; i < methods.length; i++) {
 			if (methods[i].getName().startsWith("get")){
 				Method method =  methods[i];
 				getClassPositionSize(method);					
 			}
+		}
+		readSuperClassRecursive(clazz);
+		
+	}
+
+	private void readSuperClassRecursive(Class<?> clazz) {
+		Class<?> superClazz = clazz.getSuperclass();
+		if (superClazz != null && superClazz.isAnnotationPresent(PositionalRecord.class)){
+			readAnnotations(superClazz);
 		}
 	}
 
@@ -83,7 +89,6 @@ public class CollectionDecoratorUtil {
 		return clazzPositionSize < actualValueAnnotationPosition ? actualValueAnnotationPosition : clazzPositionSize;
 	}
 	private int getFinalPosition(Annotation positionalField){
-		System.out.println(positionalField.getClass());
 		IntegerPositionalField.class.isAssignableFrom(positionalField.getClass());
 		if (PositionalField.class.isAssignableFrom(positionalField.getClass())){
 			return ((PositionalField)positionalField).finalPosition();

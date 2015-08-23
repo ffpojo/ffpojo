@@ -11,6 +11,8 @@ public class PositionalFieldDescriptor extends FieldDescriptor implements Compar
 	private char paddingCharacter;
 	private boolean trimOnRead;
 	private FieldDecorator<?> decorator;
+	private boolean ignorePositionNotFound;
+	private boolean autoFillRemainPosition;
 	
 	public int compareTo(PositionalFieldDescriptor other) {
 		if (this.initialPosition - other.initialPosition == 0) {
@@ -62,4 +64,22 @@ public class PositionalFieldDescriptor extends FieldDescriptor implements Compar
 	public void setTrimOnRead(boolean trimOnRead) {
 		this.trimOnRead = trimOnRead;
 	}
+
+	public boolean isIgnorePositionNotFound() {
+		return ignorePositionNotFound;
+	}
+
+	public void setIgnorePositionNotFound(boolean ignorePositionNotFound) {
+		this.ignorePositionNotFound = ignorePositionNotFound;
+	}
+
+	public boolean isAutoFillRemainPosition() {
+		return autoFillRemainPosition;
+	}
+
+	public void setAutoFillRemainPosition(boolean autoFillRemainPosition) {
+		this.autoFillRemainPosition = autoFillRemainPosition;
+	}
+	
+	
 }

@@ -3,9 +3,9 @@ package com.github.ffpojo.decorator;
 import java.math.BigDecimal;
 
 import com.github.ffpojo.decorator.util.FloatPointDecoratorUtil;
-import com.github.ffpojo.metadata.FieldDecorator;
+import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
 
-public class BigDecimalDecorator implements FieldDecorator<BigDecimal> {
+public class BigDecimalDecorator extends ExtendedFieldDecorator<BigDecimal> {
  
 	private static final int DEFAULT_PRECISION = 2;
 	private final FloatPointDecoratorUtil floatPointDecoratorUtil;

@@ -9,6 +9,8 @@ import com.github.ffpojo.metadata.RecordDescriptor;
 
 public class PositionalRecordDescriptor extends RecordDescriptor {
 
+	private boolean ignorePositionNotFound = false;
+	
 	public PositionalRecordDescriptor() {
 		super();
 		this.setFieldDescriptors(new ArrayList<PositionalFieldDescriptor>());
@@ -68,5 +70,15 @@ public class PositionalRecordDescriptor extends RecordDescriptor {
 			Collections.sort(fieldDescriptors);
 		}
 	}
+
+	public boolean isIgnorePositionNotFound() {
+		return ignorePositionNotFound;
+	}
+
+	public void setIgnorePositionNotFound(boolean ignorePositionNotFound) {
+		this.ignorePositionNotFound = ignorePositionNotFound;
+	}
+	
+	
 	
 }
