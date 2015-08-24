@@ -45,7 +45,7 @@ public class FlatFileReaderDefinition {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public void createMapDefinitions(List<Class> bodyClasses){
+	private void createMapDefinitions(List<Class> bodyClasses){
 		int size=0;
 		int startPosition=0;
 		for (Class<?> bodyClass : bodyClasses) {
