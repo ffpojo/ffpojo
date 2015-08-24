@@ -1,27 +1,47 @@
 package com.github.ffpojo.decorator;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
+import com.github.ffpojo.FFPojoHelper;
+import com.github.ffpojo.decorator.util.CollectionDecoratorUtil;
 import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.metadata.FieldDecorator;
 
-public class CollectionDecorator<T extends Collection<?>> implements FieldDecorator<T>{
+@SuppressWarnings("all")
+public class CollectionDecorator/*<T extends Collection<?>>*/ implements FieldDecorator<Collection>{
 
-	private Class<?> collectionType;
 	private Class<?> itensCollectionType;
 	
-	public CollectionDecorator(Class<?> itensCollectionType, Class<? extends Collection<?>> collectionType){
-		this.collectionType = collectionType;
+	public CollectionDecorator(Class<?> itensCollectionType){
 		this.itensCollectionType =  itensCollectionType;
 	}
 	
-	public String toString(T field) throws FieldDecoratorException {
-		// TODO Auto-generated method stub
-		return null;
+	public String toString(Collection collection) throws FieldDecoratorException {
+		StringBuilder sb =  new StringBuilder();
+		for (Iterator iterator = collection.iterator(); iterator.hasNext();) {
+			Object object = (Object) iterator.next();
+			String s = FFPojoHelper.getInstance().parseToText(object);
+			sb.append(s);
+		}
+		return sb.toString();
 	}
 
-	public T fromString(String field) throws FieldDecoratorException {
-		return null;
+	public Collection fromString(String field) throws FieldDecoratorException {
+		CollectionDecoratorUtil collectionDecoratorUtil = new CollectionDecoratorUtil(itensCollectionType);
+		int objectLineSize =  collectionDecoratorUtil.objectLineSize();
+		int index = 0;
+		List listObjects =  new ArrayList();
+		while(index < field.length()){
+			int finalPosition = index + objectLineSize;
+			String item =  field.substring(index, (finalPosition));
+			Object o = FFPojoHelper.getInstance().createFromText(itensCollectionType, item);
+			listObjects.add(o); 
+			index = finalPosition + 1 ; 
+		}
+		return listObjects;
 	}
 
 }

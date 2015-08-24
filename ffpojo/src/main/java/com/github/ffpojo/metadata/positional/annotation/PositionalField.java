@@ -10,7 +10,7 @@ import com.github.ffpojo.metadata.FieldDecorator;
 import com.github.ffpojo.metadata.positional.PaddingAlign;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.FIELD})
 public @interface PositionalField {
 	int initialPosition();
 	int finalPosition();
