@@ -9,9 +9,10 @@ import com.github.ffpojo.FFPojoHelper;
 import com.github.ffpojo.decorator.util.CollectionDecoratorUtil;
 import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.metadata.FieldDecorator;
+import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
 
 @SuppressWarnings("all")
-public class CollectionDecorator/*<T extends Collection<?>>*/ implements FieldDecorator<Collection>{
+public class CollectionDecorator/*<T extends Collection<?>>*/ extends ExtendedFieldDecorator<Collection> {
 
 	private Class<?> itensCollectionType;
 	
@@ -42,6 +43,23 @@ public class CollectionDecorator/*<T extends Collection<?>>*/ implements FieldDe
 			index = finalPosition + 1 ; 
 		}
 		return listObjects;
+	}
+	
+	/**
+	 * Should to return a array of Class.
+	 * The array returned represent the types paramters of constructor
+	 * @return
+	 */
+	public static Class<?>[] getTypesConstructorExtended(){
+		return new Class[]{Collection.class, Object.class};
+	}
+	
+	/**
+	 * Return the methods names in annotation that contains the values to call the constructor
+	 * @return
+	 */
+	public static String[] getMethodContainsContstructorValues(){
+		return new String[]{"itemType", "collectionType"};
 	}
 
 }

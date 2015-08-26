@@ -10,7 +10,7 @@ import java.util.List;
 import com.github.ffpojo.metadata.positional.PaddingAlign;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.FIELD})
 public @interface CollectionPositionalField {
 
 	int initialPosition();
@@ -20,6 +20,6 @@ public @interface CollectionPositionalField {
 	boolean trimOnRead() default true;
 	@SuppressWarnings("rawtypes")
 	Class<? extends Collection> collectionType() default List.class;
-	Class<?> collectionItemType() default Object.class;
+	Class<?> itemType() default Object.class;
 	
 }

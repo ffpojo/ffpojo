@@ -25,7 +25,7 @@ public class BooleanDecorator  extends ExtendedFieldDecorator<Boolean>{
 
 	public Boolean fromString(String field) throws FieldDecoratorException {
 		if (field== null) return null;
-		return (field.equalsIgnoreCase(trueIdentifier));
+		return (field.trim().equalsIgnoreCase(trueIdentifier));
 	}
 	
 	public static Class<?>[] getTypesConstructorExtended(){

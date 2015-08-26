@@ -1,18 +1,19 @@
 package com.github.ffpojo.decorator;
 
+import com.github.ffpojo.decorator.util.IntegerDecoratorUtil;
 import com.github.ffpojo.exception.FieldDecoratorException;
-import com.github.ffpojo.metadata.FieldDecorator;
+import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
 
-public class LongDecorator implements FieldDecorator<Long>{
+public class LongDecorator extends ExtendedFieldDecorator<Long>{
 
+	private final IntegerDecoratorUtil util = new IntegerDecoratorUtil();
+	
 	public String toString(Long field) throws FieldDecoratorException {
-		// TODO Auto-generated method stub
-		return null;
+		return util.toStringFromLong(field);
 	}
 
 	public Long fromString(String field) throws FieldDecoratorException {
-		// TODO Auto-generated method stub
-		return null;
+		return util.fromStringToLong(field);
 	}
 
 }
