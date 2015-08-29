@@ -9,10 +9,12 @@ import com.github.ffpojo.metadata.positional.PaddingAlign;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD})
-public @interface LongPositionalField {
+public @interface SetPositionalField {
 	int initialPosition();
 	int finalPosition();
+	Class<?> itemType();
 	PaddingAlign paddingAlign() default PaddingAlign.RIGHT;
 	char paddingCharacter() default ' ';
 	boolean trimOnRead() default true;
+	
 }

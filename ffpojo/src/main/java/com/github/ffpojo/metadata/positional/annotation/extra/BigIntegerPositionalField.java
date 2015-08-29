@@ -4,22 +4,15 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.Collection;
-import java.util.List;
 
 import com.github.ffpojo.metadata.positional.PaddingAlign;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD})
-public @interface CollectionPositionalField {
-
+public @interface BigIntegerPositionalField {
 	int initialPosition();
 	int finalPosition();
 	PaddingAlign paddingAlign() default PaddingAlign.RIGHT;
 	char paddingCharacter() default ' ';
 	boolean trimOnRead() default true;
-	@SuppressWarnings("rawtypes")
-	Class<? extends Collection> collectionType() default List.class;
-	Class<?> itemType() default Object.class;
-	
 }

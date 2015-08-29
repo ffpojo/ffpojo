@@ -8,9 +8,8 @@ import java.lang.annotation.Target;
 import com.github.ffpojo.metadata.positional.PaddingAlign;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.FIELD})
 public @interface BigDecimalPositionalField{
-
 	int initialPosition();
 	int finalPosition();
 	PaddingAlign paddingAlign() default PaddingAlign.RIGHT;

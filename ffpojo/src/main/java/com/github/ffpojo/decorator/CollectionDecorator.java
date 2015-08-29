@@ -2,28 +2,30 @@ package com.github.ffpojo.decorator;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 import com.github.ffpojo.FFPojoHelper;
 import com.github.ffpojo.decorator.util.CollectionDecoratorUtil;
 import com.github.ffpojo.exception.FieldDecoratorException;
-import com.github.ffpojo.metadata.FieldDecorator;
 import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
 
 @SuppressWarnings("all")
-public class CollectionDecorator/*<T extends Collection<?>>*/ extends ExtendedFieldDecorator<Collection> {
+public class CollectionDecorator  extends ExtendedFieldDecorator<Collection> {
 
-	private Class<?> itensCollectionType;
+	private final Class<?> itensCollectionType;
+	private final Class<? extends Collection> collectionToReturn;
 	
-	public CollectionDecorator(Class<?> itensCollectionType){
+	public CollectionDecorator(Class itensCollectionType, Class<? extends Collection> clazzCollection){
 		this.itensCollectionType =  itensCollectionType;
+		this.collectionToReturn =  clazzCollection;
 	}
 	
 	public String toString(Collection collection) throws FieldDecoratorException {
 		StringBuilder sb =  new StringBuilder();
 		for (Iterator iterator = collection.iterator(); iterator.hasNext();) {
-			Object object = (Object) iterator.next();
+			Object object =  iterator.next();
 			String s = FFPojoHelper.getInstance().parseToText(object);
 			sb.append(s);
 		}
@@ -34,13 +36,21 @@ public class CollectionDecorator/*<T extends Collection<?>>*/ extends ExtendedFi
 		CollectionDecoratorUtil collectionDecoratorUtil = new CollectionDecoratorUtil(itensCollectionType);
 		int objectLineSize =  collectionDecoratorUtil.objectLineSize();
 		int index = 0;
-		List listObjects =  new ArrayList();
-		while(index < field.length()){
+		Collection listObjects;
+		if (Set.class.isAssignableFrom(collectionToReturn)){
+			listObjects = new HashSet();
+		}else{
+			listObjects = new ArrayList();
+		}
+		while(index < field.length()-1){
 			int finalPosition = index + objectLineSize;
+			if (finalPosition > field.length()-1){
+				finalPosition =  field.length()-1;
+			}
 			String item =  field.substring(index, (finalPosition));
 			Object o = FFPojoHelper.getInstance().createFromText(itensCollectionType, item);
 			listObjects.add(o); 
-			index = finalPosition + 1 ; 
+			index = finalPosition; 
 		}
 		return listObjects;
 	}
@@ -51,7 +61,7 @@ public class CollectionDecorator/*<T extends Collection<?>>*/ extends ExtendedFi
 	 * @return
 	 */
 	public static Class<?>[] getTypesConstructorExtended(){
-		return new Class[]{Collection.class, Object.class};
+		return new Class[]{Class.class};
 	}
 	
 	/**
@@ -59,7 +69,7 @@ public class CollectionDecorator/*<T extends Collection<?>>*/ extends ExtendedFi
 	 * @return
 	 */
 	public static String[] getMethodContainsContstructorValues(){
-		return new String[]{"itemType", "collectionType"};
+		return new String[]{"itemType"};
 	}
 
 }

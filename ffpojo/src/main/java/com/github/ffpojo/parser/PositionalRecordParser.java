@@ -110,14 +110,23 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
 			if (!isFirstFieldDescriptor) {
 				previousFieldDescriptor = positionalFieldDescriptors.get(i-1);
 			}
-			
-			Method getter = actualFieldDescriptor.getGetter();
 			Object fieldValueObj;
-			try {
-				fieldValueObj = getter.invoke(record, new Object[]{});
-			} catch (Exception e) {
-				throw new RecordParserException("Error while invoking getter method: " + getter, e);
-			} 
+			if (AccessorType.FIELD.equals(actualFieldDescriptor.getAccessorType())){
+				Field field = actualFieldDescriptor.getField();
+				field.setAccessible(true);
+				try {
+					fieldValueObj = field.get(record);
+				} catch (Exception e) {
+					throw new RecordParserException("Error while reading value on field: " +  field.getName());
+				}
+			}else{				
+				Method getter = actualFieldDescriptor.getGetter();
+				try {
+					fieldValueObj = getter.invoke(record, new Object[]{});
+				} catch (Exception e) {
+					throw new RecordParserException("Error while invoking getter method: " + getter, e);
+				} 
+			}
 			
 			String fieldValue;
 			if (fieldValueObj == null) {

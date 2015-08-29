@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
+import com.github.ffpojo.util.StringUtil;
 
 public class DateDecorator extends ExtendedFieldDecorator<Date> {
 
@@ -20,10 +21,12 @@ public class DateDecorator extends ExtendedFieldDecorator<Date> {
 	}
 
 	public String toString(Date field) throws FieldDecoratorException {		
+		if (field == null) return null;
 		return sdf.format(field);
 	}
 
 	public Date fromString(String field) throws FieldDecoratorException {
+		if(StringUtil.isNullOrEmpty(field)) return null;
 		try {
 			return sdf.parse(field);
 		} catch (ParseException e) {

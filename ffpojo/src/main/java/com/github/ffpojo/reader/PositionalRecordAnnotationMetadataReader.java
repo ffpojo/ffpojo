@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.ffpojo.decorator.BooleanDecorator;
-import com.github.ffpojo.decorator.CollectionDecorator;
 import com.github.ffpojo.decorator.DateDecorator;
 import com.github.ffpojo.decorator.DoubleDecorator;
 import com.github.ffpojo.decorator.IntegerDecorator;
+import com.github.ffpojo.decorator.ListDecorator;
 import com.github.ffpojo.decorator.LongDecorator;
+import com.github.ffpojo.decorator.SetDecorator;
 import com.github.ffpojo.exception.FFPojoRuntimeException;
 import com.github.ffpojo.exception.MetadataReaderException;
 import com.github.ffpojo.metadata.FieldDecorator;
@@ -26,11 +27,12 @@ import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.BooleanPositionalField;
-import com.github.ffpojo.metadata.positional.annotation.extra.CollectionPositionalField;
 import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalFiled;
 import com.github.ffpojo.metadata.positional.annotation.extra.DoublePositionalField;
 import com.github.ffpojo.metadata.positional.annotation.extra.IntegerPositionalField;
+import com.github.ffpojo.metadata.positional.annotation.extra.ListPositionalField;
 import com.github.ffpojo.metadata.positional.annotation.extra.LongPositionalField;
+import com.github.ffpojo.metadata.positional.annotation.extra.SetPositionalField;
 import com.github.ffpojo.util.ReflectUtil;
 
 class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader {
@@ -137,6 +139,7 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 					Method method = clazzPositionalFieldAnnotation.getMethod(methodsName[i]);
 					parameters[i] = method.invoke(positionalFieldAnnotation);
 				}
+				clazzFieldDecorator.getConstructors();
 				FieldDecorator<?> filedDecorator = (FieldDecorator<?>) clazzFieldDecorator.getConstructor(typesToConstructor).newInstance(parameters);
 				return filedDecorator;
 			} catch (Exception e) {
@@ -164,7 +167,8 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 		mapAnnotationDecoratorClass.put(LongPositionalField.class, LongDecorator.class);
 		mapAnnotationDecoratorClass.put(IntegerPositionalField.class, IntegerDecorator.class);
 		mapAnnotationDecoratorClass.put(BooleanPositionalField.class, BooleanDecorator.class);
-		mapAnnotationDecoratorClass.put(CollectionPositionalField.class, CollectionDecorator.class);
+		mapAnnotationDecoratorClass.put(ListPositionalField.class, ListDecorator.class);
+		mapAnnotationDecoratorClass.put(SetPositionalField.class, SetDecorator.class);
 		mapAnnotationDecoratorClass.put(DoublePositionalField.class, DoubleDecorator.class);
 //		mapAnnotationDecoratorClass.put(DatePositionalFiled.class, DateDecorator.class);
 //		mapAnnotationDecoratorClass.put(DatePositionalFiled.class, DateDecorator.class);
