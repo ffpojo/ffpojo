@@ -1,4 +1,4 @@
-package com.github.ffpojo.samples;
+package com.github.ffpojo.samples.read;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,49 +7,12 @@ import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.file.reader.FileSystemFlatFileReader;
 import com.github.ffpojo.file.reader.FlatFileReader;
 import com.github.ffpojo.file.reader.FlatFileReaderDefinition;
-import com.github.ffpojo.metadata.positional.annotation.PositionalField;
-import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
+import com.github.ffpojo.samples.pojo.Customer;
 
 public class SimpleFileSystemFlatFileReaderExample {
 
 	//copy the file "SimpleFileSystemFlatFileReaderExample.txt" (make sure you have permission to read in the specified path):
 	private static final String FILE_NAME = "SimpleFileSystemFlatFileReaderExample.txt";
-	
-	@PositionalRecord
-	public static class Customer {
-
-		private Long id;
-		private String name;
-		private String email;
-		
-		@PositionalField(initialPosition = 1, finalPosition = 5)
-		public Long getId() {
-			return id;
-		}
-		public void setId(Long id) {
-			this.id = id;
-		}
-		// must use a String setter or a FieldDecorator
-		public void setId(String id) {
-			this.id = Long.valueOf(id);
-		}
-		
-		@PositionalField(initialPosition = 6, finalPosition = 25)
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		
-		@PositionalField(initialPosition = 26, finalPosition = 55)
-		public String getEmail() {
-			return email;
-		}
-		public void setEmail(String email) {
-			this.email = email;
-		}
-	}
 	
 	public static void main(String[] args) {
 		SimpleFileSystemFlatFileReaderExample example = new SimpleFileSystemFlatFileReaderExample();

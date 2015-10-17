@@ -1,8 +1,8 @@
 package com.github.ffpojo.file.reader;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.github.ffpojo.FFPojoHelper;
@@ -32,12 +32,12 @@ public class FlatFileReaderDefinition {
 	private IdentifierLine idLine;
 	
 	@SuppressWarnings("rawtypes")
-	public FlatFileReaderDefinition(Class bodyClass) throws FFPojoException {
+	public FlatFileReaderDefinition(Class bodyClass){
 		this(Arrays.asList(bodyClass));
 	}
 	
 	@SuppressWarnings({ "rawtypes"})
-	public FlatFileReaderDefinition(List<Class> bodyClasses) throws FFPojoException {
+	public FlatFileReaderDefinition(Collection<Class> bodyClasses) {
 		if (bodyClasses == null || bodyClasses.isEmpty()) {
 			throw new IllegalArgumentException("Class<?> object is null");
 		}
@@ -45,7 +45,7 @@ public class FlatFileReaderDefinition {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private void createMapDefinitions(List<Class> bodyClasses){
+	private void createMapDefinitions(Collection<Class> bodyClasses){
 		int size=0;
 		int startPosition=0;
 		for (Class<?> bodyClass : bodyClasses) {

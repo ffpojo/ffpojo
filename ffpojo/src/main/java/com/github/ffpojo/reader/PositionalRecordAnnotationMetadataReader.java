@@ -63,32 +63,36 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 
 	
 	private PositionalRecordDescriptor getRecordDescriptor(AccessorType accessorType) throws MetadataReaderException {
-		List<PositionalFieldDescriptor> fieldDescriptors = new ArrayList<PositionalFieldDescriptor>();
 		if (AccessorType.FIELD.equals(accessorType)){
-			return readPositionalFieldDescriptorByAccessorTypeField(fieldDescriptors);
+			return readPositionalFieldDescriptorByAccessorTypeField();
 		}
-		return readPositionalFieldDescriptorByAccessorTypeProperty(fieldDescriptors);
+		return readPositionalFieldDescriptorByAccessorTypeProperty();
 	}
 
-	private PositionalRecordDescriptor readPositionalFieldDescriptorByAccessorTypeField(List<PositionalFieldDescriptor> fieldDescriptors) throws MetadataReaderException {
+	private PositionalRecordDescriptor readPositionalFieldDescriptorByAccessorTypeField() throws MetadataReaderException {
+		final List<PositionalFieldDescriptor> fieldDescriptors = new ArrayList<PositionalFieldDescriptor>();
 		final List<Field> fields = ReflectUtil.getAnnotadedFields(recordClazz);
 		for (Field field : fields) {
-			Annotation[] annotations =  field.getAnnotations();
-			 for (Annotation annotation : annotations) {
-					if (isAnnotationPositionalField(annotation)){
-						PositionalFieldDescriptor fieldDescriptor = positionalDescriptorFromPositionalField(annotation);
-						fieldDescriptor.setAccessorType(AccessorType.FIELD);
-						fieldDescriptor.setField(field);
-						fieldDescriptors.add(fieldDescriptor);
-					}
-				}
+			readFieldDescriptor(fieldDescriptors, field);
 		}
-
 		PositionalRecordDescriptor recordDescriptor = new PositionalRecordDescriptor(recordClazz, fieldDescriptors);
 		return recordDescriptor;
 	}
 
-	private PositionalRecordDescriptor readPositionalFieldDescriptorByAccessorTypeProperty(List<PositionalFieldDescriptor> fieldDescriptors) throws MetadataReaderException {
+	private void readFieldDescriptor(final List<PositionalFieldDescriptor> fieldDescriptors, Field field) {
+		Annotation[] annotations = field.getAnnotations();
+		for (Annotation annotation : annotations) {
+			if (isAnnotationPositionalField(annotation)){
+				PositionalFieldDescriptor fieldDescriptor = positionalDescriptorFromPositionalField(annotation);
+				fieldDescriptor.setAccessorType(AccessorType.FIELD);
+				fieldDescriptor.setField(field);
+				fieldDescriptors.add(fieldDescriptor);
+			}
+		}
+	}
+
+	private PositionalRecordDescriptor readPositionalFieldDescriptorByAccessorTypeProperty() throws MetadataReaderException {
+		final List<PositionalFieldDescriptor> fieldDescriptors = new ArrayList<PositionalFieldDescriptor>();
 		Method[] methods = recordClazz.getMethods();
 		for (Method method : methods) {
 			if(ReflectUtil.isGetter(method)) {
@@ -170,9 +174,6 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 		mapAnnotationDecoratorClass.put(ListPositionalField.class, ListDecorator.class);
 		mapAnnotationDecoratorClass.put(SetPositionalField.class, SetDecorator.class);
 		mapAnnotationDecoratorClass.put(DoublePositionalField.class, DoubleDecorator.class);
-//		mapAnnotationDecoratorClass.put(DatePositionalFiled.class, DateDecorator.class);
-//		mapAnnotationDecoratorClass.put(DatePositionalFiled.class, DateDecorator.class);
-//		mapAnnotationDecoratorClass.put(DatePositionalFiled.class, DateDecorator.class);
 		return mapAnnotationDecoratorClass.get(type);
 	}
 
@@ -187,7 +188,7 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 		return decorator;
 	}
 	
-	private static boolean isAnnotationPositionalField(Annotation annotation){
+	private boolean isAnnotationPositionalField(Annotation annotation){
 			try{
 				annotation.annotationType().getMethod("initialPosition");
 				annotation.annotationType().getMethod("finalPosition");

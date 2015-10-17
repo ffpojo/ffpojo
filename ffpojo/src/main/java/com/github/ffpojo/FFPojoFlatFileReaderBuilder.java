@@ -1,61 +1,155 @@
 package com.github.ffpojo;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
+import com.github.ffpojo.dsl.AddClassBuilder;
+import com.github.ffpojo.dsl.FFPojoRandomReaderBuilder;
+import com.github.ffpojo.dsl.FFReaderBuilder;
+import com.github.ffpojo.dsl.ReadProcessor;
+import com.github.ffpojo.exception.FFPojoRuntimeException;
+import com.github.ffpojo.exception.RecordProcessorException;
+import com.github.ffpojo.file.processor.FlatFileProcessor;
+import com.github.ffpojo.file.processor.ThreadPoolFlatFileProcessor;
+import com.github.ffpojo.file.processor.record.DefaultRecordProcessor;
+import com.github.ffpojo.file.processor.record.event.RecordEvent;
+import com.github.ffpojo.file.reader.FlatFileReader;
+import com.github.ffpojo.file.reader.FlatFileReaderDefinition;
+import com.github.ffpojo.file.reader.InputStreamFlatFileReader;
 
+@SuppressWarnings("all")
 public class FFPojoFlatFileReaderBuilder {
 	
-	private File file;
-	private final Set<Class<?>> classes =  new HashSet<Class<?>>();
+	private final Set<Class> classes =  new HashSet<Class>();
 	
-	public AddClassBuilder withFile(File file){
-		this.file =  file;
-		return new AddClassBuilderImpl(this);
+	public AddClassBuilder withFile(final File file){
+		return new AddClassBuilder() {
+			
+			public FFReaderBuilder withRecordClasses(List<Class<?>> clazz) {
+				classes.addAll(clazz);
+				return read(file);
+			}
+			
+			public FFReaderBuilder withRecordClass(Class<?> clazz) {
+				classes.add(clazz);
+				return read(file);
+			}
+		};
 	}
 	
-	public InputStreamReaderBuilder withInputStream(InputStream inputStream) {
-		return null;
+	public synchronized AddClassBuilder withInputStream(final InputStream inputStream) {
+		return new AddClassBuilder() {
+			public FFReaderBuilder withRecordClasses(List<Class<?>> clazz) {
+				classes.addAll(clazz);
+				return read(inputStream);
+			}
+			
+			public FFReaderBuilder withRecordClass(Class<?> clazz) {
+				classes.add(clazz);
+				return read(inputStream);
+			}
+		};
 	}
+	
+	private FFReaderBuilder read(final File file){
+		try {
+			return read(new FileInputStream(file));
+		} catch (Exception e) {
+			throw new FFPojoRuntimeException(e);
+		}
+	}
+	
+	private FFReaderBuilder read(final InputStream inputStream ) throws FFPojoRuntimeException{
+		return new FFReaderBuilder() {
+			public List<?> read() {
+				final List itens =  new ArrayList();
+				read(new ReadProcessor() {
+					public void process(Object item) {
+						itens.add(item);
+					}
+				});
+				return itens;
+			}
 
-	private class AddClassBuilderImpl implements AddClassBuilder{
-		private FFPojoFlatFileReaderBuilder builder;
-		
-		public AddClassBuilderImpl(FFPojoFlatFileReaderBuilder builder) {
-			this.builder =  builder;
-		}
-		public FFReaderBuilder addRecordClass(Class<?> clazz) {
-			classes.add(clazz);
-			return new FFReaderBuilderImpl(builder);
-		}
-		public FFReaderBuilder addRecordClasses(List<Class<?>> clazzes) {
-			classes.addAll(clazzes);
-			return new FFReaderBuilderImpl(builder);
-		}
-	}
-	
-	private class FFReaderBuilderImpl implements FFReaderBuilder{
-		
-		private FFPojoFlatFileReaderBuilder builder;
+			public void read(ReadProcessor processor) {
+				FlatFileReader reader = null;
+				try {
+					reader = new InputStreamFlatFileReader(inputStream, new FlatFileReaderDefinition(classes));
+					while(reader.hasNext()){
+						processor.process(reader.next());
+					}
+				} catch (Exception e) {
+					throw new FFPojoRuntimeException(e);
+				}finally {
+					try {
+						if (reader != null){							
+							reader.close();
+						}
+					} catch (IOException e) {
+						throw new FFPojoRuntimeException(e);
+					}
+				}
+			}
 
-		public FFReaderBuilderImpl(FFPojoFlatFileReaderBuilder fFPojoFlatFileReaderBuilder){
-			this.builder =  fFPojoFlatFileReaderBuilder;
-		}
-		public List<?> read() {
-			return null;
-		}
-		
-	}
-	
-	public static void main(String[] args) {
-		new FFPojoFlatFileReaderBuilder()
-			.withFile(new File(""))
-			.addRecordClass(FFPojoAccessorType.class)
-			.read();
+			public FFPojoRandomReaderBuilder withThreads(final int qtdeThreads) {
+				return new FFPojoRandomReaderBuilder() {
+					public List<?> randomRead() {
+						final List itens =  new ArrayList();
+						randomRead(new ReadProcessor() {
+							public void process(Object item) {
+								itens.add(item);
+							}
+						});
+						return itens;
+					}
+
+					public void randomRead(final ReadProcessor processor) {
+						FlatFileReader reader = null;
+						try{
+							inputStream.available();
+							if (isClosed(inputStream) && inputStream.markSupported()){
+								inputStream.reset();
+							}
+							reader = reader = new InputStreamFlatFileReader(inputStream, new FlatFileReaderDefinition(classes));
+							FlatFileProcessor ffProcessor = new ThreadPoolFlatFileProcessor(reader, qtdeThreads);
+							synchronized(this){
+								ffProcessor.processFlatFile(new DefaultRecordProcessor(){
+									@Override
+									public void processBody(RecordEvent event) throws RecordProcessorException {
+										processor.process(event.getRecord());
+									}
+								});								
+							}
+						} catch (Exception e) {
+							throw new FFPojoRuntimeException(e);
+						}finally {
+							try {
+								if (reader != null){							
+									reader.close();
+								}
+							} catch (IOException e) {
+								throw new FFPojoRuntimeException(e);
+							}
+						}		
+						
+					}
+
+					private boolean isClosed(final InputStream inputStream)  {
+						try {
+							return inputStream.available() == 0;
+						} catch (IOException e) {
+							return true;
+						}
+					}
+				};
+			}
+		};
 	}
 
 }

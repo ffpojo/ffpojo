@@ -5,9 +5,9 @@ public class IdentifierLine {
 	private int size;
 	private int startPosition;
 	
-	public IdentifierLine(int startPosition2, int size2) {
-		this.size =  size2;
-		this.startPosition = startPosition2;
+	public IdentifierLine(int startPosition, int size) {
+		this.size =  size;
+		this.startPosition = startPosition;
 	}
 	public int getSize() {
 		return size;
