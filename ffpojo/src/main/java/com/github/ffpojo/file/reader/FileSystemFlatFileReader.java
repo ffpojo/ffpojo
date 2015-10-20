@@ -12,7 +12,7 @@ import java.nio.charset.CharsetDecoder;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.github.ffpojo.exception.FFPojoRuntimeException;
+import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.RecordParserException;
 import com.github.ffpojo.util.FileUtil;
 
@@ -153,9 +153,9 @@ public class FileSystemFlatFileReader extends BaseFlatFileReader implements Flat
 			this.recordText = charBuffer.toString();
 			recordIndex++;
 		} catch (IOException e) {
-			throw new FFPojoRuntimeException("Error while decoding the line number " + (recordIndex + 1), e);
+			throw new FFPojoException("Error while decoding the line number " + (recordIndex + 1), e);
 		} catch (RecordParserException e) {
-			throw new FFPojoRuntimeException("Error while parsing from text the line number " + (recordIndex + 1), e);
+			throw new FFPojoException("Error while parsing from text the line number " + (recordIndex + 1), e);
 		}
 		
 		return record;

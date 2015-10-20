@@ -15,7 +15,7 @@ import com.github.ffpojo.decorator.IntegerDecorator;
 import com.github.ffpojo.decorator.ListDecorator;
 import com.github.ffpojo.decorator.LongDecorator;
 import com.github.ffpojo.decorator.SetDecorator;
-import com.github.ffpojo.exception.FFPojoRuntimeException;
+import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.MetadataReaderException;
 import com.github.ffpojo.metadata.FieldDecorator;
 import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
@@ -124,7 +124,7 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 			fieldDescriptor.setDecorator(createNewInstanceDecorator(positionalFieldAnnotation));
 			return fieldDescriptor;			
 		}catch(Exception e){
-			throw new FFPojoRuntimeException(e);
+			throw new FFPojoException(e);
 		}
 	}
 
@@ -147,20 +147,20 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 				FieldDecorator<?> filedDecorator = (FieldDecorator<?>) clazzFieldDecorator.getConstructor(typesToConstructor).newInstance(parameters);
 				return filedDecorator;
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				throw new FFPojoException(e);
 			}
 		}
 		return getDecoratorInstance((PositionalField)positionalFieldAnnotation);
 	}
 
 	private Class<?> getClassDecorator(Annotation positionalFieldAnnotation, Class<?> clazzPositionalFieldAnnotation)
-			throws FFPojoRuntimeException {
+			throws FFPojoException {
 		try{
 			Class<?> clazzFieldDecorator = (Class<?>) getClassDecorator(positionalFieldAnnotation);
 			return clazzFieldDecorator;
 			
 		}catch(Exception e){
-			throw new FFPojoRuntimeException(e);
+			throw new FFPojoException(e);
 		}
 	}
 	

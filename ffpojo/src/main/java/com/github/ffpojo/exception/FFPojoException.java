@@ -1,6 +1,6 @@
 package com.github.ffpojo.exception;
 
-public class FFPojoException extends Exception {
+public class FFPojoException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public FFPojoException(String message) {

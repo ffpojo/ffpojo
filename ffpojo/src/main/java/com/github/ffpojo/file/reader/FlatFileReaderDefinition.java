@@ -47,14 +47,13 @@ public class FlatFileReaderDefinition {
 	@SuppressWarnings("rawtypes")
 	private void createMapDefinitions(Collection<Class> bodyClasses){
 		int size=0;
-		int startPosition=0;
+		final int startPosition=0;
 		for (Class<?> bodyClass : bodyClasses) {
 			if (bodyClass.isAnnotationPresent(PositionalRecord.class)){
-				PositionalRecord pr =  bodyClass.getAnnotation(PositionalRecord.class);
-				PositionalRecordLineIdentifier lineIdentifier =  pr.recordLineIdentifier();
-				size = lineIdentifier.textIdentifier().length();
-				startPosition =  lineIdentifier.startPosition();
-				definitions.put(lineIdentifier.textIdentifier(), bodyClass);
+				final PositionalRecord pr =  bodyClass.getAnnotation(PositionalRecord.class);
+				final String textIdentifier =  pr.textLineIdentifier();
+				size = textIdentifier.length();
+				definitions.put(textIdentifier, bodyClass);
 			}
 		}
 		idLine =  new IdentifierLine(startPosition, size);

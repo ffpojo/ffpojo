@@ -5,3 +5,7 @@
 bin/
 target/
 unused/
+*.iml
+.idea/
+.metadata/
+.recommenders/

@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.github.ffpojo.exception.FFPojoRuntimeException;
+import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.exception.RecordParserException;
 import com.github.ffpojo.metadata.FieldDecorator;
@@ -24,7 +24,8 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
 	
 	//TODO: alterar de object pra classe correta
 	public Object parseFromText(FileClassConfiguration fileClassConfiguration, String text)throws RecordParserException {
-		return parseFromText(fileClassConfiguration.getClassByIdLine(text), text);
+		final Class<?> classByIdLine = fileClassConfiguration.getClassByIdLine(text);
+		return parseFromText(classByIdLine, text);
 	}
 	
 	public <T> T parseFromText(Class<T> recordClazz, String text) throws RecordParserException {
@@ -64,7 +65,7 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
 					Object value =  actualFieldDescriptor.getDecorator().fromString(fieldValue);
 					field.set(record, value);
 				} catch (Exception e) {
-					throw new FFPojoRuntimeException(e);
+					throw new FFPojoException(e);
 				}
 				
 			}else{

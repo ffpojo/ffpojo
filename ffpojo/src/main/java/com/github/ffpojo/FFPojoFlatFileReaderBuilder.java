@@ -13,7 +13,7 @@ import com.github.ffpojo.dsl.AddClassBuilder;
 import com.github.ffpojo.dsl.FFPojoRandomReaderBuilder;
 import com.github.ffpojo.dsl.FFReaderBuilder;
 import com.github.ffpojo.dsl.ReadProcessor;
-import com.github.ffpojo.exception.FFPojoRuntimeException;
+import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.RecordProcessorException;
 import com.github.ffpojo.file.processor.FlatFileProcessor;
 import com.github.ffpojo.file.processor.ThreadPoolFlatFileProcessor;
@@ -61,11 +61,11 @@ public class FFPojoFlatFileReaderBuilder {
 		try {
 			return read(new FileInputStream(file));
 		} catch (Exception e) {
-			throw new FFPojoRuntimeException(e);
+			throw new FFPojoException(e);
 		}
 	}
 	
-	private FFReaderBuilder read(final InputStream inputStream ) throws FFPojoRuntimeException{
+	private FFReaderBuilder read(final InputStream inputStream ) throws FFPojoException{
 		return new FFReaderBuilder() {
 			public List<?> read() {
 				final List itens =  new ArrayList();
@@ -85,14 +85,14 @@ public class FFPojoFlatFileReaderBuilder {
 						processor.process(reader.next());
 					}
 				} catch (Exception e) {
-					throw new FFPojoRuntimeException(e);
+					throw new FFPojoException(e);
 				}finally {
 					try {
 						if (reader != null){							
 							reader.close();
 						}
 					} catch (IOException e) {
-						throw new FFPojoRuntimeException(e);
+						throw new FFPojoException(e);
 					}
 				}
 			}
@@ -127,14 +127,14 @@ public class FFPojoFlatFileReaderBuilder {
 								});								
 							}
 						} catch (Exception e) {
-							throw new FFPojoRuntimeException(e);
+							throw new FFPojoException(e);
 						}finally {
 							try {
 								if (reader != null){							
 									reader.close();
 								}
 							} catch (IOException e) {
-								throw new FFPojoRuntimeException(e);
+								throw new FFPojoException(e);
 							}
 						}		
 						

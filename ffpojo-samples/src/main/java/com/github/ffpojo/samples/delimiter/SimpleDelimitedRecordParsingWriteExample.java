@@ -1,22 +1,25 @@
-package com.github.ffpojo.samples;
+package com.github.ffpojo.samples.delimiter;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.github.ffpojo.FFPojoHelper;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.metadata.delimited.annotation.DelimitedField;
 import com.github.ffpojo.metadata.delimited.annotation.DelimitedRecord;
 
-/**
- * @author Gilberto Holms
- * @author William Miranda
- *
- */
-public class SimpleDelimitedRecordParsingReadExample {
+public class SimpleDelimitedRecordParsingWriteExample {
 
 	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "SimpleDelimitedRecordParsingExampleInput.txt";
+	
+	//change here (make sure you have permission to write in the specified path):
+	private static final String OUTPUT_TXT_OS_PATH = System.getProperty("java.io.tmpdir") +  INPUT_TXT_RESOURCE_CLASSPATH;
 	
 	@DelimitedRecord(delimiter = "|")
 	public static class Customer {
@@ -55,10 +58,14 @@ public class SimpleDelimitedRecordParsingReadExample {
 	}
 	
 	public static void main(String[] args) {
-		SimpleDelimitedRecordParsingReadExample example = new SimpleDelimitedRecordParsingReadExample();
+		SimpleDelimitedRecordParsingWriteExample example = new SimpleDelimitedRecordParsingWriteExample();
 		try {
 			System.out.println("Making POJO from TXT...");
 			example.readCustomersFromText();
+			
+			System.out.println("Making TXT from POJO...");
+			example.writeCustomersToText();
+			
 			System.out.println("END !");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -76,6 +83,48 @@ public class SimpleDelimitedRecordParsingReadExample {
 			System.out.printf("[%d][%s][%s]\n", cust.getId(), cust.getName(), cust.getEmail());
 		}
 		textFileReader.close();
+	}
+	
+	public void writeCustomersToText() throws IOException, FFPojoException {
+		FFPojoHelper ffpojo = FFPojoHelper.getInstance();
+		File file = new File(OUTPUT_TXT_OS_PATH);
+		file.createNewFile();
+		BufferedWriter textFileWriter = new BufferedWriter(new FileWriter(file));
+		List<Customer> customers = createCustomersMockList();
+		for (int i = 0; i < customers.size(); i++) {
+			String line = ffpojo.parseToText(customers.get(i));
+			textFileWriter.write(line);
+			if (i < customers.size() - 1) {
+				textFileWriter.newLine();
+			}
+		}
+		textFileWriter.close();	
+	}
+	
+	private static List<Customer> createCustomersMockList() {
+		List<Customer> customers = new ArrayList<Customer>();
+		{
+			Customer cust = new Customer();
+			cust.setId(98456L); 
+			cust.setName("Axel Rose"); 
+			cust.setEmail("axl@thehost.com");
+			customers.add(cust);
+		}
+		{
+			Customer cust = new Customer();
+			cust.setId(65478L); 
+			cust.setName("Bono Vox"); 
+			cust.setEmail("bono@thehost.com");
+			customers.add(cust);
+		}
+		{
+			Customer cust = new Customer();
+			cust.setId(78425L); 
+			cust.setName("Bob Marley"); 
+			cust.setEmail("marley@thehost.com");
+			customers.add(cust);
+		}
+		return customers;
 	}
 	
 }
