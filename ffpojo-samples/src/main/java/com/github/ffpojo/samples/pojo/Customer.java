@@ -3,10 +3,13 @@ package com.github.ffpojo.samples.pojo;
 import java.util.Date;
 
 import com.github.ffpojo.decorator.DateDecorator;
+import com.github.ffpojo.metadata.positional.annotation.AccessorType;
+import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 
 @PositionalRecord(ignorePositionNotFound=true)
+@FFPojoAccessorType(accessorType = AccessorType.FIELD)
 public class Customer {
 
 	private Long id;

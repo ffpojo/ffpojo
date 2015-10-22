@@ -1,51 +1,41 @@
 package com.github.ffpojo.file.reader.extra;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class IdentifierLine {
-	
-	private int size;
-	private int startPosition;
-	
-	public IdentifierLine(int startPosition, int size) {
-		this.size =  size;
-		this.startPosition = startPosition;
+
+
+	public IdentifierLine() {
 	}
-	public int getSize() {
-		return size;
+
+	private Map<Integer, String> mapIds = new HashMap<Integer, String>();
+
+	public Map<Integer, String> getMapIds() {
+		return mapIds;
 	}
-	public void setSize(int size) {
-		this.size = size;
+
+	public void setMapIds(Map<Integer, String> mapIds) {
+		this.mapIds = mapIds;
 	}
-	public int getStartPosition() {
-		return startPosition;
+
+	public void putId(Integer startPosition, String text){
+		mapIds.put(startPosition, text);
 	}
-	public void setStartPosition(int startPosition) {
-		this.startPosition = startPosition;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		IdentifierLine that = (IdentifierLine) o;
+
+		return mapIds.equals(that.mapIds);
+
 	}
-	
+
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + size;
-		result = prime * result + startPosition;
-		return result;
+		return mapIds.hashCode();
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		IdentifierLine other = (IdentifierLine) obj;
-		if (size != other.size)
-			return false;
-		if (startPosition != other.startPosition)
-			return false;
-		return true;
-	}
-	
-	
-
 }

@@ -27,6 +27,7 @@ public class CollectionDecoratorTest {
 		final Employee funcionario =  createEmployee();
 		final String line = ffpojo.parseToText(funcionario);
 		final Employee expected = ffpojo.createFromText(Employee.class, line);
+		System.out.println(expected);
 		Truth.assert_().that(line.length()).isEqualTo(550);
 		Truth.assert_().that(expected.getProjects().size()).isEqualTo(20);
 	}

@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE})
 public @interface PositionalRecordLineIdentifier {
-//	int startPosition();
+	int startPosition() default 0;
 	String textIdentifier();
 }

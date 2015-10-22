@@ -1,9 +1,6 @@
 package com.github.ffpojo.file.reader;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import com.github.ffpojo.FFPojoHelper;
 import com.github.ffpojo.exception.FFPojoException;
@@ -28,7 +25,7 @@ public class FlatFileReaderDefinition {
 	@Deprecated
 	private RecordParser trailerParser;
 	
-	private Map<String, Class<?>> definitions =  new HashMap<String, Class<?>>();;
+	private Map<IdentifierLine, Class<?>> definitions =  new HashMap<IdentifierLine, Class<?>>();;
 	private IdentifierLine idLine;
 	
 	@SuppressWarnings("rawtypes")
@@ -46,17 +43,17 @@ public class FlatFileReaderDefinition {
 	
 	@SuppressWarnings("rawtypes")
 	private void createMapDefinitions(Collection<Class> bodyClasses){
-		int size=0;
-		final int startPosition=0;
 		for (Class<?> bodyClass : bodyClasses) {
 			if (bodyClass.isAnnotationPresent(PositionalRecord.class)){
 				final PositionalRecord pr =  bodyClass.getAnnotation(PositionalRecord.class);
-				final String textIdentifier =  pr.textLineIdentifier();
-				size = textIdentifier.length();
-				definitions.put(textIdentifier, bodyClass);
+				final PositionalRecordLineIdentifier[] identifiers = pr.lineIdentifiers();
+				final IdentifierLine identifierLine = new IdentifierLine();
+				for (int i = 0; i < identifiers.length; i++) {
+					identifierLine.putId(identifiers[i].startPosition(), identifiers[i].textIdentifier());
+				}
+				definitions.put(identifierLine, bodyClass);
 			}
 		}
-		idLine =  new IdentifierLine(startPosition, size);
 	}
 	
 	public void setHeader(Class<?> header) throws FFPojoException {
@@ -78,11 +75,46 @@ public class FlatFileReaderDefinition {
 	}
 	
 	// GETTERS AND SETTERS
-	
+
 	public Class<?> getBody(String message) {
-		return body = this.definitions.get(message.substring(idLine.getStartPosition(), idLine.getSize()));
+		final Set<IdentifierLine> identifierLines = this.definitions.keySet();
+		final IdentifierLine messageId =  new IdentifierLine();
+		for(IdentifierLine id : identifierLines){
+			final Map<Integer, String> mapIds = id.getMapIds();
+			final Set<Integer> keys = mapIds.keySet();
+			for (Integer startPosition :  keys){
+				final String textId = mapIds.get(startPosition);
+				int sizeText =  textId.length();
+				int finalPosition =  startPosition + sizeText;
+				if (finalPosition > message.length()){
+					break;
+				}
+				messageId.putId(startPosition, message.substring(startPosition, finalPosition));
+			}
+			if (id.equals(messageId)){
+				this.body = this.definitions.get(messageId);
+				break;
+			}else{
+				messageId.getMapIds().clear();
+			}
+		}
+		if (this.body == null){
+			throw new FFPojoException(String.format("Anyone Record class was found for line starting  with :  %s ", getStartWithText(message)));
+		}
+
+		return this.body;
 	}
-	
+
+	private String getStartWithText(String message) {
+		String startWith = "";
+		if (message.length() > 20) {
+            startWith = message.substring(0, 20);
+        }else{
+            startWith = message;
+        }
+		return startWith;
+	}
+
 	public Class<?> getBody() {
 		return body;
 	}
