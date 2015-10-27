@@ -1,6 +1,7 @@
 package com.github.ffpojo.decorator.util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import com.github.ffpojo.util.StringUtil;
 
@@ -54,7 +55,9 @@ public class FloatPointDecoratorUtil {
 	}
 
 	public static BigDecimal fromString(String value,  int precision){
-		return new BigDecimal(value).divide(getMultiplierFactor(precision));
+		return new BigDecimal(value)
+				.divide(getMultiplierFactor(precision))
+				.setScale(precision, RoundingMode.CEILING);
 		
 	}
 	

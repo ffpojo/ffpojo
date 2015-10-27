@@ -8,13 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.ffpojo.decorator.BooleanDecorator;
-import com.github.ffpojo.decorator.DateDecorator;
-import com.github.ffpojo.decorator.DoubleDecorator;
-import com.github.ffpojo.decorator.IntegerDecorator;
-import com.github.ffpojo.decorator.ListDecorator;
-import com.github.ffpojo.decorator.LongDecorator;
-import com.github.ffpojo.decorator.SetDecorator;
+import com.github.ffpojo.decorator.*;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.MetadataReaderException;
 import com.github.ffpojo.metadata.FieldDecorator;
@@ -26,13 +20,7 @@ import com.github.ffpojo.metadata.positional.annotation.AccessorType;
 import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
-import com.github.ffpojo.metadata.positional.annotation.extra.BooleanPositionalField;
-import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalFiled;
-import com.github.ffpojo.metadata.positional.annotation.extra.DoublePositionalField;
-import com.github.ffpojo.metadata.positional.annotation.extra.IntegerPositionalField;
-import com.github.ffpojo.metadata.positional.annotation.extra.ListPositionalField;
-import com.github.ffpojo.metadata.positional.annotation.extra.LongPositionalField;
-import com.github.ffpojo.metadata.positional.annotation.extra.SetPositionalField;
+import com.github.ffpojo.metadata.positional.annotation.extra.*;
 import com.github.ffpojo.util.ReflectUtil;
 
 class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader {
@@ -174,6 +162,10 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 		mapAnnotationDecoratorClass.put(ListPositionalField.class, ListDecorator.class);
 		mapAnnotationDecoratorClass.put(SetPositionalField.class, SetDecorator.class);
 		mapAnnotationDecoratorClass.put(DoublePositionalField.class, DoubleDecorator.class);
+		mapAnnotationDecoratorClass.put(FloatPositionalField.class, FloatDecorator.class);
+		mapAnnotationDecoratorClass.put(BigDecimalPositionalField.class, BigDecimalDecorator.class);
+		mapAnnotationDecoratorClass.put(BigIntegerPositionalField.class, BigIntegerDecorator.class);
+
 		return mapAnnotationDecoratorClass.get(type);
 	}
 

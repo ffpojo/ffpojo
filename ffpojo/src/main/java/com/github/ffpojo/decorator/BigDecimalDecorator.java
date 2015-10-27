@@ -28,6 +28,21 @@ public class BigDecimalDecorator extends ExtendedFieldDecorator<BigDecimal> {
 
 	public BigDecimal fromString(String value){
 		return floatPointDecoratorUtil.fromString(value);
-	}	
-	
+	}
+
+	/**
+	 * Return the constructor parameters type
+	 * @return
+	 */
+	public static Class<?>[] getTypesConstructorExtended(){
+		return new Class[]{int.class};
+	}
+
+	/**
+	 * Return the methods names in annotation that contains the values to call the constructor
+	 * @return
+	 */
+	public static String[] getMethodContainsContstructorValues(){
+		return new String[]{"precision"};
+	}
 }

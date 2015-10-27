@@ -26,7 +26,21 @@ public class FloatDecorator extends ExtendedFieldDecorator<Float>{
 
 	public Float fromString(String value){
 		return floatPointDecoratorUtil.fromString(value).floatValue();
-	}	
+	}
 
-	
+	/**
+	 * Return the constructor parameters type
+	 * @return
+	 */
+	public static Class<?>[] getTypesConstructorExtended(){
+		return new Class[]{int.class};
+	}
+
+	/**
+	 * Return the methods names in annotation that contains the values to call the constructor
+	 * @return
+	 */
+	public static String[] getMethodContainsContstructorValues(){
+		return new String[]{"precision"};
+	}
 }

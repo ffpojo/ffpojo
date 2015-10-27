@@ -99,7 +99,7 @@ public class FlatFileReaderDefinition {
 			}
 		}
 		if (this.body == null){
-			throw new FFPojoException(String.format("Anyone Record class was found for line starting  with :  %s ", getStartWithText(message)));
+			throw new FFPojoException(String.format("No class matches with the line starting with:  %s ", getStartWithText(message)));
 		}
 
 		return this.body;
