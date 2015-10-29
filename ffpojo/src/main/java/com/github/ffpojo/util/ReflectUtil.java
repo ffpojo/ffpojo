@@ -1,6 +1,12 @@
 package com.github.ffpojo.util;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 
 public class ReflectUtil {
 
@@ -17,7 +23,7 @@ public class ReflectUtil {
 			return true;
 		}
 	}
-	
+
 	public static boolean isSetter(Method method) {
 		if (!method.getName().startsWith("set")) {
 			return false;
@@ -27,7 +33,7 @@ public class ReflectUtil {
 			return true;
 		}
 	}
-	
+
 	public static String getFieldNameFromGetterOrSetter(Method method, Class<?> clazz) {
 		String fieldNamePastelCase;
 		if (isGetter(method) && method.getName().startsWith("is")) {
@@ -37,8 +43,9 @@ public class ReflectUtil {
 		}
 		return pastelCaseToCamelCase(fieldNamePastelCase);
 	}
-	
-	public static Method getSetterFromGetter(Method method, Class<?>[] parameterTypes, Class<?> clazz) throws SecurityException, NoSuchMethodException {
+
+	public static Method getSetterFromGetter(Method method, Class<?>[] parameterTypes, Class<?> clazz)
+			throws SecurityException, NoSuchMethodException {
 		String fieldNamePastelCase;
 		if (method.getName().startsWith("is")) {
 			fieldNamePastelCase = method.getName().substring(2);
@@ -47,8 +54,9 @@ public class ReflectUtil {
 		}
 		return clazz.getMethod("set" + fieldNamePastelCase, parameterTypes);
 	}
-	
-	public static Method getGetterFromFieldName(String fieldName, Class<?> clazz) throws SecurityException, NoSuchMethodException {
+
+	public static Method getGetterFromFieldName(String fieldName, Class<?> clazz)
+			throws SecurityException, NoSuchMethodException {
 		String getterNameAsDefault = "get" + ReflectUtil.camelCaseToPastelCase(fieldName);
 		String getterNameAsBoolean = "is" + ReflectUtil.camelCaseToPastelCase(fieldName);
 		Method getter = null;
@@ -59,15 +67,52 @@ public class ReflectUtil {
 		}
 		return getter;
 	}
-	
-	public static String pastelCaseToCamelCase(String sPastel) {
+
+	public static List<Field> getRecursiveFields(Class<?> recordClazz) {
+		List<Field> listaFields = new ArrayList<Field>();
+		Class<?> clazz = recordClazz;
+		while (clazz.isAnnotationPresent(PositionalRecord.class)) {
+			listaFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+			clazz = clazz.getSuperclass();
+		}
+		return listaFields;
+	}
+
+	public static List<Field> getAnnotadedFields(Class<?> recordClazz) {
+		final List<Field> listaFields = new ArrayList<Field>();
+		if (recordClazz.isAnnotationPresent(PositionalRecord.class)) {
+			listaFields.addAll(Arrays.asList(recordClazz.getDeclaredFields()));
+		}
+		return listaFields;
+	}
+
+	public static List<Class<?>> getSuperClassesOf(Class<?> clazz) {
+		List<Class<?>> classes = new ArrayList<Class<?>>();
+		Class<?> currentClazz = clazz;
+		while (currentClazz.getSuperclass() != null) {
+			currentClazz = currentClazz.getSuperclass();
+			classes.add(currentClazz);
+		}
+		return classes;
+	}
+
+	public static boolean existMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
+		try {
+			clazz.getDeclaredMethod(methodName);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	private static String pastelCaseToCamelCase(String sPastel) {
 		char firstChar = sPastel.charAt(0);
 		return String.valueOf(Character.toLowerCase(firstChar)) + sPastel.substring(1);
 	}
-	
-	public static String camelCaseToPastelCase(String sCamel) {
+
+	private static String camelCaseToPastelCase(String sCamel) {
 		char firstChar = sCamel.charAt(0);
 		return String.valueOf(Character.toUpperCase(firstChar)) + sCamel.substring(1);
 	}
-	
+
 }

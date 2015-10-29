@@ -19,6 +19,7 @@ public class InputStreamFlatFileReader extends BaseFlatFileReader implements Fla
 		if (inputStream == null) {
 			throw new IllegalArgumentException("InputStream object is null");
 		}
+		
 		this.inputStreamReader = new BufferedReader(new InputStreamReader(inputStream));
 		this.flatFileDefinition = flatFile;		
 		this.nextLine = inputStreamReader.readLine();

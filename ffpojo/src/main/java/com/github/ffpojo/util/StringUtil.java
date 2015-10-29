@@ -1,6 +1,8 @@
 package com.github.ffpojo.util;
 
 public class StringUtil {
+	
+	public static final String EMPTY = "";
 
 	public static enum Direction {
 		LEFT,
@@ -35,4 +37,5 @@ public class StringUtil {
 	public static boolean isNullOrEmpty(String s) {
 		return s == null || s.trim().equals("");
 	}
+	
 }

@@ -1,14 +1,26 @@
 package com.github.ffpojo.reader;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.github.ffpojo.decorator.*;
+import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.MetadataReaderException;
 import com.github.ffpojo.metadata.FieldDecorator;
+import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
+import com.github.ffpojo.metadata.positional.PaddingAlign;
 import com.github.ffpojo.metadata.positional.PositionalFieldDescriptor;
 import com.github.ffpojo.metadata.positional.PositionalRecordDescriptor;
+import com.github.ffpojo.metadata.positional.annotation.AccessorType;
+import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
+import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
+import com.github.ffpojo.metadata.positional.annotation.extra.*;
 import com.github.ffpojo.util.ReflectUtil;
 
 class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader {
@@ -19,36 +31,162 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 
 	@Override
 	public PositionalRecordDescriptor readMetadata() throws MetadataReaderException {
-		List<PositionalFieldDescriptor> fieldDescriptors = new ArrayList<PositionalFieldDescriptor>();
+		
+		final AccessorType accessorType = getAccessorType();
+		final PositionalRecordDescriptor recordDescriptor = getRecordDescriptor(accessorType);
+		recordDescriptor.sortFieldDescriptors();
+		recordDescriptor.assertValid();
+		recordDescriptor.setIgnorePositionNotFound(recordClazz.getAnnotation(PositionalRecord.class).ignorePositionNotFound());
+		return recordDescriptor;
+	}
+
+	
+	private AccessorType getAccessorType() {
+		AccessorType accessorType =  AccessorType.PROPERTY;
+		if (super.recordClazz.isAnnotationPresent(FFPojoAccessorType.class)){
+			accessorType =  super.recordClazz.getAnnotation(FFPojoAccessorType.class).accessorType();
+		}
+		return accessorType;
+	}
+
+	
+	private PositionalRecordDescriptor getRecordDescriptor(AccessorType accessorType) throws MetadataReaderException {
+		if (AccessorType.FIELD.equals(accessorType)){
+			return readPositionalFieldDescriptorByAccessorTypeField();
+		}
+		return readPositionalFieldDescriptorByAccessorTypeProperty();
+	}
+
+	private PositionalRecordDescriptor readPositionalFieldDescriptorByAccessorTypeField() throws MetadataReaderException {
+		final List<PositionalFieldDescriptor> fieldDescriptors = new ArrayList<PositionalFieldDescriptor>();
+		final List<Field> fields = ReflectUtil.getAnnotadedFields(recordClazz);
+		for (Field field : fields) {
+			readFieldDescriptor(fieldDescriptors, field);
+		}
+		PositionalRecordDescriptor recordDescriptor = new PositionalRecordDescriptor(recordClazz, fieldDescriptors);
+		return recordDescriptor;
+	}
+
+	private void readFieldDescriptor(final List<PositionalFieldDescriptor> fieldDescriptors, Field field) {
+		Annotation[] annotations = field.getAnnotations();
+		for (Annotation annotation : annotations) {
+			if (isAnnotationPositionalField(annotation)){
+				PositionalFieldDescriptor fieldDescriptor = positionalDescriptorFromPositionalField(annotation);
+				fieldDescriptor.setAccessorType(AccessorType.FIELD);
+				fieldDescriptor.setField(field);
+				fieldDescriptors.add(fieldDescriptor);
+			}
+		}
+	}
+
+	private PositionalRecordDescriptor readPositionalFieldDescriptorByAccessorTypeProperty() throws MetadataReaderException {
+		final List<PositionalFieldDescriptor> fieldDescriptors = new ArrayList<PositionalFieldDescriptor>();
 		Method[] methods = recordClazz.getMethods();
 		for (Method method : methods) {
 			if(ReflectUtil.isGetter(method)) {
-				PositionalField positionalFieldAnnotation = method.getAnnotation(PositionalField.class);								
-				if (positionalFieldAnnotation != null) {
-					PositionalFieldDescriptor fieldDescriptor = new PositionalFieldDescriptor();
-					fieldDescriptor.setInitialPosition(positionalFieldAnnotation.initialPosition());
-					fieldDescriptor.setFinalPosition(positionalFieldAnnotation.finalPosition());
-					fieldDescriptor.setGetter(method);
-					FieldDecorator<?> decorator;
-					try {
-						decorator = positionalFieldAnnotation.decorator().newInstance();
-					} catch (Exception e) {
-						throw new MetadataReaderException("Error while instantiating decorator class, make sure that is provided a default constructor for class " + positionalFieldAnnotation.decorator(), e);
+				Annotation[] annotations =  method.getAnnotations();
+				for (Annotation annotation : annotations) {
+					if (isAnnotationPositionalField(annotation)){
+						PositionalFieldDescriptor fieldDescriptor = positionalDescriptorFromPositionalField(annotation);
+						fieldDescriptor.setAccessorType(AccessorType.PROPERTY);
+						fieldDescriptor.setGetter(method);
+						fieldDescriptors.add(fieldDescriptor);
 					}
-					fieldDescriptor.setDecorator(decorator);
-					fieldDescriptor.setPaddingAlign(positionalFieldAnnotation.paddingAlign());
-					fieldDescriptor.setPaddingCharacter(positionalFieldAnnotation.paddingCharacter());
-					fieldDescriptor.setTrimOnRead(positionalFieldAnnotation.trimOnRead());
-					fieldDescriptors.add(fieldDescriptor);
 				}
 			}
 		}
 		
 		PositionalRecordDescriptor recordDescriptor = new PositionalRecordDescriptor(recordClazz, fieldDescriptors);
-		recordDescriptor.sortFieldDescriptors();
-		recordDescriptor.assertValid();
-		
 		return recordDescriptor;
 	}
+	
+	private PositionalFieldDescriptor positionalDescriptorFromPositionalField(Annotation positionalFieldAnnotation) {
+		PositionalFieldDescriptor fieldDescriptor = new PositionalFieldDescriptor();
+		Class<?> clazz =  positionalFieldAnnotation.annotationType();
+		try{
+			fieldDescriptor.setInitialPosition(((Integer) clazz.getMethod("initialPosition").invoke(positionalFieldAnnotation)));
+			fieldDescriptor.setFinalPosition(((Integer) clazz.getMethod("finalPosition").invoke(positionalFieldAnnotation)));
+			fieldDescriptor.setPaddingAlign(((PaddingAlign) clazz.getMethod("paddingAlign").invoke(positionalFieldAnnotation)));
+			fieldDescriptor.setPaddingCharacter((((Character) clazz.getMethod("paddingCharacter").invoke(positionalFieldAnnotation))));
+			fieldDescriptor.setTrimOnRead(((Boolean) clazz.getMethod("trimOnRead").invoke(positionalFieldAnnotation)));
+			fieldDescriptor.setDecorator(createNewInstanceDecorator(positionalFieldAnnotation));
+			return fieldDescriptor;			
+		}catch(Exception e){
+			throw new FFPojoException(e);
+		}
+	}
 
+	private FieldDecorator<?> createNewInstanceDecorator(Annotation positionalFieldAnnotation) throws MetadataReaderException {
+		Class<?> clazzPositionalFieldAnnotation =  positionalFieldAnnotation.annotationType();
+		Class<?> clazzFieldDecorator = getClassDecorator(positionalFieldAnnotation, clazzPositionalFieldAnnotation);
+		if (clazzFieldDecorator!= null && ReflectUtil.getSuperClassesOf(clazzFieldDecorator).contains(ExtendedFieldDecorator.class)){
+			try {
+				Method getTypesConstructorExtended =  clazzFieldDecorator.getMethod("getTypesConstructorExtended");
+				Method getMethodContainsContstructorValues =  clazzFieldDecorator.getMethod("getMethodContainsContstructorValues");
+				
+				Class<?>[] typesToConstructor = (Class[]) getTypesConstructorExtended.invoke(null);
+				String[] methodsName = (String[]) getMethodContainsContstructorValues.invoke(null);
+				Object[] parameters =  new Object[methodsName.length];
+				for (int i = 0; i < methodsName.length; i++) {
+					Method method = clazzPositionalFieldAnnotation.getMethod(methodsName[i]);
+					parameters[i] = method.invoke(positionalFieldAnnotation);
+				}
+				clazzFieldDecorator.getConstructors();
+				FieldDecorator<?> filedDecorator = (FieldDecorator<?>) clazzFieldDecorator.getConstructor(typesToConstructor).newInstance(parameters);
+				return filedDecorator;
+			} catch (Exception e) {
+				throw new FFPojoException(e);
+			}
+		}
+		return getDecoratorInstance((PositionalField)positionalFieldAnnotation);
+	}
+
+	private Class<?> getClassDecorator(Annotation positionalFieldAnnotation, Class<?> clazzPositionalFieldAnnotation)
+			throws FFPojoException {
+		try{
+			Class<?> clazzFieldDecorator = (Class<?>) getClassDecorator(positionalFieldAnnotation);
+			return clazzFieldDecorator;
+			
+		}catch(Exception e){
+			throw new FFPojoException(e);
+		}
+	}
+	
+	private Class<?> getClassDecorator(Annotation positionalField){
+		Class<?> type =  positionalField.annotationType();
+		Map<Class<? extends Annotation>, Class<? extends FieldDecorator<?>>> mapAnnotationDecoratorClass = new HashMap<Class<? extends Annotation>, Class<? extends FieldDecorator<?>>>();
+		mapAnnotationDecoratorClass.put(DatePositionalFiled.class, DateDecorator.class);
+		mapAnnotationDecoratorClass.put(LongPositionalField.class, LongDecorator.class);
+		mapAnnotationDecoratorClass.put(IntegerPositionalField.class, IntegerDecorator.class);
+		mapAnnotationDecoratorClass.put(BooleanPositionalField.class, BooleanDecorator.class);
+		mapAnnotationDecoratorClass.put(ListPositionalField.class, ListDecorator.class);
+		mapAnnotationDecoratorClass.put(SetPositionalField.class, SetDecorator.class);
+		mapAnnotationDecoratorClass.put(DoublePositionalField.class, DoubleDecorator.class);
+		mapAnnotationDecoratorClass.put(FloatPositionalField.class, FloatDecorator.class);
+		mapAnnotationDecoratorClass.put(BigDecimalPositionalField.class, BigDecimalDecorator.class);
+		mapAnnotationDecoratorClass.put(BigIntegerPositionalField.class, BigIntegerDecorator.class);
+
+		return mapAnnotationDecoratorClass.get(type);
+	}
+
+	private FieldDecorator<?> getDecoratorInstance(PositionalField positionalFieldAnnotation)
+			throws MetadataReaderException {
+		FieldDecorator<?> decorator;
+		try {
+			decorator = positionalFieldAnnotation.decorator().newInstance();
+		} catch (Exception e) {
+			throw new MetadataReaderException("Error while instantiating decorator class, make sure that is provided a default constructor for class " + positionalFieldAnnotation.decorator(), e);
+		}
+		return decorator;
+	}
+	
+	private boolean isAnnotationPositionalField(Annotation annotation){
+			try{
+				annotation.annotationType().getMethod("initialPosition");
+				annotation.annotationType().getMethod("finalPosition");
+			}catch (Exception e){
+				return false;
+			}
+			return true;
+	}
 }
