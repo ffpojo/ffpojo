@@ -43,7 +43,7 @@ public class FFPojoFlatFileReaderBuilder {
 		};
 	}
 	
-	public synchronized AddClassBuilder withInputStream(final InputStream inputStream) {
+	public  AddClassBuilder withInputStream(final InputStream inputStream) {
 		return new AddClassBuilder() {
 			public FFReaderBuilder withRecordClasses(List<Class<?>> clazz) {
 				classes.addAll(clazz);
