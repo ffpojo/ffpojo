@@ -103,8 +103,9 @@ public class FFPojoAnnotationFieldManager {
         return getDecoratorInstance(fieldAnnotation);
     }
 
+    @SuppressWarnings("all")
     private FieldDecorator<?> getDecoratorInstance(Annotation annotation){
-        Class<? extends FieldDecorator> decorator = null;
+		Class<? extends FieldDecorator> decorator = null;
         try {
             decorator = (Class<? extends FieldDecorator>) annotation.getClass().getMethod("decorator").invoke(annotation);
             return decorator.newInstance();
