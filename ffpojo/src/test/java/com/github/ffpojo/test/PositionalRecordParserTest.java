@@ -4,16 +4,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalField;
 import org.junit.Test;
 
 import com.github.ffpojo.FFPojoHelper;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.metadata.positional.PaddingAlign;
 import com.github.ffpojo.metadata.positional.annotation.AccessorType;
-import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
-import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalFiled;
 import com.github.ffpojo.metadata.positional.annotation.extra.DoublePositionalField;
 import com.github.ffpojo.metadata.positional.annotation.extra.IntegerPositionalField;
 import com.google.common.truth.Truth;
@@ -202,7 +201,7 @@ public class PositionalRecordParserTest {
 		public Double getSalario(){ return this.salario; }
 		public void setSalario(Double salario){ this.salario =  salario; }
 		
-		@DatePositionalFiled(initialPosition=61, finalPosition=68, dateFormat="ddMMyyyy")
+		@DatePositionalField(initialPosition=61, finalPosition=68, dateFormat="ddMMyyyy")
 		public Date getDataDeNascimento() { return dataDeNascimento; }
 		public void setDataDeNascimento(Date dataDeNascimento) { this.dataDeNascimento = dataDeNascimento; }
 		@Override
@@ -269,7 +268,6 @@ public class PositionalRecordParserTest {
 	}
 	
 	@PositionalRecord(ignorePositionNotFound=true)
-	@FFPojoAccessorType(accessorType=AccessorType.FIELD)
 	public static final class TestPojo8 {
 		@PositionalField(initialPosition = 1, finalPosition = 10, paddingAlign = PaddingAlign.LEFT, paddingCharacter = '#')
 		private String name;

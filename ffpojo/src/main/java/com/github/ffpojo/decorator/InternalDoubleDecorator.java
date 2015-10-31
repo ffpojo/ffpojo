@@ -1,20 +1,18 @@
 package com.github.ffpojo.decorator;
 
-import java.math.BigDecimal;
-
 import com.github.ffpojo.decorator.util.FloatPointDecoratorUtil;
 import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
 
-public class BigDecimalDecorator extends ExtendedFieldDecorator<BigDecimal> {
- 
+public class InternalDoubleDecorator extends ExtendedFieldDecorator<Double> {
+
 	private static final int DEFAULT_PRECISION = 2;
 	private final FloatPointDecoratorUtil floatPointDecoratorUtil;
 	
-	public BigDecimalDecorator() {
+	public InternalDoubleDecorator() {
 		this(DEFAULT_PRECISION);
 	}
 	
-	public BigDecimalDecorator(int precision) {		
+	public InternalDoubleDecorator(int precision) {
 		floatPointDecoratorUtil = new FloatPointDecoratorUtil(precision);
 	}
 
@@ -22,13 +20,13 @@ public class BigDecimalDecorator extends ExtendedFieldDecorator<BigDecimal> {
 		return floatPointDecoratorUtil.getPrecision();
 	}
 
-	public String toString(BigDecimal value){
+	public String toString(Double value){
 		return floatPointDecoratorUtil.toString(value);
 	}
 
-	public BigDecimal fromString(String value){
-		return floatPointDecoratorUtil.fromString(value);
-	}
+	public Double fromString(String value){
+		return floatPointDecoratorUtil.fromString(value).doubleValue();
+	}	
 
 	/**
 	 * Return the constructor parameters type
@@ -37,7 +35,7 @@ public class BigDecimalDecorator extends ExtendedFieldDecorator<BigDecimal> {
 	public static Class<?>[] getTypesConstructorExtended(){
 		return new Class[]{int.class};
 	}
-
+	
 	/**
 	 * Return the methods names in annotation that contains the values to call the constructor
 	 * @return
@@ -45,4 +43,5 @@ public class BigDecimalDecorator extends ExtendedFieldDecorator<BigDecimal> {
 	public static String[] getMethodContainsContstructorValues(){
 		return new String[]{"precision"};
 	}
+	
 }

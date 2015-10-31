@@ -4,12 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.github.ffpojo.metadata.positional.annotation.AccessorType;
-import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.SetPositionalField;
 
-@FFPojoAccessorType(accessorType=AccessorType.PROPERTY)
 @PositionalRecord
 public class Manager extends Employee{
 

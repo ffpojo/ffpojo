@@ -2,14 +2,11 @@ package com.github.ffpojo.beans;
 
 import java.util.List;
 
-import com.github.ffpojo.metadata.positional.annotation.AccessorType;
-import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.ListPositionalField;
 
 @PositionalRecord(ignorePositionNotFound=true)
-@FFPojoAccessorType(accessorType=AccessorType.FIELD)
 public class Employee{
 	@PositionalField(initialPosition=1, finalPosition=10)
 	private String name;

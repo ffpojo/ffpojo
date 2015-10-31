@@ -1,13 +1,16 @@
 package com.github.ffpojo.parser;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.exception.RecordParserException;
 import com.github.ffpojo.metadata.FieldDecorator;
 import com.github.ffpojo.metadata.delimited.DelimitedFieldDescriptor;
 import com.github.ffpojo.metadata.delimited.DelimitedRecordDescriptor;
+import com.github.ffpojo.metadata.positional.annotation.AccessorType;
 import com.github.ffpojo.util.ReflectUtil;
 import com.github.ffpojo.util.RegexUtil;
 import com.github.ffpojo.util.StringUtil;
@@ -40,29 +43,43 @@ class DelimitedRecordParser extends BaseRecordParser implements RecordParser {
 			} else {
 				throw new RecordParserException("The position declared in field-mapping is greater than the text tokens amount: " + actualFieldDescriptor.getGetter());
 			}
-			
-			Method setter;
-			Class<?> getterReturnType = actualFieldDescriptor.getGetter().getReturnType();
-			try {
-				setter = ReflectUtil.getSetterFromGetter(actualFieldDescriptor.getGetter(), new Class<?>[] {String.class}, recordClazz);
-			} catch (NoSuchMethodException e1) {
+
+			if(actualFieldDescriptor.getAccessorType().equals(AccessorType.FIELD)){
+				Field field = actualFieldDescriptor.getField();
+				field.setAccessible(true);
 				try {
-					setter = ReflectUtil.getSetterFromGetter(actualFieldDescriptor.getGetter(), new Class<?>[] {getterReturnType}, recordClazz);
-				} catch (NoSuchMethodException e2) {
-					throw new RecordParserException("Compatible setter not found for getter " + actualFieldDescriptor.getGetter(), e2);
+					Object value =  actualFieldDescriptor.getDecorator().fromString(fieldValue);
+					field.set(record, value);
+				} catch (Exception e) {
+					throw new FFPojoException(e);
+				}
+			}else{
+				Method setter;
+				Class<?> getterReturnType = actualFieldDescriptor.getGetter().getReturnType();
+				try {
+					setter = ReflectUtil.getSetterFromGetter(actualFieldDescriptor.getGetter(), new Class<?>[] {String.class}, recordClazz);
+				} catch (NoSuchMethodException e1) {
+					try {
+						setter = ReflectUtil.getSetterFromGetter(actualFieldDescriptor.getGetter(), new Class<?>[] {getterReturnType}, recordClazz);
+					} catch (NoSuchMethodException e2) {
+						throw new RecordParserException("Compatible setter not found for getter " + actualFieldDescriptor.getGetter(), e2);
+					}
+				}
+
+				Object parameter;
+				try {
+					FieldDecorator<?> decorator = actualFieldDescriptor.getDecorator();
+					parameter = decorator.fromString(fieldValue);
+					if (setter != null)
+						setter.invoke(record, parameter);
+				} catch (FieldDecoratorException e) {
+					throw new RecordParserException(e);
+				} catch (Exception e) {
+					throw new RecordParserException("Error while invoking setter method, make sure that is provided a compatible fromString decorator method: " + setter, e);
 				}
 			}
-			
-			Object parameter;
-			try {
-				FieldDecorator<?> decorator = actualFieldDescriptor.getDecorator();
-				parameter = decorator.fromString(fieldValue);
-				setter.invoke(record, parameter);
-			} catch (FieldDecoratorException e) {
-				throw new RecordParserException(e);
-			} catch (Exception e) {
-				throw new RecordParserException("Error while invoking setter method, make sure that is provided a compatible fromString decorator method: " + setter, e);
-			} 
+
+
 
 		}
 		

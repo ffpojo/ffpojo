@@ -3,19 +3,17 @@ package com.github.ffpojo.beans;
 import java.util.Date;
 
 import com.github.ffpojo.metadata.positional.annotation.AccessorType;
-import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
-import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalFiled;
+import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalField;
 
 @PositionalRecord(ignorePositionNotFound=true)
-@FFPojoAccessorType(accessorType=AccessorType.FIELD)
 public class Project{
 	@PositionalField(initialPosition=1, finalPosition=10)
 	private String description;
-	@DatePositionalFiled(initialPosition=11, finalPosition=18, dateFormat="ddMMyyyy")
+	@DatePositionalField(initialPosition=11, finalPosition=18, dateFormat="ddMMyyyy")
 	private Date startDate;
-	@DatePositionalFiled(initialPosition=19, finalPosition=26, dateFormat="ddMMyyyy")
+	@DatePositionalField(initialPosition=19, finalPosition=26, dateFormat="ddMMyyyy")
 	private Date endDate;
 	public String getDescricao() {
 		return description;
