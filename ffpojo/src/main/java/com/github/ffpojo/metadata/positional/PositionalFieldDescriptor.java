@@ -26,8 +26,14 @@ public class PositionalFieldDescriptor extends FieldDescriptor implements Compar
 			return -1;
 		}
 		if (this.initialPosition - other.initialPosition == 0) {
+
 			if (this.finalPosition - other.finalPosition == 0) {
-				return this.getGetter().getName().compareTo(other.getGetter().getName());
+				if (this.isByProperty()){
+					return this.getGetter().getName().compareTo(other.getGetter().getName());
+				}else{
+					return this.getField() == null ? -1 : other.getField() == null ?  1 :
+							this.getField().getName().compareTo(other.getField().getName());
+				}
 			} else {
 				return this.finalPosition - other.finalPosition;
 			}

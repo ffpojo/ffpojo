@@ -43,7 +43,7 @@ public class CollectionDecoratorTest {
 	public void testToStringSet(){
 		final Manager manager = createManager(); 
 		final String line = ffpojo.parseToText(manager);
-		Truth.assertThat(line.length()).isEqualTo(11030);
+		Truth.assertThat(line.length()).isEqualTo(11580);
 		Truth.assertThat(manager.getEmployees().size()).isEqualTo(2);
 	}
 	
@@ -52,14 +52,14 @@ public class CollectionDecoratorTest {
 		final String line = createStringToTestManager();
 		final Manager expected = createManager();
 		final Manager actual = ffpojo.createFromText(Manager.class, line);
-		Truth.assertThat(line.length()).isEqualTo(11030);
+		Truth.assertThat(line.length()).isEqualTo(11580);
 		Truth.assertThat(actual).isEqualTo(expected);
 	}
 
 	private Manager createManager() {
 		final Manager manager =  new Manager();
 		manager.setName("Gilberto");
-		manager.setLasName("Holms");
+		manager.setLastName("Holms");
 		manager.getEmployees().add(createEmployee());
 		manager.getEmployees().add(createEmployee("Benjamin"));
 		return manager;

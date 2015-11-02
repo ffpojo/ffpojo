@@ -29,6 +29,7 @@ public class FFPojoAnnotationFieldManager {
         mapAnnotationDecoratorClass.put("float", InternalFloatDecorator.class);
         mapAnnotationDecoratorClass.put("bigdecimal", InternalBigDecimalDecorator.class);
         mapAnnotationDecoratorClass.put("biginteger", InternalBigIntegerDecorator.class);
+        mapAnnotationDecoratorClass.put("enum", InternalEnumDecorator.class);
     }
 
     public Class<?> getClassDecorator(Class<? extends Annotation> clazzPositionalFieldAnnotation){

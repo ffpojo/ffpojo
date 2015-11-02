@@ -31,8 +31,8 @@ public class SimpleInputStreamFlatFileReaderBuilderWithProcessorExample {
 		new FFPojoFlatFileReaderBuilder()
 				.withInputStream(inputStream)
 				.withRecordClass(Customer.class)
-				.read(new ReadProcessor<Customer>() {
-					public void process(Customer item) {
+				.read(new ReadProcessor() {
+					public void process(Object item) {
 						Customer cust = (Customer)item;
 						System.out.printf("[%d][%s][%s]\n", cust.getId(), cust.getName(), cust.getEmail());
 					}

@@ -2,9 +2,7 @@ package com.github.ffpojo.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import com.github.ffpojo.metadata.delimited.annotation.DelimitedRecord;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
@@ -70,13 +68,17 @@ public class ReflectUtil {
 	}
 
 	public static List<Field> getRecursiveFields(Class<?> recordClazz) {
-		List<Field> listaFields = new ArrayList<Field>();
+		final Set<Field> listaFields = new TreeSet<Field>(new Comparator<Field>() {
+			public int compare(Field o1, Field o2) {
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
 		Class<?> clazz = recordClazz;
 		while (clazz.isAnnotationPresent(PositionalRecord.class) || clazz.isAnnotationPresent(DelimitedRecord.class)) {
 			listaFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
 			clazz = clazz.getSuperclass();
 		}
-		return listaFields;
+		return new ArrayList<Field>(listaFields);
 	}
 
 	public static List<Field> getAnnotadedFields(Class<?> recordClazz) {

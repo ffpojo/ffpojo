@@ -3,7 +3,6 @@ package com.github.ffpojo.beans;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.github.ffpojo.metadata.positional.annotation.AccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.SetPositionalField;
@@ -12,10 +11,10 @@ import com.github.ffpojo.metadata.positional.annotation.extra.SetPositionalField
 public class Manager extends Employee{
 
 	private String name;
-	private String lasName;
+	private String lastName;
 	private Set<Employee> employees;
 
-	@SetPositionalField(initialPosition=31, finalPosition=11030, itemType=Employee.class)
+	@SetPositionalField(initialPosition=551, finalPosition=11580, itemType=Employee.class)
 	public Set<Employee> getEmployees() {
 		if (employees == null) employees =  new HashSet<Employee>();
 		return employees;
@@ -35,12 +34,12 @@ public class Manager extends Employee{
 	}
 
 	@PositionalField(initialPosition=11, finalPosition=30)
-	public String getLasName() {
-		return lasName;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLasName(String lasName) {
-		this.lasName = lasName;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	
 	

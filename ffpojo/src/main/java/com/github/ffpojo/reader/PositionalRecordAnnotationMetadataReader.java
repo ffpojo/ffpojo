@@ -4,7 +4,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.MetadataReaderException;
@@ -39,21 +41,21 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 	}
 
 	private PositionalRecordDescriptor getRecordDescriptor() throws MetadataReaderException {
-		final List<PositionalFieldDescriptor> fieldDescriptors = readPositionalFieldDescriptor();
+		final Set<PositionalFieldDescriptor> fieldDescriptors = readPositionalFieldDescriptor();
 		fieldDescriptors.addAll(readPositionalFieldDescriptorOnProperty());
-		return new PositionalRecordDescriptor(recordClazz, fieldDescriptors);
+		return new PositionalRecordDescriptor(recordClazz, new ArrayList<PositionalFieldDescriptor>(fieldDescriptors));
 	}
 
-	private List<PositionalFieldDescriptor> readPositionalFieldDescriptor() throws MetadataReaderException {
-		final List<PositionalFieldDescriptor> fieldDescriptors = new ArrayList<PositionalFieldDescriptor>();
-		final List<Field> fields = ReflectUtil.getAnnotadedFields(recordClazz);
+	private Set<PositionalFieldDescriptor> readPositionalFieldDescriptor() throws MetadataReaderException {
+		final Set<PositionalFieldDescriptor> fieldDescriptors = new HashSet<PositionalFieldDescriptor>();
+		final List<Field> fields = ReflectUtil.getRecursiveFields(recordClazz);
 		for (Field field : fields) {
 			readFieldDescriptor(fieldDescriptors, field);
 		}
 		return fieldDescriptors;
 	}
 
-	private void readFieldDescriptor(final List<PositionalFieldDescriptor> fieldDescriptors, Field field) {
+	private void readFieldDescriptor(final Set<PositionalFieldDescriptor> fieldDescriptors, Field field) {
 		Annotation[] annotations = field.getAnnotations();
 		for (Annotation annotation : annotations) {
 			if (annotationFieldManager.isPositionalField(annotation.annotationType())) {

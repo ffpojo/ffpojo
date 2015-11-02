@@ -33,6 +33,10 @@ public class SimpleInputStreamFlatFileReaderBuilderExample {
 				.withInputStream(inputStream)
 				.withRecordClass(Customer.class)
 				.read();
+
+		for (Customer c :  read){
+			System.out.println(c.getId() + " - " +  c.getName() +  " - " + c.getEmail());
+		}
 				
 	}
 	

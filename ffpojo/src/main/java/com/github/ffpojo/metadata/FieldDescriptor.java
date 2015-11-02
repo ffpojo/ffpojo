@@ -10,7 +10,7 @@ public abstract class FieldDescriptor {
 
 	private Method getter;
 	private Field field;
-	private AccessorType accessorType;
+	private AccessorType accessorType =  AccessorType.PROPERTY;
 		
 	// GETTERS AND SETTERS
 	
