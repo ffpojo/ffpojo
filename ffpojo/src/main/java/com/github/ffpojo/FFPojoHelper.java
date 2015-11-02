@@ -32,6 +32,10 @@ public class FFPojoHelper {
 		}
 		return singletonInstance;
 	}
+
+	public <T> List<T> getRecordsFromFile(String fileName, Class<T> recordClazz) throws FFPojoException {
+		return getRecordsFromFile(new File(fileName), recordClazz);
+	}
 	
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getRecordsFromFile(File file, Class<T> recordClazz) throws FFPojoException {
