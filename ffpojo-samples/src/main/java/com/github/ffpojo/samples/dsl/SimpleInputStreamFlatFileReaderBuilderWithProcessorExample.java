@@ -2,20 +2,19 @@ package com.github.ffpojo.samples.dsl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import com.github.ffpojo.FFPojoFlatFileReaderBuilder;
 import com.github.ffpojo.dsl.ReadProcessor;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.samples.pojo.Customer;
 
-public class SimpleInputStreamFlatFileReaderBuilderExample {
+public class SimpleInputStreamFlatFileReaderBuilderWithProcessorExample {
 
 	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "SimpleInputStreamFlatFileReaderExample.txt";
 	
 	
 	public static void main(String[] args) {
-		SimpleInputStreamFlatFileReaderBuilderExample example = new SimpleInputStreamFlatFileReaderBuilderExample();
+		SimpleInputStreamFlatFileReaderBuilderWithProcessorExample example = new SimpleInputStreamFlatFileReaderBuilderWithProcessorExample();
 		try {
 			System.out.println("Making POJO from file system TXT FILE...");
 			example.readCustomers();
@@ -29,10 +28,15 @@ public class SimpleInputStreamFlatFileReaderBuilderExample {
 	
 	public void readCustomers() throws IOException, FFPojoException {
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(INPUT_TXT_RESOURCE_CLASSPATH);
-		List<Customer> read = new FFPojoFlatFileReaderBuilder()
+		new FFPojoFlatFileReaderBuilder()
 				.withInputStream(inputStream)
 				.withRecordClass(Customer.class)
-				.read();
+				.read(new ReadProcessor<Customer>() {
+					public void process(Customer item) {
+						Customer cust = (Customer)item;
+						System.out.printf("[%d][%s][%s]\n", cust.getId(), cust.getName(), cust.getEmail());
+					}
+				});
 				
 	}
 	
