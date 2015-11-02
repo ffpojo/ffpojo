@@ -5,6 +5,7 @@ import com.github.ffpojo.decorator.*;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.MetadataReaderException;
 import com.github.ffpojo.metadata.FieldDecorator;
+import com.github.ffpojo.metadata.positional.annotation.extra.RemainPositionalField;
 import com.github.ffpojo.util.ReflectUtil;
 
 import java.lang.annotation.Annotation;
@@ -45,12 +46,16 @@ public class FFPojoAnnotationFieldManager {
         return isDelimitedField(annotation) || isPositionalField(annotation);
     }
 
+    public boolean isRemainPositionalField(Class<? extends Annotation> annotation){
+        return annotation.isAssignableFrom(RemainPositionalField.class);
+    }
+
     public boolean isPositionalField(Class<? extends Annotation> annotation){
         try{
             annotation.getMethod("initialPosition");
             annotation.getMethod("finalPosition");
         }catch (Exception e){
-            return false;
+            return isRemainPositionalField(annotation);
         }
         return true;
     }

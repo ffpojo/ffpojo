@@ -3,6 +3,10 @@ package com.github.ffpojo.metadata.positional;
 import com.github.ffpojo.metadata.FieldDecorator;
 import com.github.ffpojo.metadata.FieldDescriptor;
 
+/**
+ * @author Gilberto Holms - gibaholms@hotmail.com
+ * @author William Miranda  - blackstile@hotmail.com
+ */
 public class PositionalFieldDescriptor extends FieldDescriptor implements Comparable<PositionalFieldDescriptor> {
 
 	private int initialPosition;
@@ -12,9 +16,15 @@ public class PositionalFieldDescriptor extends FieldDescriptor implements Compar
 	private boolean trimOnRead;
 	private FieldDecorator<?> decorator;
 	private boolean ignorePositionNotFound;
-	private boolean autoFillRemainPosition;
-	
+	private boolean remainPosition;
+
 	public int compareTo(PositionalFieldDescriptor other) {
+		if (this.isRemainPosition()){
+			return 1;
+		}
+		if(other.isRemainPosition()){
+			return -1;
+		}
 		if (this.initialPosition - other.initialPosition == 0) {
 			if (this.finalPosition - other.finalPosition == 0) {
 				return this.getGetter().getName().compareTo(other.getGetter().getName());
@@ -73,13 +83,13 @@ public class PositionalFieldDescriptor extends FieldDescriptor implements Compar
 		this.ignorePositionNotFound = ignorePositionNotFound;
 	}
 
-	public boolean isAutoFillRemainPosition() {
-		return autoFillRemainPosition;
+	public boolean isRemainPosition() {
+		return remainPosition;
 	}
 
-	public void setAutoFillRemainPosition(boolean autoFillRemainPosition) {
-		this.autoFillRemainPosition = autoFillRemainPosition;
+	public void setRemainPosition(boolean remainPosition) {
+		this.remainPosition = remainPosition;
 	}
-	
-	
+
+
 }

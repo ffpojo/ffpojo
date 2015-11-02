@@ -7,6 +7,9 @@ import java.util.List;
 import com.github.ffpojo.exception.InvalidMetadataException;
 import com.github.ffpojo.metadata.RecordDescriptor;
 
+/**
+ *  @author  Gilberto Holms - gibaholms@hotmail.com
+ */
 public class PositionalRecordDescriptor extends RecordDescriptor {
 
 	private boolean ignorePositionNotFound = false;
@@ -23,10 +26,15 @@ public class PositionalRecordDescriptor extends RecordDescriptor {
 	@Override
 	public void assertValid() throws InvalidMetadataException {
 		List<PositionalFieldDescriptor> positionalFieldDescriptors = this.getFieldDescriptors();
+		if (null != this.getFieldDescriptors()){
+			Collections.sort(positionalFieldDescriptors);
+		}
 		if (positionalFieldDescriptors != null && !positionalFieldDescriptors.isEmpty()) {
 			for (int i = 0; i < positionalFieldDescriptors.size(); i++) {
 				PositionalFieldDescriptor actualFieldDescriptor = positionalFieldDescriptors.get(i);
-				
+				if (actualFieldDescriptor.isRemainPosition()){
+					continue;
+				}
 				boolean isFirstFieldDescriptor = i==0;
 				PositionalFieldDescriptor previousFieldDescriptor = null;
 				if (!isFirstFieldDescriptor) {

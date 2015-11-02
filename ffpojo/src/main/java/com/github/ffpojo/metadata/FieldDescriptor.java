@@ -32,5 +32,12 @@ public abstract class FieldDescriptor {
 	public void setAccessorType(AccessorType accessorType) {
 		this.accessorType = accessorType;
 	}
-	
+
+	public boolean isByField(){
+		return this.accessorType.isByField();
+	}
+
+	public boolean isByProperty(){
+		return this.accessorType.isByProperty();
+	}
 }
