@@ -1,4 +1,4 @@
-package com.github.ffpojo.samples.write;
+package com.github.ffpojo.samples.read;
 
 import java.io.IOException;
 import java.io.InputStream;

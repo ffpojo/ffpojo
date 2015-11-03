@@ -33,6 +33,7 @@ public class CollectionDecorator  extends ExtendedFieldDecorator<Collection> {
 	}
 
 	public Collection fromString(String field) throws FieldDecoratorException {
+		if (field == null || field.isEmpty()) return null;
 		CollectionDecoratorUtil collectionDecoratorUtil = new CollectionDecoratorUtil(itensCollectionType);
 		int objectLineSize =  collectionDecoratorUtil.objectLineSize();
 		int index = 0;

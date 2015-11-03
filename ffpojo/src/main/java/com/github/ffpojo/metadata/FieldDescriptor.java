@@ -10,7 +10,7 @@ public abstract class FieldDescriptor {
 
 	private Method getter;
 	private Field field;
-	private AccessorType accessorType;
+	private AccessorType accessorType =  AccessorType.PROPERTY;
 		
 	// GETTERS AND SETTERS
 	
@@ -32,5 +32,12 @@ public abstract class FieldDescriptor {
 	public void setAccessorType(AccessorType accessorType) {
 		this.accessorType = accessorType;
 	}
-	
+
+	public boolean isByField(){
+		return this.accessorType.isByField();
+	}
+
+	public boolean isByProperty(){
+		return this.accessorType.isByProperty();
+	}
 }

@@ -1,5 +1,8 @@
 package com.github.ffpojo;
 
+import java.io.File;
+import java.util.List;
+
 import com.github.ffpojo.container.HybridMetadataContainer;
 import com.github.ffpojo.container.MetadataContainer;
 import com.github.ffpojo.exception.FFPojoException;
@@ -28,6 +31,18 @@ public class FFPojoHelper {
 			singletonInstance = new FFPojoHelper();
 		}
 		return singletonInstance;
+	}
+
+	public <T> List<T> getRecordsFromFile(String fileName, Class<T> recordClazz) throws FFPojoException {
+		return getRecordsFromFile(new File(fileName), recordClazz);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getRecordsFromFile(File file, Class<T> recordClazz) throws FFPojoException {
+		return (List<T>)new FFPojoFlatFileReaderBuilder()
+								.withFile(file)
+								.withRecordClass(recordClazz)
+								.read();
 	}
 	
 	public <T> T createFromText(Class<T> recordClazz, String text) throws FFPojoException {

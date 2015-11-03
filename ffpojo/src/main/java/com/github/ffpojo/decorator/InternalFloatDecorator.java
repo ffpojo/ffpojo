@@ -3,16 +3,16 @@ package com.github.ffpojo.decorator;
 import com.github.ffpojo.decorator.util.FloatPointDecoratorUtil;
 import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
 
-public class FloatDecorator extends ExtendedFieldDecorator<Float>{
+public class InternalFloatDecorator extends ExtendedFieldDecorator<Float>{
 
 	private static final int DEFAULT_PRECISION = 2;
 	private final FloatPointDecoratorUtil floatPointDecoratorUtil;
 	
-	public FloatDecorator() {
+	public InternalFloatDecorator() {
 		this(DEFAULT_PRECISION);
 	}
 	
-	public FloatDecorator(int precision) {		
+	public InternalFloatDecorator(int precision) {
 		floatPointDecoratorUtil = new FloatPointDecoratorUtil(precision);
 	}
 

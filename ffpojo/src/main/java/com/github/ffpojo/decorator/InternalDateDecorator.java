@@ -8,15 +8,15 @@ import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
 import com.github.ffpojo.util.StringUtil;
 
-public class DateDecorator extends ExtendedFieldDecorator<Date> {
+public class InternalDateDecorator extends ExtendedFieldDecorator<Date> {
 
 	private static final String DEFAULT_FORMAT = "dd/MM/yyyy";
 	private final SimpleDateFormat sdf;
 	
-	public DateDecorator(String format) {
+	public InternalDateDecorator(String format) {
 		sdf = new SimpleDateFormat(format);
 	}
-	public DateDecorator(){
+	public InternalDateDecorator(){
 		this(DEFAULT_FORMAT);
 	}
 

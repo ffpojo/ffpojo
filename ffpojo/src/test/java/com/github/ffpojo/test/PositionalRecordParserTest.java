@@ -4,16 +4,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.github.ffpojo.beans.Document;
+import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalField;
 import org.junit.Test;
 
 import com.github.ffpojo.FFPojoHelper;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.metadata.positional.PaddingAlign;
 import com.github.ffpojo.metadata.positional.annotation.AccessorType;
-import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
-import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalFiled;
 import com.github.ffpojo.metadata.positional.annotation.extra.DoublePositionalField;
 import com.github.ffpojo.metadata.positional.annotation.extra.IntegerPositionalField;
 import com.google.common.truth.Truth;
@@ -21,6 +21,22 @@ import com.google.common.truth.Truth;
 import junit.framework.Assert;
 
 public class PositionalRecordParserTest {
+
+	@Test
+	public void deve_verificar_que_remain_anotation_devolve_as_posicoes_restantes_do_texto() throws NoSuchFieldException {
+		final Document document = new Document();
+		document.setAuthor("William Miranda");
+		document.setCreation(new Date());
+		document.setPublisher("Casa do Codigo");
+		document.setComments("This comment can to have infinity size, because this attribute is using the annotation @RemainPositional Field.");
+
+		String expected =  FFPojoHelper.getInstance().parseToText(document);
+		final Document other =  FFPojoHelper.getInstance().createFromText(Document.class, expected);
+		String result = FFPojoHelper.getInstance().parseToText(other);
+		Truth.assert_().that(result.length()).isEqualTo(expected.length());
+		Truth.assert_().that(result).isEqualTo(expected);
+		Truth.assert_().that(expected.length()).isEqualTo(document.getClass().getDeclaredField("publisher").getAnnotation(PositionalField.class).finalPosition() + document.getComments().length() );
+	}
 
 	@Test
 	public void deve_transformar_pojo_em_string_de_acordo_com_anotacoes_quando_os_campos_possuem_posicoes_complementares_iniciando_na_primeira_posicao() throws FFPojoException {
@@ -202,7 +218,7 @@ public class PositionalRecordParserTest {
 		public Double getSalario(){ return this.salario; }
 		public void setSalario(Double salario){ this.salario =  salario; }
 		
-		@DatePositionalFiled(initialPosition=61, finalPosition=68, dateFormat="ddMMyyyy")
+		@DatePositionalField(initialPosition=61, finalPosition=68, dateFormat="ddMMyyyy")
 		public Date getDataDeNascimento() { return dataDeNascimento; }
 		public void setDataDeNascimento(Date dataDeNascimento) { this.dataDeNascimento = dataDeNascimento; }
 		@Override
@@ -269,7 +285,6 @@ public class PositionalRecordParserTest {
 	}
 	
 	@PositionalRecord(ignorePositionNotFound=true)
-	@FFPojoAccessorType(accessorType=AccessorType.FIELD)
 	public static final class TestPojo8 {
 		@PositionalField(initialPosition = 1, finalPosition = 10, paddingAlign = PaddingAlign.LEFT, paddingCharacter = '#')
 		private String name;

@@ -5,12 +5,12 @@ import java.lang.annotation.Annotation;
 import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
 
-public class BooleanDecorator  extends ExtendedFieldDecorator<Boolean>{
+public class InternalBooleanDecorator extends ExtendedFieldDecorator<Boolean>{
 
 	private String trueIdentifier;
 	private String falseIdentifier;
 	
-	public BooleanDecorator(String trueItendifier, String falseIdentifier) {
+	public InternalBooleanDecorator(String trueItendifier, String falseIdentifier) {
 		this.trueIdentifier =  trueItendifier;
 		this.falseIdentifier =  falseIdentifier;
 	}

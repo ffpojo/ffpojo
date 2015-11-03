@@ -3,10 +3,14 @@ package com.github.ffpojo.metadata.positional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.TreeSet;
 
 import com.github.ffpojo.exception.InvalidMetadataException;
 import com.github.ffpojo.metadata.RecordDescriptor;
 
+/**
+ *  @author  Gilberto Holms - gibaholms@hotmail.com
+ */
 public class PositionalRecordDescriptor extends RecordDescriptor {
 
 	private boolean ignorePositionNotFound = false;
@@ -23,10 +27,15 @@ public class PositionalRecordDescriptor extends RecordDescriptor {
 	@Override
 	public void assertValid() throws InvalidMetadataException {
 		List<PositionalFieldDescriptor> positionalFieldDescriptors = this.getFieldDescriptors();
+		if (null != positionalFieldDescriptors){
+			sortAndRemoveRepeated(positionalFieldDescriptors);
+		}
 		if (positionalFieldDescriptors != null && !positionalFieldDescriptors.isEmpty()) {
 			for (int i = 0; i < positionalFieldDescriptors.size(); i++) {
 				PositionalFieldDescriptor actualFieldDescriptor = positionalFieldDescriptors.get(i);
-				
+				if (actualFieldDescriptor.isRemainPosition()){
+					continue;
+				}
 				boolean isFirstFieldDescriptor = i==0;
 				PositionalFieldDescriptor previousFieldDescriptor = null;
 				if (!isFirstFieldDescriptor) {
@@ -51,12 +60,31 @@ public class PositionalRecordDescriptor extends RecordDescriptor {
 				*/
 				// Block overlap but permit blank spaces
 				if (!isFirstFieldDescriptor && actualFieldDescriptor.getInitialPosition() <= previousFieldDescriptor.getFinalPosition()) {
-					throw new InvalidMetadataException("Position interval overlaps the previous field: " + actualFieldDescriptor.getGetter());
+					final String filedName = getFieldName(actualFieldDescriptor);
+					final String previousName = getFieldName(previousFieldDescriptor);
+
+					throw new InvalidMetadataException(String.format("Position interval of field %s overlaps the previous field %s ", filedName, previousName));
 				}
 			}
 		}
 	}
-	
+
+	private String getFieldName(PositionalFieldDescriptor fieldDescriptor) {
+		String previousName = "";
+		if (fieldDescriptor.isByProperty()){
+            previousName =  fieldDescriptor.getGetter().getName();
+        }else {
+            previousName =  fieldDescriptor.getField().getName();
+        }
+		return previousName;
+	}
+
+	private void sortAndRemoveRepeated(List<PositionalFieldDescriptor> positionalFieldDescriptors) {
+		final TreeSet<PositionalFieldDescriptor> fieldDescriptors = new TreeSet<PositionalFieldDescriptor>(positionalFieldDescriptors);
+		positionalFieldDescriptors.clear();
+		positionalFieldDescriptors.addAll(fieldDescriptors);
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<PositionalFieldDescriptor> getFieldDescriptors() {

@@ -27,7 +27,6 @@ public class CollectionDecoratorTest {
 		final Employee funcionario =  createEmployee();
 		final String line = ffpojo.parseToText(funcionario);
 		final Employee expected = ffpojo.createFromText(Employee.class, line);
-		System.out.println(expected);
 		Truth.assert_().that(line.length()).isEqualTo(550);
 		Truth.assert_().that(expected.getProjects().size()).isEqualTo(20);
 	}
@@ -44,7 +43,7 @@ public class CollectionDecoratorTest {
 	public void testToStringSet(){
 		final Manager manager = createManager(); 
 		final String line = ffpojo.parseToText(manager);
-		Truth.assertThat(line.length()).isEqualTo(11030);
+		Truth.assertThat(line.length()).isEqualTo(11580);
 		Truth.assertThat(manager.getEmployees().size()).isEqualTo(2);
 	}
 	
@@ -53,14 +52,14 @@ public class CollectionDecoratorTest {
 		final String line = createStringToTestManager();
 		final Manager expected = createManager();
 		final Manager actual = ffpojo.createFromText(Manager.class, line);
-		Truth.assertThat(line.length()).isEqualTo(11030);
+		Truth.assertThat(line.length()).isEqualTo(11580);
 		Truth.assertThat(actual).isEqualTo(expected);
 	}
 
 	private Manager createManager() {
 		final Manager manager =  new Manager();
 		manager.setName("Gilberto");
-		manager.setLasName("Holms");
+		manager.setLastName("Holms");
 		manager.getEmployees().add(createEmployee());
 		manager.getEmployees().add(createEmployee("Benjamin"));
 		return manager;

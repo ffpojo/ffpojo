@@ -2,33 +2,27 @@ package com.github.ffpojo.samples.pojo;
 
 import java.util.Date;
 
-import com.github.ffpojo.decorator.DateDecorator;
-import com.github.ffpojo.metadata.positional.annotation.AccessorType;
-import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
+import com.github.ffpojo.decorator.InternalDateDecorator;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
+import com.github.ffpojo.metadata.positional.annotation.extra.LongPositionalField;
 
 @PositionalRecord(ignorePositionNotFound=true)
-@FFPojoAccessorType(accessorType = AccessorType.FIELD)
 public class Customer {
 
+	@LongPositionalField(initialPosition = 1, finalPosition = 5)
 	private Long id;
 	private String name;
 	private String email;
 	private Date birthDate;
-	
-	@PositionalField(initialPosition = 1, finalPosition = 5)
+
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	// must use a String setter or a FieldDecorator
-	public void setId(String id) {
-		this.id = Long.valueOf(id);
-	}
-	
+
 	@PositionalField(initialPosition = 6, finalPosition = 25)
 	public String getName() {
 		return name;
@@ -44,7 +38,7 @@ public class Customer {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	@PositionalField(initialPosition = 56, finalPosition = 65, decorator = DateDecorator.class)
+	@PositionalField(initialPosition = 56, finalPosition = 65, decorator = InternalDateDecorator.class)
 	public Date getBirthDate() {
 		return birthDate;
 	}

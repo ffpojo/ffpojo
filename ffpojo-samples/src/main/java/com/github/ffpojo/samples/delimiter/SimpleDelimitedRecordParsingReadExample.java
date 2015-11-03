@@ -8,6 +8,7 @@ import com.github.ffpojo.FFPojoHelper;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.metadata.delimited.annotation.DelimitedField;
 import com.github.ffpojo.metadata.delimited.annotation.DelimitedRecord;
+import com.github.ffpojo.metadata.delimited.annotation.extra.LongDelimitedField;
 
 /**
  * @author Gilberto Holms
@@ -21,23 +22,19 @@ public class SimpleDelimitedRecordParsingReadExample {
 	@DelimitedRecord(delimiter = "|")
 	public static class Customer {
 
+		@LongDelimitedField(positionIndex = 1)
 		private Long id;
+		@DelimitedField(positionIndex = 2)
 		private String name;
 		private String email;
-		
-		@DelimitedField(positionIndex = 1)
+
 		public Long getId() {
 			return id;
 		}
 		public void setId(Long id) {
 			this.id = id;
 		}
-		// must use a String setter or a FieldDecorator
-		public void setId(String id) {
-			this.id = Long.valueOf(id);
-		}
-		
-		@DelimitedField(positionIndex = 2)
+
 		public String getName() {
 			return name;
 		}

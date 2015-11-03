@@ -1,12 +1,11 @@
 package com.github.ffpojo.decorator.util;
 
+import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalField;
 import org.junit.Test;
 
 import com.github.ffpojo.metadata.positional.annotation.AccessorType;
-import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
-import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalFiled;
 import com.github.ffpojo.metadata.positional.annotation.extra.DoublePositionalField;
 import com.google.common.truth.Truth;
 
@@ -39,7 +38,6 @@ public class CollectionDecoratorUtilTest {
 }
 
 @PositionalRecord
-@FFPojoAccessorType(accessorType=AccessorType.FIELD)
 class TestAccessorType{
 	
 	@PositionalField(initialPosition=1, finalPosition=10)
@@ -54,14 +52,12 @@ class TestAccessorType{
 }
 
 @PositionalRecord
-@FFPojoAccessorType(accessorType=AccessorType.FIELD)
 class TestAccessorTypeChild extends TestAccessorType{
 	@PositionalField(initialPosition=-1, finalPosition=0)
 	private String xpto;
 }
 
 @PositionalRecord
-@FFPojoAccessorType(accessorType=AccessorType.FIELD)
 class TestAccessorTypeChildMixFieldAndProperty extends TestAnnotation{
 	@PositionalField(initialPosition=-1, finalPosition=0)
 	private String xpto;
@@ -86,7 +82,7 @@ class TestAnnotation{
 	public String getLastName() {
 		return lastName;
 	}
-	@DatePositionalFiled(initialPosition=31, finalPosition=40, dateFormat="")
+	@DatePositionalField(initialPosition=31, finalPosition=40, dateFormat="")
 	public String getAddress() {
 		return lastName;
 	}

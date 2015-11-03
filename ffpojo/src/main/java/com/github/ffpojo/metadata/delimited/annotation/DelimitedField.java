@@ -9,7 +9,7 @@ import com.github.ffpojo.metadata.DefaultFieldDecorator;
 import com.github.ffpojo.metadata.FieldDecorator;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.FIELD})
 public @interface DelimitedField {
 	int positionIndex();
 	Class<? extends FieldDecorator<?>> decorator() default DefaultFieldDecorator.class;

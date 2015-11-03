@@ -2,7 +2,7 @@ package com.github.ffpojo.samples.pojo;
 
 import java.util.Date;
 
-import com.github.ffpojo.decorator.DateDecorator;
+import com.github.ffpojo.decorator.InternalDateDecorator;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 
@@ -24,7 +24,7 @@ public class Header {
 		this.controlNumber = Long.valueOf(controlNumber);
 	}
 	
-	@PositionalField(initialPosition = 11, finalPosition = 20, decorator = DateDecorator.class)
+	@PositionalField(initialPosition = 11, finalPosition = 20, decorator = InternalDateDecorator.class)
 	public Date getProcessDate() {
 		return processDate;
 	}

@@ -6,7 +6,7 @@ import com.github.ffpojo.decorator.util.IntegerDecoratorUtil;
 import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
 
-public class BigIntegerDecorator extends ExtendedFieldDecorator<BigInteger>{
+public class InternalBigIntegerDecorator extends ExtendedFieldDecorator<BigInteger>{
 
 	private final IntegerDecoratorUtil util =  new IntegerDecoratorUtil();
 	

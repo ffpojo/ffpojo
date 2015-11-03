@@ -5,12 +5,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import com.github.ffpojo.metadata.positional.annotation.AccessorType;
-import com.github.ffpojo.metadata.positional.annotation.FFPojoAccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.BigDecimalPositionalField;
 import com.github.ffpojo.metadata.positional.annotation.extra.BooleanPositionalField;
-import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalFiled;
+import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalField;
 import com.github.ffpojo.metadata.positional.annotation.extra.DoublePositionalField;
 import com.github.ffpojo.metadata.positional.annotation.extra.FloatPositionalField;
 import com.github.ffpojo.metadata.positional.annotation.extra.IntegerPositionalField;
@@ -34,15 +33,9 @@ public class CollectionDecoratorUtil {
 	private void readAnnotations(Class<?> clazz){		
 		AccessorType accessorType  =  AccessorType.PROPERTY;
 		if (clazz.isAnnotationPresent(PositionalRecord.class)){
-			if (clazz.isAnnotationPresent(FFPojoAccessorType.class)){
-				accessorType =  clazz.getAnnotation(FFPojoAccessorType.class).accessorType();
-			}
-			if (AccessorType.FIELD.equals(accessorType)){
-				readObjectLineSizeFromField(clazz);
-			}else{
-				readObjectLineSizeFromProperties(clazz);
-			}
-			
+			readObjectLineSizeFromField(clazz);
+			readObjectLineSizeFromProperties(clazz);
+
 		}
 	}
 
@@ -96,8 +89,8 @@ public class CollectionDecoratorUtil {
 			return ((BigDecimalPositionalField)positionalField).finalPosition();
 		}else if (BooleanPositionalField.class.isAssignableFrom(positionalField.getClass())){
 			return ((BooleanPositionalField)positionalField).finalPosition();
-		}else if (DatePositionalFiled.class.isAssignableFrom(positionalField.getClass())){
-			return ((DatePositionalFiled)positionalField).finalPosition();
+		}else if (DatePositionalField.class.isAssignableFrom(positionalField.getClass())){
+			return ((DatePositionalField)positionalField).finalPosition();
 		}else if (DoublePositionalField.class.isAssignableFrom(positionalField.getClass())){
 			return ((DoublePositionalField)positionalField).finalPosition();
 		}else if (FloatPositionalField.class.isAssignableFrom(positionalField.getClass())){
