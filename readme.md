@@ -1,4 +1,4 @@
-## FFPOJO - Flat File POJO Parser ##
+## FFPOJO - Flat File POJO Parser ## [![Build Status](https://travis-ci.org/ffpojo/ffpojo.svg)](https://travis-ci.org/ffpojo/ffpojo)
 
 The **FFPOJO Project** is a **Flat-File Parser**, POJO based, library for Java applications. It's a **Object-Oriented** approach to work to flat-files, because the libray is based on **POJOs** and an **Object-Flat-Mapping (OFM)**, using **Java Annotations**, **XML** or **both**. When used together, the XML mapping **overrides** the annotations.
 
@@ -42,7 +42,7 @@ have no dependencies, so thats simplier at most. The build process is shown belo
 ---
 
 ##### Metadata Definitions #####
-To describe your flat-file records and fields you must use **Java Annotations and/or XML**. If used both, the XML information will override the annotations 
+To describe your flat-file records and fields you must use **Java Annotations and/or XML**. If used both, the XML information will override the annotations
 on a **class level**. It means that you can't override a single field, but you can override an entire record class.
 
 ---
@@ -108,17 +108,17 @@ If you choose to map your ffpojos using XML, it must be valid according to the [
 public class SimplePositionalRecordParsingExample {
 
 	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "SimplePositionalRecordParsingExampleInput.txt";
-	
+
 	//change here (make sure you have permission to write in the specified path):
 	private static final String OUTPUT_TXT_OS_PATH = "C:/Users/gibaholms/Desktop/SimplePositionalRecordParsingExampleOutput.txt";
-	
+
 	@PositionalRecord
 	public static class Customer {
 
 		private Long id;
 		private String name;
 		private String email;
-		
+
 		@PositionalField(initialPosition = 1, finalPosition = 5)
 		public Long getId() {
 			return id;
@@ -130,7 +130,7 @@ public class SimplePositionalRecordParsingExample {
 		public void setId(String id) {
 			this.id = Long.valueOf(id);
 		}
-		
+
 		@PositionalField(initialPosition = 6, finalPosition = 25)
 		public String getName() {
 			return name;
@@ -138,7 +138,7 @@ public class SimplePositionalRecordParsingExample {
 		public void setName(String name) {
 			this.name = name;
 		}
-		
+
 		@PositionalField(initialPosition = 26, finalPosition = 55)
 		public String getEmail() {
 			return email;
@@ -147,16 +147,16 @@ public class SimplePositionalRecordParsingExample {
 			this.email = email;
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		SimplePositionalRecordParsingExample example = new SimplePositionalRecordParsingExample();
 		try {
 			System.out.println("Making POJO from TXT...");
 			example.readCustomersFromText();
-			
+
 			System.out.println("Making TXT from POJO...");
 			example.writeCustomersToText();
-			
+
 			System.out.println("END !");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -164,7 +164,7 @@ public class SimplePositionalRecordParsingExample {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void readCustomersFromText() throws IOException, FFPojoException {
 		FFPojoHelper ffpojo = FFPojoHelper.getInstance();
 		BufferedReader textFileReader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(INPUT_TXT_RESOURCE_CLASSPATH)));
@@ -175,7 +175,7 @@ public class SimplePositionalRecordParsingExample {
 		}
 		textFileReader.close();
 	}
-	
+
 	public void writeCustomersToText() throws IOException, FFPojoException {
 		FFPojoHelper ffpojo = FFPojoHelper.getInstance();
 		File file = new File(OUTPUT_TXT_OS_PATH);
@@ -189,35 +189,35 @@ public class SimplePositionalRecordParsingExample {
 				textFileWriter.newLine();
 			}
 		}
-		textFileWriter.close();	
+		textFileWriter.close();
 	}
-	
+
 	private static List<Customer> createCustomersMockList() {
 		List<Customer> customers = new ArrayList<Customer>();
 		{
 			Customer cust = new Customer();
-			cust.setId(98456L); 
-			cust.setName("Axel Rose"); 
+			cust.setId(98456L);
+			cust.setName("Axel Rose");
 			cust.setEmail("axl@thehost.com");
 			customers.add(cust);
 		}
 		{
 			Customer cust = new Customer();
-			cust.setId(65478L); 
-			cust.setName("Bono Vox"); 
+			cust.setId(65478L);
+			cust.setName("Bono Vox");
 			cust.setEmail("bono@thehost.com");
 			customers.add(cust);
 		}
 		{
 			Customer cust = new Customer();
-			cust.setId(78425L); 
-			cust.setName("Bob Marley"); 
+			cust.setId(78425L);
+			cust.setName("Bob Marley");
 			cust.setEmail("marley@thehost.com");
 			customers.add(cust);
 		}
 		return customers;
 	}
-	
+
 }
 ```
 
@@ -231,17 +231,17 @@ public class SimplePositionalRecordParsingExample {
 public class SimpleDelimitedRecordParsingExample {
 
 	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "SimpleDelimitedRecordParsingExampleInput.txt";
-	
+
 	//change here (make sure you have permission to write in the specified path):
 	private static final String OUTPUT_TXT_OS_PATH = "C:/Users/gibaholms/Desktop/SimpleDelimitedRecordParsingExampleOutput.txt";
-	
+
 	@DelimitedRecord(delimiter = "|")
 	public static class Customer {
 
 		private Long id;
 		private String name;
 		private String email;
-		
+
 		@DelimitedField(positionIndex = 1)
 		public Long getId() {
 			return id;
@@ -253,7 +253,7 @@ public class SimpleDelimitedRecordParsingExample {
 		public void setId(String id) {
 			this.id = Long.valueOf(id);
 		}
-		
+
 		@DelimitedField(positionIndex = 2)
 		public String getName() {
 			return name;
@@ -261,7 +261,7 @@ public class SimpleDelimitedRecordParsingExample {
 		public void setName(String name) {
 			this.name = name;
 		}
-		
+
 		@DelimitedField(positionIndex = 3)
 		public String getEmail() {
 			return email;
@@ -270,16 +270,16 @@ public class SimpleDelimitedRecordParsingExample {
 			this.email = email;
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		SimpleDelimitedRecordParsingExample example = new SimpleDelimitedRecordParsingExample();
 		try {
 			System.out.println("Making POJO from TXT...");
 			example.readCustomersFromText();
-			
+
 			System.out.println("Making TXT from POJO...");
 			example.writeCustomersToText();
-			
+
 			System.out.println("END !");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -287,7 +287,7 @@ public class SimpleDelimitedRecordParsingExample {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void readCustomersFromText() throws IOException, FFPojoException {
 		FFPojoHelper ffpojo = FFPojoHelper.getInstance();
 		BufferedReader textFileReader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(INPUT_TXT_RESOURCE_CLASSPATH)));
@@ -298,7 +298,7 @@ public class SimpleDelimitedRecordParsingExample {
 		}
 		textFileReader.close();
 	}
-	
+
 	public void writeCustomersToText() throws IOException, FFPojoException {
 		FFPojoHelper ffpojo = FFPojoHelper.getInstance();
 		File file = new File(OUTPUT_TXT_OS_PATH);
@@ -312,35 +312,35 @@ public class SimpleDelimitedRecordParsingExample {
 				textFileWriter.newLine();
 			}
 		}
-		textFileWriter.close();	
+		textFileWriter.close();
 	}
-	
+
 	private static List<Customer> createCustomersMockList() {
 		List<Customer> customers = new ArrayList<Customer>();
 		{
 			Customer cust = new Customer();
-			cust.setId(98456L); 
-			cust.setName("Axel Rose"); 
+			cust.setId(98456L);
+			cust.setName("Axel Rose");
 			cust.setEmail("axl@thehost.com");
 			customers.add(cust);
 		}
 		{
 			Customer cust = new Customer();
-			cust.setId(65478L); 
-			cust.setName("Bono Vox"); 
+			cust.setId(65478L);
+			cust.setName("Bono Vox");
 			cust.setEmail("bono@thehost.com");
 			customers.add(cust);
 		}
 		{
 			Customer cust = new Customer();
-			cust.setId(78425L); 
-			cust.setName("Bob Marley"); 
+			cust.setId(78425L);
+			cust.setName("Bob Marley");
 			cust.setEmail("marley@thehost.com");
 			customers.add(cust);
 		}
 		return customers;
 	}
-	
+
 }
 ```
 
@@ -354,10 +354,10 @@ public class SimpleDelimitedRecordParsingExample {
 public class PositionalRecordParsingWithDecoratorExample {
 
 	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "PositionalRecordParsingWithDecoratorExampleInput.txt";
-	
+
 	//change here (make sure you have permission to write in the specified path):
 	private static final String OUTPUT_TXT_OS_PATH = "C:/Users/gibaholms/Desktop/PositionalRecordParsingWithDecoratorExampleOutput.txt";
-	
+
 	@PositionalRecord
 	public static class Customer {
 
@@ -365,7 +365,7 @@ public class PositionalRecordParsingWithDecoratorExample {
 		private String name;
 		private String email;
 		private Date birthDate;
-		
+
 		@PositionalField(initialPosition = 1, finalPosition = 5, decorator = LongDecorator.class)
 		public Long getId() {
 			return id;
@@ -373,7 +373,7 @@ public class PositionalRecordParsingWithDecoratorExample {
 		public void setId(Long id) {
 			this.id = id;
 		}
-		
+
 		@PositionalField(initialPosition = 6, finalPosition = 25)
 		public String getName() {
 			return name;
@@ -381,7 +381,7 @@ public class PositionalRecordParsingWithDecoratorExample {
 		public void setName(String name) {
 			this.name = name;
 		}
-		
+
 		@PositionalField(initialPosition = 26, finalPosition = 55)
 		public String getEmail() {
 			return email;
@@ -389,7 +389,7 @@ public class PositionalRecordParsingWithDecoratorExample {
 		public void setEmail(String email) {
 			this.email = email;
 		}
-		
+
 		@PositionalField(initialPosition = 56, finalPosition = 65, decorator = DateDecorator.class)
 		public Date getBirthDate() {
 			return birthDate;
@@ -398,17 +398,17 @@ public class PositionalRecordParsingWithDecoratorExample {
 			this.birthDate = birthDate;
 		}
 	}
-	
+
 	public static class LongDecorator extends DefaultFieldDecorator {
 		@Override
 		public Object fromString(String str) {
 			return Long.valueOf(str);
 		}
 	}
-	
+
 	public static class DateDecorator implements FieldDecorator<Date> {
 		private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		
+
 		public Date fromString(String str) throws FieldDecoratorException {
 			try {
 				return sdf.parse(str);
@@ -422,16 +422,16 @@ public class PositionalRecordParsingWithDecoratorExample {
 			return sdf.format(date);
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		PositionalRecordParsingWithDecoratorExample example = new PositionalRecordParsingWithDecoratorExample();
 		try {
 			System.out.println("Making POJO from TXT...");
 			example.readCustomersFromText();
-			
+
 			System.out.println("Making TXT from POJO...");
 			example.writeCustomersToText();
-			
+
 			System.out.println("END !");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -439,7 +439,7 @@ public class PositionalRecordParsingWithDecoratorExample {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void readCustomersFromText() throws IOException, FFPojoException {
 		FFPojoHelper ffpojo = FFPojoHelper.getInstance();
 		BufferedReader textFileReader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(INPUT_TXT_RESOURCE_CLASSPATH)));
@@ -450,7 +450,7 @@ public class PositionalRecordParsingWithDecoratorExample {
 		}
 		textFileReader.close();
 	}
-	
+
 	public void writeCustomersToText() throws IOException, FFPojoException {
 		FFPojoHelper ffpojo = FFPojoHelper.getInstance();
 		File file = new File(OUTPUT_TXT_OS_PATH);
@@ -464,38 +464,38 @@ public class PositionalRecordParsingWithDecoratorExample {
 				textFileWriter.newLine();
 			}
 		}
-		textFileWriter.close();	
+		textFileWriter.close();
 	}
-	
+
 	private static List<Customer> createCustomersMockList() {
 		List<Customer> customers = new ArrayList<Customer>();
 		{
 			Customer cust = new Customer();
-			cust.setId(98456L); 
-			cust.setName("Axel Rose"); 
+			cust.setId(98456L);
+			cust.setName("Axel Rose");
 			cust.setEmail("axl@thehost.com");
 			cust.setBirthDate(new Date());
 			customers.add(cust);
 		}
 		{
 			Customer cust = new Customer();
-			cust.setId(65478L); 
-			cust.setName("Bono Vox"); 
+			cust.setId(65478L);
+			cust.setName("Bono Vox");
 			cust.setEmail("bono@thehost.com");
 			cust.setBirthDate(new Date());
 			customers.add(cust);
 		}
 		{
 			Customer cust = new Customer();
-			cust.setId(78425L); 
-			cust.setName("Bob Marley"); 
+			cust.setId(78425L);
+			cust.setName("Bob Marley");
 			cust.setEmail("marley@thehost.com");
 			cust.setBirthDate(new Date());
 			customers.add(cust);
 		}
 		return customers;
 	}
-	
+
 }
 ```
 
@@ -510,14 +510,14 @@ public class SimpleFileSystemFlatFileReaderExample {
 
 	//copy the file "SimpleFileSystemFlatFileReaderExample.txt" (make sure you have permission to read in the specified path):
 	private static final String INPUT_TXT_OS_PATH = "C:/Users/gholms/Desktop/SimpleFileSystemFlatFileReaderExample.txt";
-	
+
 	@PositionalRecord
 	public static class Customer {
 
 		private Long id;
 		private String name;
 		private String email;
-		
+
 		@PositionalField(initialPosition = 1, finalPosition = 5)
 		public Long getId() {
 			return id;
@@ -529,7 +529,7 @@ public class SimpleFileSystemFlatFileReaderExample {
 		public void setId(String id) {
 			this.id = Long.valueOf(id);
 		}
-		
+
 		@PositionalField(initialPosition = 6, finalPosition = 25)
 		public String getName() {
 			return name;
@@ -537,7 +537,7 @@ public class SimpleFileSystemFlatFileReaderExample {
 		public void setName(String name) {
 			this.name = name;
 		}
-		
+
 		@PositionalField(initialPosition = 26, finalPosition = 55)
 		public String getEmail() {
 			return email;
@@ -546,13 +546,13 @@ public class SimpleFileSystemFlatFileReaderExample {
 			this.email = email;
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		SimpleFileSystemFlatFileReaderExample example = new SimpleFileSystemFlatFileReaderExample();
 		try {
 			System.out.println("Making POJO from file system TXT FILE...");
 			example.readCustomers();
-			
+
 			System.out.println("END !");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -560,7 +560,7 @@ public class SimpleFileSystemFlatFileReaderExample {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void readCustomers() throws IOException, FFPojoException {
 		File inputFile = new File(INPUT_TXT_OS_PATH);
 		if (!inputFile.exists()) {
@@ -574,7 +574,7 @@ public class SimpleFileSystemFlatFileReaderExample {
 		}
 		ffReader.close();
 	}
-	
+
 }
 ```
 
@@ -588,14 +588,14 @@ public class SimpleFileSystemFlatFileReaderExample {
 public class SimpleInputStreamFlatFileReaderExample {
 
 	private static final String INPUT_TXT_RESOURCE_CLASSPATH = "SimpleInputStreamFlatFileReaderExample.txt";
-	
+
 	@PositionalRecord
 	public static class Customer {
 
 		private Long id;
 		private String name;
 		private String email;
-		
+
 		@PositionalField(initialPosition = 1, finalPosition = 5)
 		public Long getId() {
 			return id;
@@ -607,7 +607,7 @@ public class SimpleInputStreamFlatFileReaderExample {
 		public void setId(String id) {
 			this.id = Long.valueOf(id);
 		}
-		
+
 		@PositionalField(initialPosition = 6, finalPosition = 25)
 		public String getName() {
 			return name;
@@ -615,7 +615,7 @@ public class SimpleInputStreamFlatFileReaderExample {
 		public void setName(String name) {
 			this.name = name;
 		}
-		
+
 		@PositionalField(initialPosition = 26, finalPosition = 55)
 		public String getEmail() {
 			return email;
@@ -624,13 +624,13 @@ public class SimpleInputStreamFlatFileReaderExample {
 			this.email = email;
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		SimpleInputStreamFlatFileReaderExample example = new SimpleInputStreamFlatFileReaderExample();
 		try {
 			System.out.println("Making POJO from file system TXT FILE...");
 			example.readCustomers();
-			
+
 			System.out.println("END !");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -638,7 +638,7 @@ public class SimpleInputStreamFlatFileReaderExample {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void readCustomers() throws IOException, FFPojoException {
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(INPUT_TXT_RESOURCE_CLASSPATH);
 		FlatFileReaderDefinition ffDefinition = new FlatFileReaderDefinition(Customer.class);
@@ -649,7 +649,7 @@ public class SimpleInputStreamFlatFileReaderExample {
 		}
 		ffReader.close();
 	}
-	
+
 }
 ```
 
@@ -664,14 +664,14 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 
 	//copy the file "FileSystemFlatFileReaderWithHeaderAndTrailerExample.txt" (make sure you have permission to read in the specified path):
 	private static final String INPUT_TXT_OS_PATH = "C:/Users/gholms/Desktop/FileSystemFlatFileReaderWithHeaderAndTrailerExample.txt";
-	
+
 	@PositionalRecord
 	public static class Customer {
 
 		private Long id;
 		private String name;
 		private String email;
-		
+
 		@PositionalField(initialPosition = 1, finalPosition = 5)
 		public Long getId() {
 			return id;
@@ -683,7 +683,7 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 		public void setId(String id) {
 			this.id = Long.valueOf(id);
 		}
-		
+
 		@PositionalField(initialPosition = 6, finalPosition = 25)
 		public String getName() {
 			return name;
@@ -691,7 +691,7 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 		public void setName(String name) {
 			this.name = name;
 		}
-		
+
 		@PositionalField(initialPosition = 26, finalPosition = 55)
 		public String getEmail() {
 			return email;
@@ -700,13 +700,13 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 			this.email = email;
 		}
 	}
-	
+
 	@PositionalRecord
 	public static class Header {
 
 		private Long controlNumber;
 		private Date processDate;
-		
+
 		@PositionalField(initialPosition = 1, finalPosition = 10)
 		public Long getControlNumber() {
 			return controlNumber;
@@ -718,7 +718,7 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 		public void setControlNumber(String controlNumber) {
 			this.controlNumber = Long.valueOf(controlNumber);
 		}
-		
+
 		@PositionalField(initialPosition = 11, finalPosition = 20, decorator = DateDecorator.class)
 		public Date getProcessDate() {
 			return processDate;
@@ -727,12 +727,12 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 			this.processDate = processDate;
 		}
 	}
-	
+
 	@PositionalRecord
 	public static class Trailer {
 
 		private Integer recordsCount;
-		
+
 		@PositionalField(initialPosition = 1, finalPosition = 4)
 		public Integer getRecordsCount() {
 			return recordsCount;
@@ -745,10 +745,10 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 			this.recordsCount = Integer.valueOf(recordsCount);
 		}
 	}
-	
+
 	public static class DateDecorator implements FieldDecorator<Date> {
 		private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		
+
 		public Date fromString(String str) throws FieldDecoratorException {
 			try {
 				return sdf.parse(str);
@@ -762,13 +762,13 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 			return sdf.format(date);
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		FileSystemFlatFileReaderWithHeaderAndTrailerExample example = new FileSystemFlatFileReaderWithHeaderAndTrailerExample();
 		try {
 			System.out.println("Making POJO from file system TXT FILE...");
 			example.readCustomers();
-			
+
 			System.out.println("END !");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -776,7 +776,7 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void readCustomers() throws IOException, FFPojoException {
 		File inputFile = new File(INPUT_TXT_OS_PATH);
 		if (!inputFile.exists()) {
@@ -803,7 +803,7 @@ public class FileSystemFlatFileReaderWithHeaderAndTrailerExample {
 		}
 		ffReader.close();
 	}
-	
+
 }
 ```
 
@@ -818,14 +818,14 @@ public class SimpleFileSystemFlatFileReaderWithDefaultFlatFileProcessorExample {
 
 	//copy the file "SimpleFileSystemFlatFileReaderWithDefaultFlatFileProcessorExample.txt" (make sure you have permission to read in the specified path):
 	private static final String INPUT_TXT_OS_PATH = "C:/Users/gholms/Desktop/SimpleFileSystemFlatFileReaderWithDefaultFlatFileProcessorExample.txt";
-	
+
 	@PositionalRecord
 	public static class Customer {
 
 		private Long id;
 		private String name;
 		private String email;
-		
+
 		@PositionalField(initialPosition = 1, finalPosition = 5)
 		public Long getId() {
 			return id;
@@ -837,7 +837,7 @@ public class SimpleFileSystemFlatFileReaderWithDefaultFlatFileProcessorExample {
 		public void setId(String id) {
 			this.id = Long.valueOf(id);
 		}
-		
+
 		@PositionalField(initialPosition = 6, finalPosition = 25)
 		public String getName() {
 			return name;
@@ -845,7 +845,7 @@ public class SimpleFileSystemFlatFileReaderWithDefaultFlatFileProcessorExample {
 		public void setName(String name) {
 			this.name = name;
 		}
-		
+
 		@PositionalField(initialPosition = 26, finalPosition = 55)
 		public String getEmail() {
 			return email;
@@ -854,7 +854,7 @@ public class SimpleFileSystemFlatFileReaderWithDefaultFlatFileProcessorExample {
 			this.email = email;
 		}
 	}
-	
+
 	public static class CustomerRecordProcessor implements RecordProcessor {
 
 		public void processBody(RecordEvent event) {
@@ -869,15 +869,15 @@ public class SimpleFileSystemFlatFileReaderWithDefaultFlatFileProcessorExample {
 		public void processTrailer(RecordEvent event) {
 			// blank
 		}
-		
+
 	}
-	
+
 	public static void main(String[] args) {
 		SimpleFileSystemFlatFileReaderWithDefaultFlatFileProcessorExample example = new SimpleFileSystemFlatFileReaderWithDefaultFlatFileProcessorExample();
 		try {
 			System.out.println("Making POJO from file system TXT FILE...");
 			example.readCustomers();
-			
+
 			System.out.println("END !");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -885,7 +885,7 @@ public class SimpleFileSystemFlatFileReaderWithDefaultFlatFileProcessorExample {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void readCustomers() throws IOException, FFPojoException {
 		File inputFile = new File(INPUT_TXT_OS_PATH);
 		if (!inputFile.exists()) {
@@ -897,7 +897,7 @@ public class SimpleFileSystemFlatFileReaderWithDefaultFlatFileProcessorExample {
 		ffProcessor.processFlatFile(new CustomerRecordProcessor());
 		ffReader.close();
 	}
-	
+
 }
 ```
 
@@ -912,14 +912,14 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorExampl
 
 	//copy the file "SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorExample.txt" (make sure you have permission to read in the specified path):
 	private static final String INPUT_TXT_OS_PATH = "C:/Users/gholms/Desktop/SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorExample.txt";
-	
+
 	@PositionalRecord
 	public static class Customer {
 
 		private Long id;
 		private String name;
 		private String email;
-		
+
 		@PositionalField(initialPosition = 1, finalPosition = 5)
 		public Long getId() {
 			return id;
@@ -931,7 +931,7 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorExampl
 		public void setId(String id) {
 			this.id = Long.valueOf(id);
 		}
-		
+
 		@PositionalField(initialPosition = 6, finalPosition = 25)
 		public String getName() {
 			return name;
@@ -939,7 +939,7 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorExampl
 		public void setName(String name) {
 			this.name = name;
 		}
-		
+
 		@PositionalField(initialPosition = 26, finalPosition = 55)
 		public String getEmail() {
 			return email;
@@ -948,7 +948,7 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorExampl
 			this.email = email;
 		}
 	}
-	
+
 	// processor class must be thread-safe !
 	public static class CustomerRecordProcessor implements RecordProcessor {
 
@@ -964,15 +964,15 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorExampl
 		public void processTrailer(RecordEvent event) {
 			// blank
 		}
-		
+
 	}
-	
+
 	public static void main(String[] args) {
 		SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorExample example = new SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorExample();
 		try {
 			System.out.println("Making POJO from file system TXT FILE...");
 			example.readCustomers();
-			
+
 			System.out.println("END !");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -980,7 +980,7 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorExampl
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void readCustomers() throws IOException, FFPojoException {
 		File inputFile = new File(INPUT_TXT_OS_PATH);
 		if (!inputFile.exists()) {
@@ -992,7 +992,7 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorExampl
 		ffProcessor.processFlatFile(new CustomerRecordProcessor());
 		ffReader.close();
 	}
-	
+
 }
 ```
 
@@ -1007,14 +1007,14 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorAndErr
 
 	//copy the file "SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorAndErrorHandlerExample.txt" (make sure you have permission to read in the specified path):
 	private static final String INPUT_TXT_OS_PATH = "C:/Users/gholms/Desktop/SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorAndErrorHandlerExample.txt";
-	
+
 	@PositionalRecord
 	public static class Customer {
 
 		private Long id;
 		private String name;
 		private String email;
-		
+
 		@PositionalField(initialPosition = 1, finalPosition = 5)
 		public Long getId() {
 			return id;
@@ -1026,7 +1026,7 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorAndErr
 		public void setId(String id) {
 			this.id = Long.valueOf(id);
 		}
-		
+
 		@PositionalField(initialPosition = 6, finalPosition = 25)
 		public String getName() {
 			return name;
@@ -1034,7 +1034,7 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorAndErr
 		public void setName(String name) {
 			this.name = name;
 		}
-		
+
 		@PositionalField(initialPosition = 26, finalPosition = 55)
 		public String getEmail() {
 			return email;
@@ -1043,7 +1043,7 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorAndErr
 			this.email = email;
 		}
 	}
-	
+
 	// processor class must be thread-safe !
 	public static class CustomerRecordProcessor extends DefaultRecordProcessor {
 
@@ -1052,23 +1052,23 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorAndErr
 			System.out.printf("[%d][%s][%s]\n", cust.getId(), cust.getName(), cust.getEmail());
 			throw new RecordProcessorException("An error occurred !!!");
 		}
-		
+
 	}
-	
+
 	public static class CustomerErrorHandler implements ErrorHandler {
 
 		public void error(RecordProcessorException exception) throws RecordProcessorException {
 			System.out.println("ErrorHandler executed !");
 		}
-		
+
 	}
-	
+
 	public static void main(String[] args) {
 		SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorAndErrorHandlerExample example = new SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorAndErrorHandlerExample();
 		try {
 			System.out.println("Making POJO from file system TXT FILE...");
 			example.readCustomers();
-			
+
 			System.out.println("END !");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -1076,7 +1076,7 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorAndErr
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void readCustomers() throws IOException, FFPojoException {
 		File inputFile = new File(INPUT_TXT_OS_PATH);
 		if (!inputFile.exists()) {
@@ -1089,7 +1089,7 @@ public class SimpleFileSystemFlatFileReaderWithThreadPoolFlatFileProcessorAndErr
 		ffProcessor.processFlatFile(new CustomerRecordProcessor());
 		ffReader.close();
 	}
-	
+
 }
 ```
 
@@ -1104,14 +1104,14 @@ public class SimpleFileSystemFlatFileWriterExample {
 
 	//change here (make sure you have permission to write in the specified path):
 	private static final String OUTPUT_TXT_OS_PATH = "C:/Users/gibaholms/Desktop/SimpleFileSystemFlatFileWriterExample.txt";
-	
+
 	@PositionalRecord
 	public static class Customer {
 
 		private Long id;
 		private String name;
 		private String email;
-		
+
 		@PositionalField(initialPosition = 1, finalPosition = 5)
 		public Long getId() {
 			return id;
@@ -1123,7 +1123,7 @@ public class SimpleFileSystemFlatFileWriterExample {
 		public void setId(String id) {
 			this.id = Long.valueOf(id);
 		}
-		
+
 		@PositionalField(initialPosition = 6, finalPosition = 25)
 		public String getName() {
 			return name;
@@ -1131,7 +1131,7 @@ public class SimpleFileSystemFlatFileWriterExample {
 		public void setName(String name) {
 			this.name = name;
 		}
-		
+
 		@PositionalField(initialPosition = 26, finalPosition = 55)
 		public String getEmail() {
 			return email;
@@ -1140,13 +1140,13 @@ public class SimpleFileSystemFlatFileWriterExample {
 			this.email = email;
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		SimplePositionalRecordParsingExample example = new SimplePositionalRecordParsingExample();
 		try {
 			System.out.println("Making TXT from POJO...");
 			example.writeCustomersToText();
-			
+
 			System.out.println("END !");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -1154,40 +1154,40 @@ public class SimpleFileSystemFlatFileWriterExample {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void writeCustomersToText() throws IOException, FFPojoException {
 		File file = new File(OUTPUT_TXT_OS_PATH);
 		FlatFileWriter ffWriter = new FileSystemFlatFileWriter(file, true);
 		List<Customer> customers = createCustomersMockList();
 		ffWriter.writeRecordList(customers);
-		ffWriter.close();	
+		ffWriter.close();
 	}
-	
+
 	private static List<Customer> createCustomersMockList() {
 		List<Customer> customers = new ArrayList<Customer>();
 		{
 			Customer cust = new Customer();
-			cust.setId(98456L); 
-			cust.setName("Axel Rose"); 
+			cust.setId(98456L);
+			cust.setName("Axel Rose");
 			cust.setEmail("axl@thehost.com");
 			customers.add(cust);
 		}
 		{
 			Customer cust = new Customer();
-			cust.setId(65478L); 
-			cust.setName("Bono Vox"); 
+			cust.setId(65478L);
+			cust.setName("Bono Vox");
 			cust.setEmail("bono@thehost.com");
 			customers.add(cust);
 		}
 		{
 			Customer cust = new Customer();
-			cust.setId(78425L); 
-			cust.setName("Bob Marley"); 
+			cust.setId(78425L);
+			cust.setName("Bob Marley");
 			cust.setEmail("marley@thehost.com");
 			customers.add(cust);
 		}
 		return customers;
 	}
-	
+
 }
 ```
