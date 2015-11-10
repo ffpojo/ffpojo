@@ -32,7 +32,7 @@ class DelimitedRecordParser extends BaseRecordParser implements RecordParser {
 		}
 
 		List<DelimitedFieldDescriptor> delimitedFieldDescriptors = getRecordDescriptor().getFieldDescriptors();
-		String[] textTokens = text.split(RegexUtil.escapeRegexMetacharacters(getRecordDescriptor().getDelimiter()));
+		String[] textTokens = text.split(RegexUtil.escapeRegexMetacharacters(getRecordDescriptor().getDelimiter()), -1);
 		int tokensQtt = textTokens.length;
 		for(int i = 0; i < delimitedFieldDescriptors.size(); i++) {
 			DelimitedFieldDescriptor actualFieldDescriptor = delimitedFieldDescriptors.get(i);

@@ -23,16 +23,30 @@ import junit.framework.Assert;
 public class PositionalRecordParserTest {
 
 	@Test
-	public void deve_verificar_que_remain_anotation_devolve_as_posicoes_restantes_do_texto() throws NoSuchFieldException {
+	public void deve_verificar_que_remain_anotation_devolve_as_posicoes_restantes_do_texto() throws NoSuchFieldException, ParseException {
+		final String expected = "William Miranda     03112015Casa do Codigo       This comment can to have infinity size, because this attribute is using the annotation @RemainPositional Field.";
 		final Document document = new Document();
 		document.setAuthor("William Miranda");
-		document.setCreation(new Date());
+		document.setCreation(new SimpleDateFormat("ddMMyyyy").parse("03112015"));
 		document.setPublisher("Casa do Codigo");
 		document.setComments("This comment can to have infinity size, because this attribute is using the annotation @RemainPositional Field.");
 
-		String expected =  FFPojoHelper.getInstance().parseToText(document);
-		final Document other =  FFPojoHelper.getInstance().createFromText(Document.class, expected);
-		String result = FFPojoHelper.getInstance().parseToText(other);
+		final String result = FFPojoHelper.getInstance().parseToText(document);
+		Truth.assert_().that(result.length()).isEqualTo(expected.length());
+		Truth.assert_().that(result).isEqualTo(expected);
+		Truth.assert_().that(expected.length()).isEqualTo(document.getClass().getDeclaredField("publisher").getAnnotation(PositionalField.class).finalPosition() + document.getComments().length() );
+	}
+
+
+	@Test
+	public void deve_verificar_que_remain_anotation_devolve_as_posicoes_restantes_do_texto_sem_preencher_campo_anterior() throws NoSuchFieldException, ParseException {
+		final String expected = "William Miranda     03112015                     This comment can to have infinity size, because this attribute is using the annotation @RemainPositional Field.";
+		final Document document = new Document();
+		document.setAuthor("William Miranda");
+		document.setCreation(new SimpleDateFormat("ddMMyyyy").parse("03112015"));
+		document.setComments("This comment can to have infinity size, because this attribute is using the annotation @RemainPositional Field.");
+		final String result = FFPojoHelper.getInstance().parseToText(document);
+
 		Truth.assert_().that(result.length()).isEqualTo(expected.length());
 		Truth.assert_().that(result).isEqualTo(expected);
 		Truth.assert_().that(expected.length()).isEqualTo(document.getClass().getDeclaredField("publisher").getAnnotation(PositionalField.class).finalPosition() + document.getComments().length() );

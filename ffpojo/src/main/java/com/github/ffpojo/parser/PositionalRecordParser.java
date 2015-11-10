@@ -52,8 +52,8 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
 
 		for (int i = 0; i < positionalFieldDescriptors.size(); i++) {
 			final PositionalFieldDescriptor actualFieldDescriptor = positionalFieldDescriptors.get(i);
-
 			final PositionalFieldDescriptor previousFieldDescriptor = readPreviousFieldDescriptors(positionalFieldDescriptors, i);
+
 			final boolean isFirstFieldDescriptor =  previousFieldDescriptor == null;
 
 			final String fieldValue = readFieldValueFromRecord(record, actualFieldDescriptor);
@@ -197,21 +197,24 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
 	private String readFieldValue(String text, PositionalFieldDescriptor actualFieldDescriptor, PositionalFieldDescriptor previousFieldDescriptor) {
 		String fieldValue = StringUtil.EMPTY;
 		int initialIndex = 0;
-		int finalIndex = 0 ;actualFieldDescriptor.getFinalPosition();
+		int finalIndex = 0 ;
 		if (actualFieldDescriptor.isRemainPosition()){
 			if (previousFieldDescriptor != null){
 				if (text.length() > previousFieldDescriptor.getFinalPosition()) {
 					initialIndex = previousFieldDescriptor.getFinalPosition();
 				}
 			}
-			finalIndex = text.length();
-			fieldValue = text.substring(initialIndex, finalIndex);
+			if (previousFieldDescriptor == null || (initialIndex > 0 && initialIndex <  text.length())){
+				finalIndex = text.length();
+				fieldValue = text.substring(initialIndex, finalIndex);
+			}
         }else {
 			initialIndex = actualFieldDescriptor.getInitialPosition() - 1;
 			finalIndex = actualFieldDescriptor.getFinalPosition();
 			if (text.length() < finalIndex) {
 				if (!((PositionalRecordDescriptor) recordDescriptor).isIgnorePositionNotFound()) {
-					throw new RecordParserException("The text length is less than the declared length in field mapping: " + actualFieldDescriptor.getGetter());
+					final String fieldName = actualFieldDescriptor.getGetter() != null ? actualFieldDescriptor.getGetter().getName() : actualFieldDescriptor.getField().getName();
+					throw new RecordParserException("The text length is less than the declared length in field mapping: " + fieldName);
 				}
 				if (text.length() > initialIndex && initialIndex >= 0) {
 					fieldValue = text.substring(initialIndex);
