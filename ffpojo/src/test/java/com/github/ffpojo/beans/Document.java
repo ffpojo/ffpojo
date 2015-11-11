@@ -3,7 +3,7 @@ package com.github.ffpojo.beans;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalField;
-import com.github.ffpojo.metadata.positional.annotation.extra.RemainPositionalField;
+import com.github.ffpojo.metadata.positional.annotation.extra.PositionalFieldRemainder;
 
 import java.util.Date;
 
@@ -24,7 +24,7 @@ public class Document {
     @PositionalField(initialPosition = 29, finalPosition = 49)
     private String publisher;
 
-    @RemainPositionalField
+    @PositionalFieldRemainder
     private String comments;
 
     public String getAuthor() {

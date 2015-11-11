@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD})
-public @interface RemainPositionalField {
+public @interface PositionalFieldRemainder {
 	PaddingAlign paddingAlign() default PaddingAlign.RIGHT;
 	char paddingCharacter() default ' ';
 	boolean trimOnRead() default true;

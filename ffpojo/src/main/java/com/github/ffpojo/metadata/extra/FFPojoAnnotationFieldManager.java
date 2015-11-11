@@ -5,7 +5,7 @@ import com.github.ffpojo.decorator.*;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.MetadataReaderException;
 import com.github.ffpojo.metadata.FieldDecorator;
-import com.github.ffpojo.metadata.positional.annotation.extra.RemainPositionalField;
+import com.github.ffpojo.metadata.positional.annotation.extra.PositionalFieldRemainder;
 import com.github.ffpojo.util.ReflectUtil;
 
 import java.lang.annotation.Annotation;
@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FFPojoAnnotationFieldManager {
+    public class FFPojoAnnotationFieldManager {
 
     final private static Map<String, Class<? extends FieldDecorator<?>>> mapAnnotationDecoratorClass = new HashMap<String,  Class<? extends FieldDecorator<?>>>();
 
@@ -48,7 +48,7 @@ public class FFPojoAnnotationFieldManager {
     }
 
     public boolean isRemainPositionalField(Class<? extends Annotation> annotation){
-        return annotation.isAssignableFrom(RemainPositionalField.class);
+        return annotation.isAssignableFrom(PositionalFieldRemainder.class);
     }
 
     public boolean isPositionalField(Class<? extends Annotation> annotation){

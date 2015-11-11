@@ -6,7 +6,7 @@ import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalField;
 import com.github.ffpojo.metadata.positional.annotation.extra.EnumPositionalField;
-import com.github.ffpojo.metadata.positional.annotation.extra.RemainPositionalField;
+import com.github.ffpojo.metadata.positional.annotation.extra.PositionalFieldRemainder;
 import com.google.common.truth.Truth;
 import org.junit.Test;
 
@@ -99,7 +99,7 @@ public class EnumDecoratorTest {
         @PositionalField(initialPosition = 21, finalPosition = 30)
         private String nome;
 
-        @RemainPositionalField
+        @PositionalFieldRemainder
         private String message;
 
         public String getNome() {
