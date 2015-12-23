@@ -5,6 +5,7 @@ import com.github.ffpojo.decorator.*;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.MetadataReaderException;
 import com.github.ffpojo.metadata.FieldDecorator;
+import com.github.ffpojo.metadata.FullLineField;
 import com.github.ffpojo.metadata.positional.annotation.extra.PositionalFieldRemainder;
 import com.github.ffpojo.util.ReflectUtil;
 
@@ -14,7 +15,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-    public class FFPojoAnnotationFieldManager {
+public class FFPojoAnnotationFieldManager {
 
     final private static Map<String, Class<? extends FieldDecorator<?>>> mapAnnotationDecoratorClass = new HashMap<String,  Class<? extends FieldDecorator<?>>>();
 
@@ -30,6 +31,7 @@ import java.util.Map;
         mapAnnotationDecoratorClass.put("bigdecimal", InternalBigDecimalDecorator.class);
         mapAnnotationDecoratorClass.put("biginteger", InternalBigIntegerDecorator.class);
         mapAnnotationDecoratorClass.put("enum", InternalEnumDecorator.class);
+
     }
 
     public Class<?> getClassDecorator(Class<? extends Annotation> clazzPositionalFieldAnnotation){
@@ -44,11 +46,15 @@ import java.util.Map;
     }
 
     public boolean isFFPojoAnnotationField(Class<? extends Annotation> annotation){
-        return isDelimitedField(annotation) || isPositionalField(annotation);
+        return isDelimitedField(annotation) || isPositionalField(annotation) || isFullLineField(annotation);
     }
 
-    public boolean isRemainPositionalField(Class<? extends Annotation> annotation){
-        return annotation.isAssignableFrom(PositionalFieldRemainder.class);
+    public boolean isFullLineField(Class<? extends Annotation> annotation){
+        return annotation!=null && annotation.isAssignableFrom(FullLineField.class);
+    }
+
+    public boolean isPositionalFieldRemainder(Class<? extends Annotation> annotation){
+        return annotation!=null && annotation.isAssignableFrom(PositionalFieldRemainder.class);
     }
 
     public boolean isPositionalField(Class<? extends Annotation> annotation){
@@ -56,7 +62,7 @@ import java.util.Map;
             annotation.getMethod("initialPosition");
             annotation.getMethod("finalPosition");
         }catch (Exception e){
-            return isRemainPositionalField(annotation);
+            return isPositionalFieldRemainder(annotation);
         }
         return true;
     }
@@ -111,7 +117,7 @@ import java.util.Map;
 
     @SuppressWarnings("all")
     private FieldDecorator<?> getDecoratorInstance(Annotation annotation){
-		Class<? extends FieldDecorator> decorator = null;
+        Class<? extends FieldDecorator> decorator = null;
         try {
             decorator = (Class<? extends FieldDecorator>) annotation.getClass().getMethod("decorator").invoke(annotation);
             return decorator.newInstance();

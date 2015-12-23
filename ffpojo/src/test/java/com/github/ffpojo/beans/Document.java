@@ -12,7 +12,7 @@ import java.util.Date;
  * @author William Miranda
  */
 
-@PositionalRecord(ignorePositionNotFound = true)
+@PositionalRecord(ignoreMissingFieldsInTheEnd = true)
 public class Document {
 
     @PositionalField(initialPosition = 1, finalPosition = 20)

@@ -57,7 +57,11 @@ class DelimitedRecordAnnotationMetadataReader extends AnnotationMetadataReader {
 			if (annotationFieldManager.isDelimitedField(annotation.annotationType())) {
 				DelimitedFieldDescriptor fieldDescriptor = createDelimitedDescriptor(annotation);
 				fieldDescriptor.setAccessorType(AccessorType.FIELD);
-				fieldDescriptor.setField(field);
+				try {
+					fieldDescriptor.setGetter(ReflectUtil.getGetterFromFieldName(field.getName(), recordClazz));
+				} catch (NoSuchMethodException e) {
+					throw new FFPojoException(String.format("Not found getter method to field %s ", field.getName()), e);
+				}
 				fieldDescriptors.add(fieldDescriptor);
 			}
 		}

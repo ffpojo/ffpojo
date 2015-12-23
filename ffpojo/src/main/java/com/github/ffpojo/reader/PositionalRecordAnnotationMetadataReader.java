@@ -32,10 +32,10 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 
 	@Override
 	public PositionalRecordDescriptor readMetadata() throws MetadataReaderException {
-		
+
 		final PositionalRecordDescriptor recordDescriptor = getRecordDescriptor();
 		recordDescriptor.assertValid();
-		recordDescriptor.setIgnorePositionNotFound(recordClazz.getAnnotation(PositionalRecord.class).ignorePositionNotFound());
+		recordDescriptor.setIgnoreMissingFieldsInTheEnd(recordClazz.getAnnotation(PositionalRecord.class).ignoreMissingFieldsInTheEnd());
 		recordDescriptor.sortFieldDescriptors();
 		return recordDescriptor;
 	}
@@ -61,7 +61,12 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 			if (annotationFieldManager.isPositionalField(annotation.annotationType())) {
 				PositionalFieldDescriptor fieldDescriptor = createPositionalDescriptor(annotation);
 				fieldDescriptor.setAccessorType(AccessorType.FIELD);
-				fieldDescriptor.setField(field);
+				try{
+					Method method = ReflectUtil.getGetterFromFieldName(field.getName(), recordClazz);
+					fieldDescriptor.setGetter(method);
+				}catch (Exception e){
+					throw new FFPojoException(String.format("Not found getter method to field %s ", field.getName()), e);
+				}
 				fieldDescriptors.add(fieldDescriptor);
 			}
 		}
@@ -102,7 +107,7 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 			fieldDescriptor.setPaddingAlign(((PaddingAlign) clazz.getMethod("paddingAlign").invoke(positionalFieldAnnotation)));
 			fieldDescriptor.setPaddingCharacter((((Character) clazz.getMethod("paddingCharacter").invoke(positionalFieldAnnotation))));
 			fieldDescriptor.setTrimOnRead(((Boolean) clazz.getMethod("trimOnRead").invoke(positionalFieldAnnotation)));
-			if (annotationFieldManager.isRemainPositionalField(clazz)){
+			if (annotationFieldManager.isPositionalFieldRemainder(clazz)){
 				fieldDescriptor.setRemainPosition(true);
 				fieldDescriptor.setDecorator(new DefaultFieldDecorator());
 			}else{

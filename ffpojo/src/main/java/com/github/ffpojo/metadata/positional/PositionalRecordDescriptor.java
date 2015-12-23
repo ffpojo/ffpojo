@@ -13,7 +13,7 @@ import com.github.ffpojo.metadata.RecordDescriptor;
  */
 public class PositionalRecordDescriptor extends RecordDescriptor {
 
-	private boolean ignorePositionNotFound = false;
+	private boolean ignoreMissingFieldsInTheEnd = false;
 	
 	public PositionalRecordDescriptor() {
 		super();
@@ -33,7 +33,7 @@ public class PositionalRecordDescriptor extends RecordDescriptor {
 		if (positionalFieldDescriptors != null && !positionalFieldDescriptors.isEmpty()) {
 			for (int i = 0; i < positionalFieldDescriptors.size(); i++) {
 				PositionalFieldDescriptor actualFieldDescriptor = positionalFieldDescriptors.get(i);
-				if (actualFieldDescriptor.isRemainPosition()){
+				if (canSkipValidation(actualFieldDescriptor)){
 					continue;
 				}
 				boolean isFirstFieldDescriptor = i==0;
@@ -69,14 +69,13 @@ public class PositionalRecordDescriptor extends RecordDescriptor {
 		}
 	}
 
-	private String getFieldName(PositionalFieldDescriptor fieldDescriptor) {
-		String previousName = "";
-		if (fieldDescriptor.isByProperty()){
-            previousName =  fieldDescriptor.getGetter().getName();
-        }else {
-            previousName =  fieldDescriptor.getField().getName();
-        }
-		return previousName;
+    private boolean canSkipValidation(PositionalFieldDescriptor actualFieldDescriptor) {
+        return actualFieldDescriptor.isPositionalFieldRemainder() || actualFieldDescriptor.isFullLineField();
+    }
+
+
+    private String getFieldName(PositionalFieldDescriptor fieldDescriptor) {
+		return fieldDescriptor.getGetter().getName();
 	}
 
 	private void sortAndRemoveRepeated(List<PositionalFieldDescriptor> positionalFieldDescriptors) {
@@ -99,12 +98,12 @@ public class PositionalRecordDescriptor extends RecordDescriptor {
 		}
 	}
 
-	public boolean isIgnorePositionNotFound() {
-		return ignorePositionNotFound;
+	public boolean isIgnoreMissingFieldsInTheEnd() {
+		return ignoreMissingFieldsInTheEnd;
 	}
 
-	public void setIgnorePositionNotFound(boolean ignorePositionNotFound) {
-		this.ignorePositionNotFound = ignorePositionNotFound;
+	public void setIgnoreMissingFieldsInTheEnd(boolean ignoreMissingFieldsInTheEnd) {
+		this.ignoreMissingFieldsInTheEnd = ignoreMissingFieldsInTheEnd;
 	}
 	
 	

@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface PositionalRecord {
-	boolean ignorePositionNotFound() default false;
+	boolean ignoreMissingFieldsInTheEnd() default false;
+	boolean isGetterAndSetterMethodOptional() default true;
 	PositionalRecordLineIdentifier[] lineIdentifiers() default {};
 }

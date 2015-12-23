@@ -11,7 +11,6 @@ import org.junit.Test;
 import com.github.ffpojo.FFPojoHelper;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.metadata.positional.PaddingAlign;
-import com.github.ffpojo.metadata.positional.annotation.AccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.DoublePositionalField;
@@ -298,7 +297,7 @@ public class PositionalRecordParserTest {
 		public void setName(String name) { this.name = name; }
 	}
 	
-	@PositionalRecord(ignorePositionNotFound=true)
+	@PositionalRecord(ignoreMissingFieldsInTheEnd =true)
 	public static final class TestPojo8 {
 		@PositionalField(initialPosition = 1, finalPosition = 10, paddingAlign = PaddingAlign.LEFT, paddingCharacter = '#')
 		private String name;
