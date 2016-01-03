@@ -1,6 +1,5 @@
 package com.github.ffpojo.parser;
 
-import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.exception.RecordParserException;
 import com.github.ffpojo.metadata.FieldDecorator;
@@ -9,7 +8,6 @@ import com.github.ffpojo.metadata.positional.PositionalRecordDescriptor;
 import com.github.ffpojo.util.ReflectUtil;
 import com.github.ffpojo.util.StringUtil;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -134,15 +132,10 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
             try {
                 setter = ReflectUtil.getSetterFromGetter(actualFieldDescriptor.getGetter(), new Class<?>[] {getterReturnType}, recordClazz);
             } catch (NoSuchMethodException e2) {
-				e2.printStackTrace();
-//                throw new RecordParserException("Compatible setter not found for getter " + actualFieldDescriptor.getGetter(), e2);
+                logger.warning("Compatible setter not found for getter " + actualFieldDescriptor.getGetter());
             }
         }
-		if (setter != null){
-			setValueBySetterMethod(record, actualFieldDescriptor, fieldValue, setter);
-		}else{
-			setValueByField(record, actualFieldDescriptor, fieldValue);
-		}
+		setValue(record, actualFieldDescriptor, fieldValue, setter);
 	}
 
 	private String readFieldValue(String text, PositionalFieldDescriptor actualFieldDescriptor, PositionalFieldDescriptor previousFieldDescriptor) {

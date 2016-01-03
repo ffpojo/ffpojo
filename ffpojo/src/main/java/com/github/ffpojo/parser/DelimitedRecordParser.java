@@ -1,20 +1,17 @@
 package com.github.ffpojo.parser;
 
-import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.exception.RecordParserException;
 import com.github.ffpojo.metadata.FieldDecorator;
 import com.github.ffpojo.metadata.delimited.DelimitedFieldDescriptor;
 import com.github.ffpojo.metadata.delimited.DelimitedRecordDescriptor;
-import com.github.ffpojo.metadata.positional.PositionalFieldDescriptor;
 import com.github.ffpojo.util.ReflectUtil;
 import com.github.ffpojo.util.RegexUtil;
 import com.github.ffpojo.util.StringUtil;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
-
+import java.util.logging.Logger;
 
 
 class DelimitedRecordParser extends BaseRecordParser implements RecordParser {
@@ -50,18 +47,10 @@ class DelimitedRecordParser extends BaseRecordParser implements RecordParser {
 				try {
 					setter = ReflectUtil.getSetterFromGetter(actualFieldDescriptor.getGetter(), new Class<?>[]{getterReturnType}, recordClazz);
 				} catch (NoSuchMethodException e2) {
-					e2.printStackTrace();
-//					throw new RecordParserException("Compatible setter not found for getter " + actualFieldDescriptor.getGetter(), e2);
+					logger.warning("Compatible setter not found for getter " + actualFieldDescriptor.getGetter());
 				}
 			}
-
-			if (setter != null){
-				setValueBySetterMethod(record, actualFieldDescriptor, fieldValue, setter);
-
-			}else{
-				setValueByField(record, actualFieldDescriptor, fieldValue);
-			}
-
+			setValue(record, actualFieldDescriptor, fieldValue, setter);
 
 		}
 		

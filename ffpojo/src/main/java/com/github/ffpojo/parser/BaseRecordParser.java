@@ -7,12 +7,16 @@ import com.github.ffpojo.metadata.FieldDecorator;
 import com.github.ffpojo.metadata.FieldDescriptor;
 import com.github.ffpojo.metadata.RecordDescriptor;
 import com.github.ffpojo.metadata.delimited.DelimitedFieldDescriptor;
+import com.github.ffpojo.metadata.positional.PositionalFieldDescriptor;
 import com.github.ffpojo.util.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 abstract class BaseRecordParser implements RecordParser {
+
+	protected static final Logger logger =  Logger.getLogger("global");
 
 	protected RecordDescriptor recordDescriptor;
 	
@@ -22,6 +26,14 @@ abstract class BaseRecordParser implements RecordParser {
 
 	protected RecordDescriptor getRecordDescriptor() {
 		return recordDescriptor;
+	}
+
+	protected  <T> void setValue(T record, FieldDescriptor actualFieldDescriptor, String fieldValue, Method setter) {
+		if (setter != null){
+			setValueBySetterMethod(record, actualFieldDescriptor, fieldValue, setter);
+		}else{
+			setValueByField(record, actualFieldDescriptor, fieldValue);
+		}
 	}
 
 	protected  <T> void setValueByField(T record, FieldDescriptor actualFieldDescriptor, String fieldValue){
