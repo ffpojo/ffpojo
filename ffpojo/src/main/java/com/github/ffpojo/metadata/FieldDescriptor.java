@@ -3,6 +3,7 @@ package com.github.ffpojo.metadata;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import com.github.ffpojo.metadata.positional.PositionalFieldDescriptor;
 import com.github.ffpojo.metadata.positional.annotation.AccessorType;
 import com.github.ffpojo.util.ReflectUtil;
 import com.github.ffpojo.util.StringUtil;
@@ -11,10 +12,9 @@ import com.github.ffpojo.util.StringUtil;
 public abstract class FieldDescriptor {
 
 	private Method getter;
-	private AccessorType accessorType =  AccessorType.PROPERTY;
 	private boolean isFullLineField;
-	private Field field;
-		
+	private FieldDecorator<?> decorator;
+
 	// GETTERS AND SETTERS
 	
 	public Method getGetter() {
@@ -23,12 +23,6 @@ public abstract class FieldDescriptor {
 	public void setGetter(Method getter) {
 		this.getter = getter;
 	}
-	public AccessorType getAccessorType() {
-		return accessorType;
-	}
-	public void setAccessorType(AccessorType accessorType) {
-		this.accessorType = accessorType;
-	}
 	public boolean isFullLineField() {
 		return isFullLineField;
 	}
@@ -36,24 +30,30 @@ public abstract class FieldDescriptor {
 		this.isFullLineField = isFullLineField;
 	}
 
-	public String getFieldDescriptorName(){
-		String fieldName = "";
-		if (getter!= null){
-			fieldName =  getter.getName();
-		}else if (field != null){
-			fieldName =  field.getName();
-		}
+	protected String getFieldDescriptorName(){
+		final String fieldName = ReflectUtil.getFieldNameFromGetterOrSetter(getter);
 		return StringUtil.pastelCaseToCamelCase(fieldName);
 	}
 
-	private String getterToFieldName(Method getter){
-		if (getter == null) return null;
-		String getName=  getter.getName();
-		if (getName.startsWith("get")){
-			return getName.substring(3);
+	protected int compareFieldDescriptorFullLine(FieldDescriptor other){
+		if (this.isFullLineField()){
+			return 1;
 		}
-		return getName.substring(2);
+		if(other.isFullLineField()){
+			return -1;
+		}
+		return 0;
+	}
 
+	protected int compareGetterName(PositionalFieldDescriptor other){
+		return  this.getFieldDescriptorName().compareTo(other.getFieldDescriptorName());
+	}
+
+	public FieldDecorator<?> getDecorator() {
+		return decorator;
+	}
+	public void setDecorator(FieldDecorator<?> decorator) {
+		this.decorator = decorator;
 	}
 
 }

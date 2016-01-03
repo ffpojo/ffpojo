@@ -134,6 +134,17 @@ public class PositionalRecordParserTest {
 		Truth.assert_().that(actual.getIdade()).isEqualTo(35);
 		Truth.assert_().that(actual.getOpcionalDescricao()).isEqualTo("St Martin Street");
 	}
+
+	@Test
+	public void deveTestarClassWithoutSetter() throws FFPojoException {
+		String expected = "William   35  St Martin Street";
+		FFPojoHelper ffpojo = FFPojoHelper.getInstance();
+		TestImutableClass actual = ffpojo.createFromText(TestImutableClass.class, expected);
+		Truth.assert_().that(actual.getName()).isEqualTo("William");
+		Truth.assert_().that(actual.getIdade()).isEqualTo(35);
+		Truth.assert_().that(actual.getOpcionalDescricao()).isEqualTo("St Martin Street");
+	}
+
 	
 	@Test
 	public void deve_transformar_pojo_em_string_de_acordo_com_anotacoes_considerando_padding_direita_e_padding_caractere() throws FFPojoException {
@@ -322,6 +333,27 @@ public class PositionalRecordParserTest {
 			this.opcionalDescricao = opcionalDescricao;
 		}
 		
-		
+	}
+
+	@PositionalRecord(ignoreMissingFieldsInTheEnd = true)
+	public static final class TestImutableClass{
+		@PositionalField(initialPosition = 1, finalPosition = 10, paddingAlign = PaddingAlign.LEFT, paddingCharacter = '#')
+		private String name;
+		@IntegerPositionalField(initialPosition=11, finalPosition=14)
+		private int idade;
+		@PositionalField(initialPosition=15, finalPosition=3000)
+		private String opcionalDescricao;
+
+		public String getName() {
+			return name;
+		}
+
+		public int getIdade() {
+			return idade;
+		}
+
+		public String getOpcionalDescricao() {
+			return opcionalDescricao;
+		}
 	}
 }

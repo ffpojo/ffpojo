@@ -76,8 +76,12 @@ public class FFPojoAnnotationFieldManager {
         return true;
     }
 
-
-    public boolean isFieldAlreadyFFPojoAnnotation( Field field) {
+    /**
+     * Verify if exist a FFPOjo Annotation (@PositionalField, @DelimitedField, @FullLineField, @PositionalFieldRemainder) on field
+     * @param field
+     * @return
+     */
+    public boolean isFieldAnnotedWithFFPojoAnnotation(Field field) {
         Annotation[] annotationsField =  field.getAnnotations();
         boolean hasFieldAnnotaded =  false;
         for (int i = 0; i < annotationsField.length; i++) {

@@ -13,6 +13,7 @@ import static com.github.ffpojo.util.StringUtil.pastelCaseToCamelCase;
 public class ReflectUtil {
 
 	public static boolean isGetter(Method method) {
+		if (method == null) return false;
 		if (!method.getName().startsWith("get") && !method.getName().startsWith("is")) {
 			return false;
 		} else if (method.getName().equals("getClass")) {
@@ -83,6 +84,20 @@ public class ReflectUtil {
 		return new ArrayList<Field>(listaFields);
 	}
 
+	public static Field getField(Class<?> recordClazz, String fieldName){
+		List<Field> fields =  getRecursiveFields(recordClazz);
+		Class<?> clazz = recordClazz;
+		Field field = null;
+		while (clazz.isAnnotationPresent(PositionalRecord.class) || clazz.isAnnotationPresent(DelimitedRecord.class)) {
+			try {
+				field =  clazz.getDeclaredField(fieldName);
+				return field;
+			} catch (NoSuchFieldException e) {}
+			clazz = clazz.getSuperclass();
+		}
+		return field;
+	}
+
 	public static List<Field> getAnnotadedFields(Class<?> recordClazz) {
 		final List<Field> listaFields = new ArrayList<Field>();
 		if (recordClazz.isAnnotationPresent(PositionalRecord.class) || recordClazz.isAnnotationPresent(DelimitedRecord.class)) {
@@ -109,7 +124,4 @@ public class ReflectUtil {
 		}
 		return true;
 	}
-
-
-
 }

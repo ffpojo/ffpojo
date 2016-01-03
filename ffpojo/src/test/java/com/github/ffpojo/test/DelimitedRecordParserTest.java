@@ -1,5 +1,6 @@
 package com.github.ffpojo.test;
 
+import com.google.common.truth.Truth;
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -144,7 +145,16 @@ public class DelimitedRecordParserTest {
 		String expected = "Giba     St Martin Street";
 		Assert.assertEquals(expected, actual);
 	}
-	
+
+	@Test
+	public void deve_transformar_pojo_em_string_de_acordo_com_anotacoes_considerando_delimitador_como_caractere_de_espaco_composto_sem_metodo_setter() throws FFPojoException {
+		String actual = "Giba     St Martin Street";
+		FFPojoHelper ffpojo = FFPojoHelper.getInstance();
+		TestPojo10WithSetter pojo = ffpojo.createFromText(TestPojo10WithSetter.class, actual);
+		Truth.assert_().that(pojo.getName()).isEqualTo("Giba");
+		Truth.assert_().that(pojo.getAddress()).isEqualTo("St Martin Street");
+	}
+
 	@DelimitedRecord
 	public static final class TestPojo1 {
 		private String name;
@@ -289,5 +299,16 @@ public class DelimitedRecordParserTest {
 		@DelimitedField(positionIndex = 2)
 		public String getAddress() { return address; }
 		public void setAddress(String address) { this.address = address; }
+	}
+
+	@DelimitedRecord(delimiter = "     ")
+	public static final class TestPojo10WithSetter {
+		private String name;
+		private String address;
+		// GETTERS AND SETTERS
+		@DelimitedField(positionIndex = 1)
+		public String getName() { return name; }
+		@DelimitedField(positionIndex = 2)
+		public String getAddress() { return address; }
 	}
 }

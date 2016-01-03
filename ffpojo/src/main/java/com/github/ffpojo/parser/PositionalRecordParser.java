@@ -1,5 +1,6 @@
 package com.github.ffpojo.parser;
 
+import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.FieldDecoratorException;
 import com.github.ffpojo.exception.RecordParserException;
 import com.github.ffpojo.metadata.FieldDecorator;
@@ -8,6 +9,7 @@ import com.github.ffpojo.metadata.positional.PositionalRecordDescriptor;
 import com.github.ffpojo.util.ReflectUtil;
 import com.github.ffpojo.util.StringUtil;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -124,7 +126,7 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
 	}
 
 	private <T> void setValueFromText(Class<T> recordClazz, T record, PositionalFieldDescriptor actualFieldDescriptor, String fieldValue) {
-		Method setter;
+		Method setter = null;
 		Class<?> getterReturnType = actualFieldDescriptor.getGetter().getReturnType();
 		try {
             setter = ReflectUtil.getSetterFromGetter(actualFieldDescriptor.getGetter(), new Class<?>[]{String.class}, recordClazz);
@@ -132,19 +134,15 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
             try {
                 setter = ReflectUtil.getSetterFromGetter(actualFieldDescriptor.getGetter(), new Class<?>[] {getterReturnType}, recordClazz);
             } catch (NoSuchMethodException e2) {
-                throw new RecordParserException("Compatible setter not found for getter " + actualFieldDescriptor.getGetter(), e2);
+				e2.printStackTrace();
+//                throw new RecordParserException("Compatible setter not found for getter " + actualFieldDescriptor.getGetter(), e2);
             }
         }
-		Object parameter;
-		try {
-            FieldDecorator<?> decorator = actualFieldDescriptor.getDecorator();
-            parameter = decorator.fromString(fieldValue);
-            setter.invoke(record, parameter);
-        } catch (FieldDecoratorException e) {
-            throw new RecordParserException(e);
-        } catch (Exception e) {
-            throw new RecordParserException("Error while invoking setter method, make sure that is provided a compatible fromString decorator method: " + setter, e);
-        }
+		if (setter != null){
+			setValueBySetterMethod(record, actualFieldDescriptor, fieldValue, setter);
+		}else{
+			setValueByField(record, actualFieldDescriptor, fieldValue);
+		}
 	}
 
 	private String readFieldValue(String text, PositionalFieldDescriptor actualFieldDescriptor, PositionalFieldDescriptor previousFieldDescriptor) {
