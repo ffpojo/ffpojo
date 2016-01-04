@@ -16,7 +16,6 @@ public class PositionalFieldDescriptor extends FieldDescriptor implements Compar
 	private boolean trimOnRead;
 	private FieldDecorator<?> decorator;
 	private boolean ignoreMissingFieldsInTheEnd;
-	private boolean remainPosition;
 
 	public int compareTo(PositionalFieldDescriptor other) {
 		int resultCompareFullLine = comparePositionalFullLine(other);
@@ -52,10 +51,10 @@ public class PositionalFieldDescriptor extends FieldDescriptor implements Compar
 	}
 
 	private int comparePositionalFieldRemainder(PositionalFieldDescriptor other){
-		if (this.isPositionalFieldRemainder()){
+		if (this.isIgnoreMissingFieldsInTheEnd() && !other.isFullLineField()){
 			return 1;
 		}
-		if(other.isPositionalFieldRemainder()){
+		if(other.isIgnoreMissingFieldsInTheEnd() || other.isFullLineField()){
 			return -1;
 		}
 		return 0;
@@ -107,14 +106,5 @@ public class PositionalFieldDescriptor extends FieldDescriptor implements Compar
 	public void setIgnoreMissingFieldsInTheEnd(boolean ignoreMissingFieldsInTheEnd) {
 		this.ignoreMissingFieldsInTheEnd = ignoreMissingFieldsInTheEnd;
 	}
-
-	public boolean isPositionalFieldRemainder() {
-		return remainPosition;
-	}
-
-	public void setRemainPosition(boolean remainPosition) {
-		this.remainPosition = remainPosition;
-	}
-
 
 }

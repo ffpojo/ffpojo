@@ -108,7 +108,7 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 			final boolean isFullLineField = annotationFieldManager.isFullLineField(clazz);
 			final boolean isPositionalFieldRemainder = annotationFieldManager.isPositionalFieldRemainder(clazz);
 			fieldDescriptor.setIsFullLineField(isFullLineField);
-			fieldDescriptor.setRemainPosition(isPositionalFieldRemainder);
+			fieldDescriptor.setIgnoreMissingFieldsInTheEnd(isPositionalFieldRemainder);
 			if (!(isFullLineField || isPositionalFieldRemainder)){
 				fieldDescriptor.setDecorator(annotationFieldManager.createNewInstanceDecorator(positionalFieldAnnotation));
 				fieldDescriptor.setFinalPosition(((Integer) clazz.getMethod("finalPosition").invoke(positionalFieldAnnotation)));

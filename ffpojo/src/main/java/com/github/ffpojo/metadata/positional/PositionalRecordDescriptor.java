@@ -70,7 +70,7 @@ public class PositionalRecordDescriptor extends RecordDescriptor {
 	}
 
     private boolean canSkipValidation(PositionalFieldDescriptor actualFieldDescriptor) {
-        return actualFieldDescriptor.isPositionalFieldRemainder() || actualFieldDescriptor.isFullLineField();
+        return actualFieldDescriptor.isIgnoreMissingFieldsInTheEnd() || actualFieldDescriptor.isFullLineField();
     }
 
 

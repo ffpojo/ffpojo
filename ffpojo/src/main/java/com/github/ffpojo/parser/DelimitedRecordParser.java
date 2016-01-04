@@ -32,11 +32,13 @@ class DelimitedRecordParser extends BaseRecordParser implements RecordParser {
 		String[] textTokens = text.split(RegexUtil.escapeRegexMetacharacters(getRecordDescriptor().getDelimiter()), -1);
 		int tokensQtt = textTokens.length;
 		for (DelimitedFieldDescriptor actualFieldDescriptor : delimitedFieldDescriptors) {
-			String fieldValue;
-			if (actualFieldDescriptor.getPositionIndex() <= tokensQtt) {
-				fieldValue = textTokens[actualFieldDescriptor.getPositionIndex() - 1];
-			} else {
-				throw new RecordParserException("The position declared in field-mapping is greater than the text tokens amount: " + actualFieldDescriptor.getGetter());
+			String fieldValue = text;
+			if (!actualFieldDescriptor.isFullLineField()){
+				if (actualFieldDescriptor.getPositionIndex() <= tokensQtt) {
+					fieldValue = textTokens[actualFieldDescriptor.getPositionIndex() - 1];
+				} else {
+					throw new RecordParserException("The position declared in field-mapping is greater than the text tokens amount: " + actualFieldDescriptor.getGetter());
+				}
 			}
 
 			Method setter =null;
