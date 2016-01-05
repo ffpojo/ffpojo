@@ -197,7 +197,7 @@ public class XmlMetadataReader {
 					positionalFieldDescriptor.setPaddingAlign(paddingAlign);
 				} else if (attr.getNodeName().equals("padding-character")) {
 					String paddingCharacter = attr.getNodeValue();
-					positionalFieldDescriptor.setFinalPosition(paddingCharacter.charAt(0));
+					positionalFieldDescriptor.setPaddingCharacter(paddingCharacter.charAt(0));
 				} else if (attr.getNodeName().equals("trim-on-read")) {
 					boolean trimOnRead = Boolean.valueOf(attr.getNodeValue());
 					positionalFieldDescriptor.setTrimOnRead(trimOnRead);
