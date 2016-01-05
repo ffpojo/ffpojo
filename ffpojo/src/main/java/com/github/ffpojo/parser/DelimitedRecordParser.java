@@ -22,7 +22,7 @@ class DelimitedRecordParser extends BaseRecordParser implements RecordParser {
 	public DelimitedRecordParser(DelimitedRecordDescriptor recordDescriptor) {
 		super(recordDescriptor);
 	}
-	
+
 	public <T> T parseFromText(Class<T> recordClazz, String text) throws RecordParserException {
 		T record;
 		try {
@@ -36,7 +36,7 @@ class DelimitedRecordParser extends BaseRecordParser implements RecordParser {
 		int tokensQtt = textTokens.length;
 		for(int i = 0; i < delimitedFieldDescriptors.size(); i++) {
 			DelimitedFieldDescriptor actualFieldDescriptor = delimitedFieldDescriptors.get(i);
-			
+
 			String fieldValue;
 			if (actualFieldDescriptor.getPositionIndex() <= tokensQtt) {
 				fieldValue = textTokens[actualFieldDescriptor.getPositionIndex() - 1];
@@ -82,32 +82,32 @@ class DelimitedRecordParser extends BaseRecordParser implements RecordParser {
 
 
 		}
-		
+
 		return record;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <T> String parseToText(T record) throws RecordParserException {
 		StringBuffer sbufRecordLine = new StringBuffer();
-		
+
 		List<DelimitedFieldDescriptor> delimitedFieldDescriptors = getRecordDescriptor().getFieldDescriptors();
 		for(int i = 0; i < delimitedFieldDescriptors.size(); i++) {
 			DelimitedFieldDescriptor actualFieldDescriptor = delimitedFieldDescriptors.get(i);
-			
+
 			boolean isFirstFieldDescriptor = i==0;
 			DelimitedFieldDescriptor previousFieldDescriptor = null;
 			if (!isFirstFieldDescriptor) {
 				previousFieldDescriptor = delimitedFieldDescriptors.get(i-1);
 			}
-			
+
 			Method getter = actualFieldDescriptor.getGetter();
 			Object fieldValueObj;
 			try {
 				fieldValueObj = getter.invoke(record, new Object[]{});
 			} catch (Exception e) {
 				throw new RecordParserException("Error while invoking getter method: " + getter, e);
-			} 
-			
+			}
+
 			String fieldValue;
 			if (fieldValueObj == null) {
 				fieldValue = "";
@@ -119,7 +119,7 @@ class DelimitedRecordParser extends BaseRecordParser implements RecordParser {
 					throw new RecordParserException(e);
 				}
 			}
-			
+
 			// Check for missing fields and fill
 			if (isFirstFieldDescriptor && actualFieldDescriptor.getPositionIndex() > 1) {
 				int missingFields = actualFieldDescriptor.getPositionIndex() - 1;
@@ -128,7 +128,7 @@ class DelimitedRecordParser extends BaseRecordParser implements RecordParser {
 				int missingFields = actualFieldDescriptor.getPositionIndex() - previousFieldDescriptor.getPositionIndex() - 1;
 				sbufRecordLine.append(StringUtil.fillToLength("", missingFields, ',', StringUtil.Direction.RIGHT));
 			}
-			
+
 			sbufRecordLine.append(fieldValue);
 			if (i < delimitedFieldDescriptors.size() - 1) {
 				sbufRecordLine.append(getRecordDescriptor().getDelimiter());
@@ -138,10 +138,10 @@ class DelimitedRecordParser extends BaseRecordParser implements RecordParser {
 
 		return sbufRecordLine.toString();
 	}
-	
+
 	@Override
 	protected DelimitedRecordDescriptor getRecordDescriptor() {
 		return (DelimitedRecordDescriptor)recordDescriptor;
 	}
-	
+
 }
