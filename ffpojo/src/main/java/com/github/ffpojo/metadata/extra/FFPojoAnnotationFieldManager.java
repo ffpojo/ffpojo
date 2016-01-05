@@ -62,7 +62,7 @@ public class FFPojoAnnotationFieldManager {
             annotation.getMethod("initialPosition");
             annotation.getMethod("finalPosition");
         }catch (Exception e){
-            return isPositionalFieldRemainder(annotation);
+            return isPositionalFieldRemainder(annotation) || isFullLineField(annotation);
         }
         return true;
     }
@@ -71,7 +71,7 @@ public class FFPojoAnnotationFieldManager {
         try{
             annotation.getMethod("positionIndex");
         }catch (Exception e){
-            return false;
+            return isFullLineField(annotation);
         }
         return true;
     }

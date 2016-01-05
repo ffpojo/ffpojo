@@ -1,5 +1,6 @@
 package com.github.ffpojo.beans;
 
+import com.github.ffpojo.metadata.FullLineField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalField;
@@ -26,6 +27,9 @@ public class Document {
 
     @PositionalFieldRemainder
     private String comments;
+
+    @FullLineField
+    private String fullLine;
 
     public String getAuthor() {
         return author;
@@ -57,6 +61,10 @@ public class Document {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public String getFullLine() {
+        return fullLine;
     }
 
     @Override

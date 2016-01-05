@@ -42,7 +42,7 @@ public class PositionalFieldDescriptorTest {
                 .build();
 
         PositionalFieldDescriptor positionalFieldDescriptorRemainder = PositionalFieldDescriptorBuilder.newInstance()
-                .isIgnoreMissingFieldsInTheEnd()
+                .isPositionalFieldRemainder()
                 .build();
 
         Truth.assert_().that(positionalFieldDescriptor.compareTo(positionalFieldDescriptor2)).isLessThan(0);
@@ -89,8 +89,8 @@ class PositionalFieldDescriptorBuilder{
         return this;
     }
 
-    public PositionalFieldDescriptorBuilder isIgnoreMissingFieldsInTheEnd(){
-        this.positionalFieldDescriptor.setIgnoreMissingFieldsInTheEnd(true);
+    public PositionalFieldDescriptorBuilder isPositionalFieldRemainder(){
+        this.positionalFieldDescriptor.setIsPositionalFieldRemainder(true);
         return this;
     }
 

@@ -101,15 +101,18 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 		PositionalFieldDescriptor fieldDescriptor = new PositionalFieldDescriptor();
 		Class<? extends Annotation> clazz =  positionalFieldAnnotation.annotationType();
 		try{
+			fieldDescriptor.setDecorator(new DefaultFieldDecorator());
+			if(annotationFieldManager.isFullLineField(clazz)){
+				fieldDescriptor.setIsFullLineField(true);
+				return fieldDescriptor;
+			}
+
 			fieldDescriptor.setPaddingAlign(((PaddingAlign) clazz.getMethod("paddingAlign").invoke(positionalFieldAnnotation)));
 			fieldDescriptor.setPaddingCharacter((((Character) clazz.getMethod("paddingCharacter").invoke(positionalFieldAnnotation))));
 			fieldDescriptor.setTrimOnRead(((Boolean) clazz.getMethod("trimOnRead").invoke(positionalFieldAnnotation)));
-			fieldDescriptor.setDecorator(new DefaultFieldDecorator());
-			final boolean isFullLineField = annotationFieldManager.isFullLineField(clazz);
 			final boolean isPositionalFieldRemainder = annotationFieldManager.isPositionalFieldRemainder(clazz);
-			fieldDescriptor.setIsFullLineField(isFullLineField);
-			fieldDescriptor.setIgnoreMissingFieldsInTheEnd(isPositionalFieldRemainder);
-			if (!(isFullLineField || isPositionalFieldRemainder)){
+			fieldDescriptor.setIsPositionalFieldRemainder(isPositionalFieldRemainder);
+			if (!(isPositionalFieldRemainder)){
 				fieldDescriptor.setDecorator(annotationFieldManager.createNewInstanceDecorator(positionalFieldAnnotation));
 				fieldDescriptor.setFinalPosition(((Integer) clazz.getMethod("finalPosition").invoke(positionalFieldAnnotation)));
 				fieldDescriptor.setInitialPosition(((Integer) clazz.getMethod("initialPosition").invoke(positionalFieldAnnotation)));

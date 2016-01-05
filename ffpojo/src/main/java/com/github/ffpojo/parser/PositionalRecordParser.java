@@ -43,6 +43,9 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
 
 		for (int i = 0; i < positionalFieldDescriptors.size(); i++) {
 			final PositionalFieldDescriptor actualFieldDescriptor = positionalFieldDescriptors.get(i);
+			if (actualFieldDescriptor.isFullLineField()){
+				continue;
+			}
 			final PositionalFieldDescriptor previousFieldDescriptor = readPreviousFieldDescriptors(positionalFieldDescriptors, i);
 
 			final boolean isFirstFieldDescriptor =  previousFieldDescriptor == null;
@@ -50,7 +53,7 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
 			final String fieldValue = readFieldValueFromRecord(record, actualFieldDescriptor);
 			int fieldLength = actualFieldDescriptor.getFinalPosition() - actualFieldDescriptor.getInitialPosition() + 1;
 			String sizedFieldValue = StringUtil.fillToLength(fieldValue, fieldLength, actualFieldDescriptor.getPaddingCharacter(), StringUtil.Direction.valueOf(actualFieldDescriptor.getPaddingAlign().toString()));
-			if (actualFieldDescriptor.isIgnoreMissingFieldsInTheEnd()){
+			if (actualFieldDescriptor.isPositionalFieldRemainder()){
 				sizedFieldValue = fieldValue;
 			}
 			// Check for blank spaces and fill
@@ -145,7 +148,7 @@ class PositionalRecordParser extends BaseRecordParser implements RecordParser {
 		if (actualFieldDescriptor.isFullLineField()){
 			return text;
 		}
-		if (actualFieldDescriptor.isIgnoreMissingFieldsInTheEnd()){
+		if (actualFieldDescriptor.isPositionalFieldRemainder()){
 			if (previousFieldDescriptor != null){
 				if (text.length() > previousFieldDescriptor.getFinalPosition()) {
 					initialIndex = previousFieldDescriptor.getFinalPosition();

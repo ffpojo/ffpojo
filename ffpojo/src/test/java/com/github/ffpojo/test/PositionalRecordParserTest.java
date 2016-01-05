@@ -36,6 +36,14 @@ public class PositionalRecordParserTest {
 		Truth.assert_().that(expected.length()).isEqualTo(document.getClass().getDeclaredField("publisher").getAnnotation(PositionalField.class).finalPosition() + document.getComments().length() );
 	}
 
+	@Test
+	public void deve_verificar_que_fullline_annotation_devolve_toda_linha() throws Exception{
+		final String expected = "William Miranda     03112015Casa do Codigo       This comment can to have infinity size, because this attribute is using the annotation @RemainPositional Field.";
+		final Document document = FFPojoHelper.getInstance().createFromText(Document.class, expected);
+		Truth.assert_().that(document.getFullLine()).isEqualTo(expected);
+
+	}
+
 
 	@Test
 	public void deve_verificar_que_remain_anotation_devolve_as_posicoes_restantes_do_texto_sem_preencher_campo_anterior() throws NoSuchFieldException, ParseException {
