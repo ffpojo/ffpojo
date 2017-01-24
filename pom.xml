@@ -10,7 +10,7 @@
 
 	<groupId>com.github.ffpojo</groupId>
 	<artifactId>ffpojo-parent</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>2.0.REPACKAGE</version>
 	<packaging>pom</packaging>
 
 	<name>FFPOJO Project</name>
@@ -46,6 +46,12 @@
 			<name>Gilberto Augusto Holms</name>
 			<email>gibaholms85@gmail.com</email>
 			<url>http://gibaholms.wordpress.com</url>
+		</developer>
+		<developer>
+			<id>blackstile</id>
+			<name>William Miranda de Jesus</name>
+			<email>blackstile@hotmail.com</email>
+			<url>http://blogdoparanga.wordpress.com</url>
 		</developer>
 	</developers>
 

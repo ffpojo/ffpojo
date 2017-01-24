@@ -49,14 +49,6 @@ public class FFPojoAnnotationFieldManager {
         return isDelimitedField(annotation) || isPositionalField(annotation) || isFullLineField(annotation);
     }
 
-    public boolean isFullLineField(Class<? extends Annotation> annotation){
-        return annotation!=null && annotation.isAssignableFrom(FullLineField.class);
-    }
-
-    public boolean isPositionalFieldRemainder(Class<? extends Annotation> annotation){
-        return annotation!=null && annotation.isAssignableFrom(PositionalFieldRemainder.class);
-    }
-
     public boolean isPositionalField(Class<? extends Annotation> annotation){
         try{
             annotation.getMethod("initialPosition");
@@ -65,6 +57,14 @@ public class FFPojoAnnotationFieldManager {
             return isPositionalFieldRemainder(annotation) || isFullLineField(annotation);
         }
         return true;
+    }
+
+    public boolean isFullLineField(Class<? extends Annotation> annotation){
+        return annotation!=null && annotation.isAssignableFrom(FullLineField.class);
+    }
+
+    public boolean isPositionalFieldRemainder(Class<? extends Annotation> annotation){
+        return annotation!=null && annotation.isAssignableFrom(PositionalFieldRemainder.class);
     }
 
     public boolean isDelimitedField(Class<? extends Annotation> annotation){

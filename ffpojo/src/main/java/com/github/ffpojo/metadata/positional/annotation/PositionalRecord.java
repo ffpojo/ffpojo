@@ -9,6 +9,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 public @interface PositionalRecord {
 	boolean ignoreMissingFieldsInTheEnd() default false;
-	boolean isGetterAndSetterMethodOptional() default true;
 	PositionalRecordLineIdentifier[] lineIdentifiers() default {};
 }

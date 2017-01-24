@@ -27,8 +27,10 @@ public class EnumDecoratorTest {
         fFpojoGitLog.setNome("Manoel");
         fFpojoGitLog.setMessage("Teste anotacao @EnumPositionalField");
         String expected = FFPojoHelper.getInstance().parseToText(fFpojoGitLog);
+        System.out.println(expected);
         FFpojoGitLog other =  FFPojoHelper.getInstance().createFromText(FFpojoGitLog.class, expected);
         String actual = FFPojoHelper.getInstance().parseToText(other);
+        System.out.println(actual);
         Truth.assert_().that(actual).isEqualTo(expected);
         Truth.assert_().that(other).isEqualTo(fFpojoGitLog);
         Truth.assert_().that(other.getColaborator()).isEqualTo(Colaborator.WILLIAM);
@@ -42,6 +44,7 @@ public class EnumDecoratorTest {
         fFpojoGitLog.setMessage("Teste anotacao @EnumPositionalField");
         fFpojoGitLog.setNome("Josefina");
         String expected = FFPojoHelper.getInstance().parseToText(fFpojoGitLog);
+        System.out.println(expected);
         FFpojoGitLog other =  FFPojoHelper.getInstance().createFromText(FFpojoGitLogOrdinal.class, expected);
         String actual = FFPojoHelper.getInstance().parseToText(other);
         Truth.assert_().that(actual).isEqualTo(expected);
