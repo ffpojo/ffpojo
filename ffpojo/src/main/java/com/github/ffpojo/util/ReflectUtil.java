@@ -1,15 +1,19 @@
 package com.github.ffpojo.util;
 
+import com.github.ffpojo.metadata.delimited.annotation.DelimitedRecord;
+import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import com.github.ffpojo.metadata.delimited.annotation.DelimitedRecord;
-import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
+import static com.github.ffpojo.util.StringUtil.camelCaseToPastelCase;
+import static com.github.ffpojo.util.StringUtil.pastelCaseToCamelCase;
 
 public class ReflectUtil {
 
 	public static boolean isGetter(Method method) {
+		if (method == null) return false;
 		if (!method.getName().startsWith("get") && !method.getName().startsWith("is")) {
 			return false;
 		} else if (method.getName().equals("getClass")) {
@@ -54,10 +58,9 @@ public class ReflectUtil {
 		return clazz.getMethod("set" + fieldNamePastelCase, parameterTypes);
 	}
 
-	public static Method getGetterFromFieldName(String fieldName, Class<?> clazz)
-			throws SecurityException, NoSuchMethodException {
-		String getterNameAsDefault = "get" + ReflectUtil.camelCaseToPastelCase(fieldName);
-		String getterNameAsBoolean = "is" + ReflectUtil.camelCaseToPastelCase(fieldName);
+	public static Method getGetterFromFieldName(String fieldName, Class<?> clazz) throws SecurityException, NoSuchMethodException {
+		String getterNameAsDefault = "get" + camelCaseToPastelCase(fieldName);
+		String getterNameAsBoolean = "is" + camelCaseToPastelCase(fieldName);
 		Method getter = null;
 		try {
 			getter = clazz.getMethod(getterNameAsDefault, (Class[]) null);
@@ -79,6 +82,20 @@ public class ReflectUtil {
 			clazz = clazz.getSuperclass();
 		}
 		return new ArrayList<Field>(listaFields);
+	}
+
+	public static Field getField(Class<?> recordClazz, String fieldName){
+		List<Field> fields =  getRecursiveFields(recordClazz);
+		Class<?> clazz = recordClazz;
+		Field field = null;
+		while (clazz.isAnnotationPresent(PositionalRecord.class) || clazz.isAnnotationPresent(DelimitedRecord.class)) {
+			try {
+				field =  clazz.getDeclaredField(fieldName);
+				return field;
+			} catch (NoSuchFieldException e) {}
+			clazz = clazz.getSuperclass();
+		}
+		return field;
 	}
 
 	public static List<Field> getAnnotadedFields(Class<?> recordClazz) {
@@ -107,15 +124,4 @@ public class ReflectUtil {
 		}
 		return true;
 	}
-
-	private static String pastelCaseToCamelCase(String sPastel) {
-		char firstChar = sPastel.charAt(0);
-		return String.valueOf(Character.toLowerCase(firstChar)) + sPastel.substring(1);
-	}
-
-	private static String camelCaseToPastelCase(String sCamel) {
-		char firstChar = sCamel.charAt(0);
-		return String.valueOf(Character.toUpperCase(firstChar)) + sCamel.substring(1);
-	}
-
 }

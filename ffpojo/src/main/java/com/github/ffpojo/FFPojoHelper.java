@@ -1,8 +1,5 @@
 package com.github.ffpojo;
 
-import java.io.File;
-import java.util.List;
-
 import com.github.ffpojo.container.HybridMetadataContainer;
 import com.github.ffpojo.container.MetadataContainer;
 import com.github.ffpojo.exception.FFPojoException;
@@ -10,6 +7,9 @@ import com.github.ffpojo.exception.MetadataContainerException;
 import com.github.ffpojo.metadata.RecordDescriptor;
 import com.github.ffpojo.parser.RecordParser;
 import com.github.ffpojo.parser.RecordParserFactory;
+
+import java.io.File;
+import java.util.List;
 
 
 public class FFPojoHelper {

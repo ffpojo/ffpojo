@@ -11,7 +11,6 @@ import org.junit.Test;
 import com.github.ffpojo.FFPojoHelper;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.metadata.positional.PaddingAlign;
-import com.github.ffpojo.metadata.positional.annotation.AccessorType;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.DoublePositionalField;
@@ -23,16 +22,38 @@ import junit.framework.Assert;
 public class PositionalRecordParserTest {
 
 	@Test
-	public void deve_verificar_que_remain_anotation_devolve_as_posicoes_restantes_do_texto() throws NoSuchFieldException {
+	public void deve_verificar_que_remain_anotation_devolve_as_posicoes_restantes_do_texto() throws NoSuchFieldException, ParseException {
+		final String expected = "William Miranda     03112015Casa do Codigo       This comment can to have infinity size, because this attribute is using the annotation @RemainPositional Field.";
 		final Document document = new Document();
 		document.setAuthor("William Miranda");
-		document.setCreation(new Date());
+		document.setCreation(new SimpleDateFormat("ddMMyyyy").parse("03112015"));
 		document.setPublisher("Casa do Codigo");
 		document.setComments("This comment can to have infinity size, because this attribute is using the annotation @RemainPositional Field.");
 
-		String expected =  FFPojoHelper.getInstance().parseToText(document);
-		final Document other =  FFPojoHelper.getInstance().createFromText(Document.class, expected);
-		String result = FFPojoHelper.getInstance().parseToText(other);
+		final String result = FFPojoHelper.getInstance().parseToText(document);
+		Truth.assert_().that(result.length()).isEqualTo(expected.length());
+		Truth.assert_().that(result).isEqualTo(expected);
+		Truth.assert_().that(expected.length()).isEqualTo(document.getClass().getDeclaredField("publisher").getAnnotation(PositionalField.class).finalPosition() + document.getComments().length() );
+	}
+
+	@Test
+	public void deve_verificar_que_fullline_annotation_devolve_toda_linha() throws Exception{
+		final String expected = "William Miranda     03112015Casa do Codigo       This comment can to have infinity size, because this attribute is using the annotation @RemainPositional Field.";
+		final Document document = FFPojoHelper.getInstance().createFromText(Document.class, expected);
+		Truth.assert_().that(document.getFullLine()).isEqualTo(expected);
+
+	}
+
+
+	@Test
+	public void deve_verificar_que_remain_anotation_devolve_as_posicoes_restantes_do_texto_sem_preencher_campo_anterior() throws NoSuchFieldException, ParseException {
+		final String expected = "William Miranda     03112015                     This comment can to have infinity size, because this attribute is using the annotation @RemainPositional Field.";
+		final Document document = new Document();
+		document.setAuthor("William Miranda");
+		document.setCreation(new SimpleDateFormat("ddMMyyyy").parse("03112015"));
+		document.setComments("This comment can to have infinity size, because this attribute is using the annotation @RemainPositional Field.");
+		final String result = FFPojoHelper.getInstance().parseToText(document);
+
 		Truth.assert_().that(result.length()).isEqualTo(expected.length());
 		Truth.assert_().that(result).isEqualTo(expected);
 		Truth.assert_().that(expected.length()).isEqualTo(document.getClass().getDeclaredField("publisher").getAnnotation(PositionalField.class).finalPosition() + document.getComments().length() );
@@ -121,6 +142,17 @@ public class PositionalRecordParserTest {
 		Truth.assert_().that(actual.getIdade()).isEqualTo(35);
 		Truth.assert_().that(actual.getOpcionalDescricao()).isEqualTo("St Martin Street");
 	}
+
+	@Test
+	public void deveTestarClassWithoutSetter() throws FFPojoException {
+		String expected = "William   35  St Martin Street";
+		FFPojoHelper ffpojo = FFPojoHelper.getInstance();
+		TestImutableClass actual = ffpojo.createFromText(TestImutableClass.class, expected);
+		Truth.assert_().that(actual.getName()).isEqualTo("William");
+		Truth.assert_().that(actual.getIdade()).isEqualTo(35);
+		Truth.assert_().that(actual.getOpcionalDescricao()).isEqualTo("St Martin Street");
+	}
+
 	
 	@Test
 	public void deve_transformar_pojo_em_string_de_acordo_com_anotacoes_considerando_padding_direita_e_padding_caractere() throws FFPojoException {
@@ -284,7 +316,7 @@ public class PositionalRecordParserTest {
 		public void setName(String name) { this.name = name; }
 	}
 	
-	@PositionalRecord(ignorePositionNotFound=true)
+	@PositionalRecord(ignoreMissingFieldsInTheEnd =true)
 	public static final class TestPojo8 {
 		@PositionalField(initialPosition = 1, finalPosition = 10, paddingAlign = PaddingAlign.LEFT, paddingCharacter = '#')
 		private String name;
@@ -309,6 +341,27 @@ public class PositionalRecordParserTest {
 			this.opcionalDescricao = opcionalDescricao;
 		}
 		
-		
+	}
+
+	@PositionalRecord(ignoreMissingFieldsInTheEnd = true)
+	public static final class TestImutableClass{
+		@PositionalField(initialPosition = 1, finalPosition = 10, paddingAlign = PaddingAlign.LEFT, paddingCharacter = '#')
+		private String name;
+		@IntegerPositionalField(initialPosition=11, finalPosition=14)
+		private int idade;
+		@PositionalField(initialPosition=15, finalPosition=3000)
+		private String opcionalDescricao;
+
+		public String getName() {
+			return name;
+		}
+
+		public int getIdade() {
+			return idade;
+		}
+
+		public String getOpcionalDescricao() {
+			return opcionalDescricao;
+		}
 	}
 }

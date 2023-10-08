@@ -32,10 +32,10 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 
 	@Override
 	public PositionalRecordDescriptor readMetadata() throws MetadataReaderException {
-		
+
 		final PositionalRecordDescriptor recordDescriptor = getRecordDescriptor();
 		recordDescriptor.assertValid();
-		recordDescriptor.setIgnorePositionNotFound(recordClazz.getAnnotation(PositionalRecord.class).ignorePositionNotFound());
+		recordDescriptor.setIgnoreMissingFieldsInTheEnd(recordClazz.getAnnotation(PositionalRecord.class).ignoreMissingFieldsInTheEnd());
 		recordDescriptor.sortFieldDescriptors();
 		return recordDescriptor;
 	}
@@ -60,8 +60,11 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 		for (Annotation annotation : annotations) {
 			if (annotationFieldManager.isPositionalField(annotation.annotationType())) {
 				PositionalFieldDescriptor fieldDescriptor = createPositionalDescriptor(annotation);
-				fieldDescriptor.setAccessorType(AccessorType.FIELD);
-				fieldDescriptor.setField(field);
+				try {
+					fieldDescriptor.setGetter(ReflectUtil.getGetterFromFieldName(field.getName(), recordClazz));
+				} catch (NoSuchMethodException e) {
+					throw new FFPojoException(String.format("Not found getter method to field %s ", field.getName()), e);
+				}
 				fieldDescriptors.add(fieldDescriptor);
 			}
 		}
@@ -78,14 +81,13 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 						try {
 							final String fieldName = ReflectUtil.getFieldNameFromGetterOrSetter(method);
 							Field field  =  recordClazz.getDeclaredField(fieldName);
-							if (!annotationFieldManager.isFieldAlreadyFFPojoAnnotation(field)){
+							if (!annotationFieldManager.isFieldAnnotedWithFFPojoAnnotation(field)){
 								PositionalFieldDescriptor fieldDescriptor = createPositionalDescriptor(annotation);
-								fieldDescriptor.setAccessorType(AccessorType.PROPERTY);
 								fieldDescriptor.setGetter(method);
 								fieldDescriptors.add(fieldDescriptor);
 							}
 						} catch (NoSuchFieldException e) {
-							e.printStackTrace();
+							throw new MetadataReaderException(e);
 						}
 					}
 				}
@@ -99,13 +101,18 @@ class PositionalRecordAnnotationMetadataReader extends AnnotationMetadataReader 
 		PositionalFieldDescriptor fieldDescriptor = new PositionalFieldDescriptor();
 		Class<? extends Annotation> clazz =  positionalFieldAnnotation.annotationType();
 		try{
+			fieldDescriptor.setDecorator(new DefaultFieldDecorator());
+			if(annotationFieldManager.isFullLineField(clazz)){
+				fieldDescriptor.setIsFullLineField(true);
+				return fieldDescriptor;
+			}
+
 			fieldDescriptor.setPaddingAlign(((PaddingAlign) clazz.getMethod("paddingAlign").invoke(positionalFieldAnnotation)));
 			fieldDescriptor.setPaddingCharacter((((Character) clazz.getMethod("paddingCharacter").invoke(positionalFieldAnnotation))));
 			fieldDescriptor.setTrimOnRead(((Boolean) clazz.getMethod("trimOnRead").invoke(positionalFieldAnnotation)));
-			if (annotationFieldManager.isRemainPositionalField(clazz)){
-				fieldDescriptor.setRemainPosition(true);
-				fieldDescriptor.setDecorator(new DefaultFieldDecorator());
-			}else{
+			final boolean isPositionalFieldRemainder = annotationFieldManager.isPositionalFieldRemainder(clazz);
+			fieldDescriptor.setIsPositionalFieldRemainder(isPositionalFieldRemainder);
+			if (!(isPositionalFieldRemainder)){
 				fieldDescriptor.setDecorator(annotationFieldManager.createNewInstanceDecorator(positionalFieldAnnotation));
 				fieldDescriptor.setFinalPosition(((Integer) clazz.getMethod("finalPosition").invoke(positionalFieldAnnotation)));
 				fieldDescriptor.setInitialPosition(((Integer) clazz.getMethod("initialPosition").invoke(positionalFieldAnnotation)));

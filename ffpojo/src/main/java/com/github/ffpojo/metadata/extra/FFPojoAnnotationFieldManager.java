@@ -5,7 +5,8 @@ import com.github.ffpojo.decorator.*;
 import com.github.ffpojo.exception.FFPojoException;
 import com.github.ffpojo.exception.MetadataReaderException;
 import com.github.ffpojo.metadata.FieldDecorator;
-import com.github.ffpojo.metadata.positional.annotation.extra.RemainPositionalField;
+import com.github.ffpojo.metadata.FullLineField;
+import com.github.ffpojo.metadata.positional.annotation.extra.PositionalFieldRemainder;
 import com.github.ffpojo.util.ReflectUtil;
 
 import java.lang.annotation.Annotation;
@@ -30,6 +31,7 @@ public class FFPojoAnnotationFieldManager {
         mapAnnotationDecoratorClass.put("bigdecimal", InternalBigDecimalDecorator.class);
         mapAnnotationDecoratorClass.put("biginteger", InternalBigIntegerDecorator.class);
         mapAnnotationDecoratorClass.put("enum", InternalEnumDecorator.class);
+
     }
 
     public Class<?> getClassDecorator(Class<? extends Annotation> clazzPositionalFieldAnnotation){
@@ -44,11 +46,7 @@ public class FFPojoAnnotationFieldManager {
     }
 
     public boolean isFFPojoAnnotationField(Class<? extends Annotation> annotation){
-        return isDelimitedField(annotation) || isPositionalField(annotation);
-    }
-
-    public boolean isRemainPositionalField(Class<? extends Annotation> annotation){
-        return annotation.isAssignableFrom(RemainPositionalField.class);
+        return isDelimitedField(annotation) || isPositionalField(annotation) || isFullLineField(annotation);
     }
 
     public boolean isPositionalField(Class<? extends Annotation> annotation){
@@ -56,22 +54,34 @@ public class FFPojoAnnotationFieldManager {
             annotation.getMethod("initialPosition");
             annotation.getMethod("finalPosition");
         }catch (Exception e){
-            return isRemainPositionalField(annotation);
+            return isPositionalFieldRemainder(annotation) || isFullLineField(annotation);
         }
         return true;
+    }
+
+    public boolean isFullLineField(Class<? extends Annotation> annotation){
+        return annotation!=null && annotation.isAssignableFrom(FullLineField.class);
+    }
+
+    public boolean isPositionalFieldRemainder(Class<? extends Annotation> annotation){
+        return annotation!=null && annotation.isAssignableFrom(PositionalFieldRemainder.class);
     }
 
     public boolean isDelimitedField(Class<? extends Annotation> annotation){
         try{
             annotation.getMethod("positionIndex");
         }catch (Exception e){
-            return false;
+            return isFullLineField(annotation);
         }
         return true;
     }
 
-
-    public boolean isFieldAlreadyFFPojoAnnotation( Field field) {
+    /**
+     * Verify if exist a FFPOjo Annotation (@PositionalField, @DelimitedField, @FullLineField, @PositionalFieldRemainder) on field
+     * @param field
+     * @return
+     */
+    public boolean isFieldAnnotedWithFFPojoAnnotation(Field field) {
         Annotation[] annotationsField =  field.getAnnotations();
         boolean hasFieldAnnotaded =  false;
         for (int i = 0; i < annotationsField.length; i++) {
@@ -111,7 +121,7 @@ public class FFPojoAnnotationFieldManager {
 
     @SuppressWarnings("all")
     private FieldDecorator<?> getDecoratorInstance(Annotation annotation){
-		Class<? extends FieldDecorator> decorator = null;
+        Class<? extends FieldDecorator> decorator = null;
         try {
             decorator = (Class<? extends FieldDecorator>) annotation.getClass().getMethod("decorator").invoke(annotation);
             return decorator.newInstance();

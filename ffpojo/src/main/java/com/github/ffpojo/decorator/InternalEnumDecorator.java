@@ -29,7 +29,7 @@ public class InternalEnumDecorator extends ExtendedFieldDecorator<Enum<?>> {
     }
 
     public Enum fromString(String field) throws FieldDecoratorException {
-        if(field == null  ||  field.trim().isEmpty()){
+        if(field == null  ||  StringUtil.EMPTY.equalsIgnoreCase(field.trim())){
             return  null;
         }
         if (enumerationType.isString()){

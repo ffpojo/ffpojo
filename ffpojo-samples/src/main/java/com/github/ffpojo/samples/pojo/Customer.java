@@ -7,7 +7,7 @@ import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.LongPositionalField;
 
-@PositionalRecord(ignorePositionNotFound=true)
+@PositionalRecord(ignoreMissingFieldsInTheEnd =true)
 public class Customer {
 
 	@LongPositionalField(initialPosition = 1, finalPosition = 5)

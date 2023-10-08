@@ -6,7 +6,7 @@ import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.ListPositionalField;
 
-@PositionalRecord(ignorePositionNotFound=true)
+@PositionalRecord(ignoreMissingFieldsInTheEnd =true)
 public class Employee{
 	@PositionalField(initialPosition=1, finalPosition=10)
 	private String name;

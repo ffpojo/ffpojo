@@ -15,25 +15,23 @@ public class PositionalFieldDescriptor extends FieldDescriptor implements Compar
 	private char paddingCharacter;
 	private boolean trimOnRead;
 	private FieldDecorator<?> decorator;
-	private boolean ignorePositionNotFound;
-	private boolean remainPosition;
+	private boolean isPositionalFieldRemainder;
 
 	public int compareTo(PositionalFieldDescriptor other) {
-		if (this.isRemainPosition()){
-			return 1;
+		int resultCompareFullLine = comparePositionalFullLine(other);
+		if(resultCompareFullLine != 0){
+			return resultCompareFullLine;
 		}
-		if(other.isRemainPosition()){
-			return -1;
+
+		int resultCompareFieldRemainder =  comparePositionalFieldRemainder(other);
+		if(resultCompareFieldRemainder != 0){
+			return resultCompareFieldRemainder;
 		}
+
 		if (this.initialPosition - other.initialPosition == 0) {
 
 			if (this.finalPosition - other.finalPosition == 0) {
-				if (this.isByProperty()){
-					return this.getGetter().getName().compareTo(other.getGetter().getName());
-				}else{
-					return this.getField() == null ? -1 : other.getField() == null ?  1 :
-							this.getField().getName().compareTo(other.getField().getName());
-				}
+				return this.getGetter().getName().compareTo(other.getGetter().getName());
 			} else {
 				return this.finalPosition - other.finalPosition;
 			}
@@ -41,7 +39,27 @@ public class PositionalFieldDescriptor extends FieldDescriptor implements Compar
 			return this.initialPosition - other.initialPosition;
 		}
 	}
-	
+
+	private int comparePositionalFullLine(PositionalFieldDescriptor other){
+		if (this.isFullLineField()){
+			return 1;
+		}
+		if(other.isFullLineField()){
+			return -1;
+		}
+		return 0;
+	}
+
+	private int comparePositionalFieldRemainder(PositionalFieldDescriptor other){
+		if (this.isPositionalFieldRemainder() && !other.isFullLineField()){
+			return 1;
+		}
+		if(other.isPositionalFieldRemainder() || other.isFullLineField()){
+			return -1;
+		}
+		return 0;
+	}
+
 	// GETTERS AND SETTERS
 	
 	public int getInitialPosition() {
@@ -81,21 +99,11 @@ public class PositionalFieldDescriptor extends FieldDescriptor implements Compar
 		this.trimOnRead = trimOnRead;
 	}
 
-	public boolean isIgnorePositionNotFound() {
-		return ignorePositionNotFound;
+	public boolean isPositionalFieldRemainder() {
+		return isPositionalFieldRemainder;
 	}
 
-	public void setIgnorePositionNotFound(boolean ignorePositionNotFound) {
-		this.ignorePositionNotFound = ignorePositionNotFound;
+	public void setIsPositionalFieldRemainder(boolean isPositionalFieldRemainder) {
+		this.isPositionalFieldRemainder = isPositionalFieldRemainder;
 	}
-
-	public boolean isRemainPosition() {
-		return remainPosition;
-	}
-
-	public void setRemainPosition(boolean remainPosition) {
-		this.remainPosition = remainPosition;
-	}
-
-
 }

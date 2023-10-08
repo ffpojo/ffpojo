@@ -10,7 +10,7 @@ import com.github.ffpojo.metadata.positional.PaddingAlign;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD})
 public @interface DatePositionalField {
-	String dateFormat();
+	String dateFormat() default "DDMMYYYY";
 	int initialPosition();
 	int finalPosition();
 	PaddingAlign paddingAlign() default PaddingAlign.RIGHT;

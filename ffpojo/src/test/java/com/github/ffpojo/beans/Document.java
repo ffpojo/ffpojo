@@ -1,9 +1,10 @@
 package com.github.ffpojo.beans;
 
+import com.github.ffpojo.metadata.FullLineField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalField;
 import com.github.ffpojo.metadata.positional.annotation.PositionalRecord;
 import com.github.ffpojo.metadata.positional.annotation.extra.DatePositionalField;
-import com.github.ffpojo.metadata.positional.annotation.extra.RemainPositionalField;
+import com.github.ffpojo.metadata.positional.annotation.extra.PositionalFieldRemainder;
 
 import java.util.Date;
 
@@ -12,7 +13,7 @@ import java.util.Date;
  * @author William Miranda
  */
 
-@PositionalRecord
+@PositionalRecord(ignoreMissingFieldsInTheEnd = true)
 public class Document {
 
     @PositionalField(initialPosition = 1, finalPosition = 20)
@@ -23,8 +24,12 @@ public class Document {
 
     @PositionalField(initialPosition = 29, finalPosition = 49)
     private String publisher;
-    @RemainPositionalField
+
+    @PositionalFieldRemainder
     private String comments;
+
+    @FullLineField
+    private String fullLine;
 
     public String getAuthor() {
         return author;
@@ -56,6 +61,10 @@ public class Document {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public String getFullLine() {
+        return fullLine;
     }
 
     @Override
